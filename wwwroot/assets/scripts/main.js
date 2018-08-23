@@ -33,7 +33,7 @@ var legend = {};
 // *  }
 
 document.addEventListener("DOMContentLoaded", function(){
-  ajaxXML("../assets/images/world_clean.svg")
+  ajaxXML("../assets/images/world.svg")
     .then(
       function fulfilled(result) {
         $("#svgContainer").appendChild(result.documentElement);
