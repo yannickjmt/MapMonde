@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>World Map</title>
+    <link rel="stylesheet" href="assets/styles/main.css">
+    <script src="assets/scripts/main.js"></script>
+  </head>
+  <body>
+   <div class="objectWrapper">
+     <p>
+       <button type="button" class="button" onclick="fillCountry()">Test manip map</button>
+       <span id="card-body"></span>
+     </p>
+     <!-- <div class="card">
+       <div id="card-body" class="card-body">
+           
+       </div>
+     </div> -->
+     <div class="object" id="svgContainer">
+     </div>
+   
+   </div>
+   <div class="info">
+     <div>
+       <button type="button" onclick="testAPI()">Test API</button>
+       <textarea id="request" rows="2" cols="100">http://api.worldbank.org/v2/countries/all/indicators/SP.POP.TOTL?format=json&date=2017&per_page=400</textarea>
+       <!-- <textarea id="request" rows="2" cols="100">http://api.worldbank.org/v2/countries/chn;bra/indicators/SP.POP.TOTL?format=json&date=2000:2001</textarea> -->
+       
+       <textarea id="answer" rows="50" cols="100"></textarea>
+     </div>
+     <div class="legend">
+       <div id="legend1"></div><div class="legendText" id="legend0-text"></div>
+       <div id="legend2"></div><div class="legendText" id="legend1-text"></div>
+       <div id="legend3"></div><div class="legendText" id="legend2-text"></div>
+       <div id="legend4"></div><div class="legendText" id="legend3-text"></div>
+       <div id="legend5"></div><div class="legendText" id="legend4-text"></div>
+       <div id="legend6"></div><div class="legendText" id="legend5-text"></div>
+       <div id="legend7"></div><div class="legendText" id="legend6-text"></div>
+       <div id="legend8"></div><div class="legendText" id="legend7-text"></div>
+       <div id="legend0"></div><div class="legendText" id="legend8-text"></div>
+
+     </div>
+   </div>
+  </body>
+</html>

@@ -1,0 +1,83 @@
+.objectWrapper {
+    border: 1px solid red;
+}
+.object {
+    border: 1px solid blue;
+    width: 100%;
+}
+path {
+    fill: #f2f2f2;
+    fill-rule: evenodd;
+}
+path:hover {
+    stroke-width: 4px; 
+}
+
+.noData {
+    fill: #f2f2f2;
+}
+.background1 {
+    fill: #8b0000;
+}
+.background2 {
+    fill: #cf3b59;
+}
+.background3 {
+    fill: #f78599;
+}
+.background4 {
+    fill: #ffd8cd;
+}
+.background5 {
+    fill: #81dd8e;
+}
+.background6 {
+    fill: #63be8a;
+}
+.background7 {
+    fill: #3f9e86;
+}
+.background8 {
+    fill: #008080;
+}
+
+.info {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+.legend {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+    padding: 10px;
+    border: 1px solid black;
+}
+.legendText {
+    font-family: verdana;
+}
+
+.legend1 {
+    background-color: #8b0000;
+}
+.legend2 {
+    background-color: #cf3b59;
+}
+.legend3 {
+    background-color: #f78599;
+}
+.legend4 {
+    background-color: #ffd8cd;
+}
+.legend5 {
+    background-color: #81dd8e;
+}
+.legend6 {
+    background-color: #63be8a;
+}
+.legend7 {
+    background-color: #3f9e86;
+}
+.legend8 {
+    background-color: #008080;
+}
