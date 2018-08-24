@@ -1,10 +1,3 @@
-.objectWrapper {
-    border: 1px solid red;
-}
-.object {
-    border: 1px solid blue;
-    width: 100%;
-}
 path {
     fill: #f2f2f2;
     fill-rule: evenodd;
@@ -41,17 +34,39 @@ path:hover {
     fill: #008080;
 }
 
-.info {
+.container {
     display: grid;
     grid-template-columns: 1fr 1fr;
+    grid-template-rows: 100px auto 500px 500px;
+    grid-template-areas: 
+        "header header"
+        "map map"
+        "selectors legend"
+        "apiIO apiIO";
+}
+.header {
+    grid-area: header;
+    border: 1px solid red;
+}
+.map {
+    grid-area: map;
+}
+.selectors {
+    border: 1px solid blue;
+    grid-area: selectors;
+}
+.apiIO {
+    grid-area: apiIO;
 }
 .legend {
-    position: relative;
+    grid-area: legend;
+    border: 1px solid green;
+    /* position: relative; */
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
     padding: 10px;
-    border: 1px solid black;
+    
 }
 .legendText {
     font-family: verdana;
@@ -80,4 +95,10 @@ path:hover {
 }
 .legend8 {
     background-color: #008080;
+}
+
+
+input[type=radio] {
+	height: 20px;
+	width: 30px;
 }

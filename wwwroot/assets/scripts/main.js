@@ -1,61 +1,69 @@
-"use strict";
+'use strict';
 
-const D = document
-const $ = D.querySelector.bind(D)
-const $$ = (selector, startNode) => [...(startNode||D).querySelectorAll(selector)]
-// $(‘#button”) same as getElementByID
-// $$(‘button’). selects all element of type button (then can use .map for ex)
+const D = document;
+const $ = D.querySelector.bind(D);
+const $$ = (selector, startNode) => [...(startNode||D).querySelectorAll(selector)];
+//* $(‘#button”) same as getElementByID
+//* $$(‘button’). selects all element of type button (then can use .map for ex)
 
 var svgCountries =[];
 var svgObj = {};
 
 var countries = {};
-// * ID: {
-// *    'country_name': 'Brazil',
-// *    'country_code': 'BR',
-// *    IndicatorID: {
-// *      Year1 : {value: '', scale: ''},
-// *      Year2 : {value: '', scale: ''}
-// *    }
-// *  }
-// ? should I implement scales?
+//* ID: {
+//*    'country_name': 'Brazil',
+//*    'country_code': 'BR',
+//*    IndicatorID: {
+//*      Year1 : {value: '', scale: ''},
+//*      Year2 : {value: '', scale: ''}
+//*    }
+//*  }
+//? should I implement scales?
 
 var legend = {};
-// *  IndicatorID1: { 
-// *     'indicator_name': '',
-// *     Year1: {'reduced': false,
-// *             'values': [ , ]
-// *            },
-// *     Year2: { }
-// *   },
-// *   IndicatorID2: {
-// *                
-// *  }
+//*  IndicatorID1: { 
+//*     'indicator_name': '',
+//*     Year1: {'reduced': false,
+//*             'values': [ , ]
+//*            },
+//*     Year2: { }
+//*   },
+//*   IndicatorID2: {
+//*                
+//*  }
 
-document.addEventListener("DOMContentLoaded", function(){
-  ajaxXML("../assets/images/world.svg")
+var activeYear = '';
+var activeIndicator = '';
+
+document.addEventListener('DOMContentLoaded', function() {
+  ajaxXML('../assets/images/world.svg')
     .then(
       function fulfilled(result) {
-        $("#svgContainer").appendChild(result.documentElement);
+        $('#svgContainer').appendChild(result.documentElement);
         svgObj = $('#svgContainer').firstElementChild;
 
         //list of countries present in the SVG
-        svgCountries = Array.from(svgObj.querySelectorAll("path"));
+        svgCountries = Array.from(svgObj.querySelectorAll('path'));
 
         //initialize countries 
         for (let country of svgCountries) {
-          countries[country.getAttribute("data-id")] = 
-            {"country_name": country.getAttribute("data-name"),
-            "country_code": country.getAttribute("data-id")};
+          countries[country.getAttribute('data-id')] = 
+            {'country_name': country.getAttribute('data-name'),
+              'country_code': country.getAttribute('data-id')};
         }
       },
       function rejected(err) {
-        console.log("Caught error in DomContentLoaded rejecter : " + err.message);
+        console.log('Caught error in DomContentLoaded rejecter : ' + err.message);
       }
     )
     .catch(function(err) {
-      console.log("Caught error in DomContentLoaded : " + err.message);
+      console.log('Caught error in DomContentLoaded : ' + err.message);
     });
+  
+  $('#years').addEventListener('change', function() {
+    activeYear = $('#years').elements['activeYear'].value;
+    fillMapAndLegend();
+  });
 });
 
 function ajaxXML(url) {
@@ -92,22 +100,22 @@ function fillCountry() {
   // var svgObject = document.getElementById('svgContainer').firstElementChild;
   
   var USA = svgObj.getElementById('RU');
-   //USA.style.fill = "#333";
-   USA.setAttributeNS(null, "class", 'background2');
+  //USA.style.fill = "#333";
+  USA.setAttributeNS(null, 'class', 'background2');
   // console.log(USA.getAttribute("data-name"));
   //   console.log(country.getAttribute("fill"));
   //   console.log(country.getAttributeNS(null, "fill"));
   //   country.setAttributeNS(null, "fill", "#333");
 
   function showCountryInfo(event) {
-    $('#card-body').innerHTML = event.target.getAttribute("newAttr");
+    $('#card-body').innerHTML = event.target.getAttribute('newAttr');
   }
-  svgObj.addEventListener("click", showCountryInfo, false);
+  svgObj.addEventListener('click', showCountryInfo, false);
   
-  countries = Array.from(svgObj.querySelectorAll("path"));
+  countries = Array.from(svgObj.querySelectorAll('path'));
   for (let country of countries) {
-    country.setAttributeNS(null, "newAttr", country.getAttribute("data-name") 
-      + " " + country.getAttribute("data-id"));
+    country.setAttributeNS(null, 'newAttr', country.getAttribute('data-name') 
+      + ' ' + country.getAttribute('data-id'));
   }
 }
 
@@ -115,19 +123,25 @@ function testAPI() {
   const urlAPI = $('#request').value;
   console.log(urlAPI);
   ajaxTXT(urlAPI)
-  .then(
-    function fulfilled(result) {
-      processApiAnswer(result);
-      updateMapColors();
-      displayLegend();
-    },
-    function rejected(err) {
-      console.log("caught error in testAPI rejecter : " + err.message);
-    }
-  )
-  .catch(function(err) {
-    console.log("Caught error in test API : " + err.message);
-  });
+    .then(
+      function fulfilled(result) {
+        processApiAnswer(result);
+        displayControls();
+        fillMapAndLegend();
+
+      },
+      function rejected(err) {
+        console.log('caught error in testAPI rejecter : ' + err.message);
+      }
+    )
+    .catch(function(err) {
+      console.log('Caught error in test API : ' + err.message);
+    });
+}
+
+function fillMapAndLegend() {
+  updateMapColors();
+  displayLegend();
 }
 
 function processApiAnswer(result) {
@@ -135,7 +149,7 @@ function processApiAnswer(result) {
   let JSONObj = JSON.parse(result);
 
   for (let JSONcountry of JSONObj[1]) {
-    let country = countries[JSONcountry.country.id]
+    let country = countries[JSONcountry.country.id];
     
     // process API result only if country code exists in SVG and countries global object
     // (many unknown country codes)
@@ -144,7 +158,7 @@ function processApiAnswer(result) {
       //Sometimes World Bank returns a record without a value, we discard it
       if (JSONcountry.value != null) {
         let year = {};
-        year[JSONcountry.date] = { "value": JSONcountry.value};
+        year[JSONcountry.date] = { 'value': JSONcountry.value};
 
         let countryIndicator = country[JSONcountry.indicator.id];
         if (countryIndicator) {
@@ -164,8 +178,6 @@ function processApiAnswer(result) {
   //replace array from global legend with reduced final scale
   //may do that later in the process if handling multiple queries
   reduceLegend();
-
- 
 }
 
 function pushValuesToLegendObj(indicatorID, IndicatorName, year, value) {
@@ -182,10 +194,10 @@ function pushValuesToLegendObj(indicatorID, IndicatorName, year, value) {
     }
   } else {
     // create new indicator property
-    let yearObj = {}
+    let yearObj = {};
     yearObj[year] = {'reduced': false, 'values':[value]};
     legend[indicatorID] = yearObj;
-    // TODO legend[indicatorID]['indicator_name'] = IndicatorName;
+    legend[indicatorID]['indicator_name'] = IndicatorName;
   }
 }
 
@@ -193,7 +205,7 @@ function reduceLegend() {
   for (let indicatorVal in legend) {
     for (let yearVal in legend[indicatorVal]) {
       let year = legend[indicatorVal][yearVal];
-      if (year.reduced === false) {
+      if ((typeof year.reduced === 'boolean') && (year.reduced === false)) {
         let arr = reduceArray(year.values);
         year.values = arr;
         year.reduced = true;
@@ -207,8 +219,8 @@ function reduceArray(arr) {
   // TODO: round numbers depending on certain conditions
   // TODO: find cool algo using median doesn't work well
   //       separating into equally large block of values for the moment
-  const legendArr = []
-  const min = Math.min(...arr);
+  const legendArr = [];
+  //const min = Math.min(...arr);
   const max = Math.max(...arr);
 
 
@@ -233,22 +245,21 @@ function reduceArray(arr) {
   return legendArr;
 }
 
-
 function updateMapColors() {
 // ? maybe need year and indicator array for dynamic change
 
   const indicator = 'SP.POP.TOTL';
-  const year = '2017';
   let classCountry;
 
+  // assign CSS class each to svg element
   for (let svgCountry of svgCountries) {
-    let svgCountryCode = svgCountry.getAttribute("data-id");
+    let svgCountryCode = svgCountry.getAttribute('data-id');
     let countryIndic = countries[svgCountryCode][indicator];
     if (countryIndic) {
-      if (countryIndic[year]) {
-        let value = countryIndic[year].value;
+      if (countryIndic[activeYear]) {
+        let value = countryIndic[activeYear].value;
         if (value != null) {
-          classCountry = getClass(value, indicator, year);
+          classCountry = getClassName(value, indicator, activeYear);
         } else {
           classCountry = 'noData';
         }
@@ -258,11 +269,11 @@ function updateMapColors() {
     } else {
       classCountry = 'noData';
     }
-    svgCountry.setAttributeNS(null, "class", classCountry);
+    svgCountry.setAttributeNS(null, 'class', classCountry);
   }
 }
 
-function getClass(value, indicator, year) {
+function getClassName(value, indicator, year) {
   let rangeLegend = legend[indicator][year].values;
   let index = rangeLegend.findIndex( a => a >= value);
   return 'background' + index;
@@ -271,13 +282,38 @@ function getClass(value, indicator, year) {
 // very temporary
 function displayLegend() {
   const indicator = 'SP.POP.TOTL';
-  const year = '2017';
-  let arr = legend[indicator][year].values;
+  let arr = legend[indicator][activeYear].values;
   arr.forEach((val, index) => {
     let bgID = '#legend' + index;
     let textID = bgID + '-text';
     $(bgID).className = 'legend' + index;
     $(textID).innerHTML = val.toLocaleString();
-    $(textID).className = 'legendText'
+    $(textID).className = 'legendText';
   });
+}
+
+function displayControls() {
+  // years selector
+  // sort years and check the first year of the list in the form
+  let yearArray = getActiveYears();
+  yearArray.sort((a, b) => b - a);
+  yearArray.forEach( (year, i) => {
+    let checked = (i == 0) ? 'checked' : '';
+    let text = `<label><input type="radio" name="activeYear" value="${ year }" ${ checked }>${ year }</label><br>`;
+    $('#years').insertAdjacentHTML('beforeend', text);
+  });
+  activeYear = yearArray[0];
+}
+
+function getActiveYears() {
+  let yearArray = [];
+  for (let indicatorVal in legend) {
+    for (let yearVal in legend[indicatorVal]) {
+      let year = legend[indicatorVal][yearVal];
+      if (typeof year.reduced === 'boolean') {
+        if (!yearArray.includes(yearVal)) yearArray.push(yearVal);
+      }
+    }
+  }
+  return yearArray;
 }
