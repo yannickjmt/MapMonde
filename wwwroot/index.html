@@ -23,8 +23,13 @@
       <div class="map" id="svgContainer">
       </div>
       <div class="selectors">
-        <form id="years">
-        </form>
+
+        <div class="selector-years">
+          <form id="years"></form>
+        </div>
+        <div class="selector-indicators">
+          <form id="indicators"></form>
+        </div>
       </div>
       <div class="legend">
         <div id="legend1"></div><div class="legendText" id="legend0-text"></div>
@@ -42,11 +47,8 @@
        
         <textarea id="request" rows="5" cols="100">http://api.worldbank.org/v2/countries/all/indicators/SP.POP.TOTL?format=json&date=2017&per_page=10000
 http://api.worldbank.org/v2/countries/all/indicators/SP.POP.TOTL?format=json&date=2013&per_page=10000
-http://api.worldbank.org/v2/countries/all/indicators/SP.POP.TOTL?format=json&date=2010&per_page=10000
-http://api.worldbank.org/v2/countries/all/indicators/SP.POP.TOTL?format=json&date=2007&per_page=10000
-http://api.worldbank.org/v2/countries/all/indicators/SP.POP.TOTL?format=json&date=2000&per_page=10000
-http://api.worldbank.org/v2/countries/all/indicators/SP.POP.TOTL?format=json&date=1990&per_page=10000
-http://api.worldbank.org/v2/countries/all/indicators/SP.POP.TOTL?format=json&date=1980&per_page=10000</textarea>
+http://api.worldbank.org/v2/countries/all/indicators/NY.GDP.MKTP.CD?format=json&date=2017&per_page=10000
+http://api.worldbank.org/v2/countries/all/indicators/NY.GDP.MKTP.CD?format=json&date=2013&per_page=10000</textarea>
         <!-- <textarea id="request" rows="5" cols="100">http://api.worldbank.org/v2/countries/chn;bra/indicators/SP.POP.TOTL?format=json&date=2000:2001</textarea> -->
        
         <textarea id="answer" rows="50" cols="100"></textarea>

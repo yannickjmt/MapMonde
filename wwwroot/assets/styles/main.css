@@ -54,6 +54,9 @@ path:hover {
 .selectors {
     border: 1px solid blue;
     grid-area: selectors;
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr;
 }
 .apiIO {
     grid-area: apiIO;

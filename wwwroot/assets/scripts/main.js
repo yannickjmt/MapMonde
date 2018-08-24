@@ -58,9 +58,14 @@ document.addEventListener('DOMContentLoaded', function() {
       console.log('Caught error in SVG processing : ' + err.message);
     });
   
-  // refresh map on active year change
+  // refresh map on active year or indicator change
+  // ugly but will do for now
   $('#years').addEventListener('change', function() {
     activeYear = $('#years').elements['activeYear'].value;
+    fillMapAndLegend();
+  });
+  $('#indicators').addEventListener('change', function() {
+    activeIndicator = $('#indicators').elements['activeIndicator'].value;
     fillMapAndLegend();
   });
 });
@@ -248,18 +253,18 @@ function reduceArray(arr) {
 function updateMapColors() {
 // ? maybe need year and indicator array for dynamic change
 
-  const indicator = 'SP.POP.TOTL';
+  // const indicator = 'SP.POP.TOTL';
   let classCountry;
 
   // assign CSS class each to svg element
   for (let svgCountry of svgCountries) {
     let svgCountryCode = svgCountry.getAttribute('data-id');
-    let countryIndic = countries[svgCountryCode][indicator];
+    let countryIndic = countries[svgCountryCode][activeIndicator];
     if (countryIndic) {
       if (countryIndic[activeYear]) {
         let value = countryIndic[activeYear].value;
         if (value != null) {
-          classCountry = getClassName(value, indicator, activeYear);
+          classCountry = getClassName(value, activeIndicator, activeYear);
         } else {
           classCountry = 'noData';
         }
@@ -281,8 +286,8 @@ function getClassName(value, indicator, year) {
 
 // very temporary
 function displayLegend() {
-  const indicator = 'SP.POP.TOTL';
-  let arr = legend[indicator][activeYear].values;
+  // const indicator = 'SP.POP.TOTL';
+  let arr = legend[activeIndicator][activeYear].values;
   arr.forEach((val, index) => {
     let bgID = '#legend' + index;
     let textID = bgID + '-text';
@@ -293,9 +298,10 @@ function displayLegend() {
 }
 
 function displayControls() {
+  // TODO find a better display
   // years selector
   // sort years and check the first year of the list in the form
-  let yearArray = getActiveYears();
+  let yearArray = getYearsFromLegendObj();
   yearArray.sort((a, b) => b - a);
   yearArray.forEach( (year, i) => {
     let checked = (i == 0) ? 'checked' : '';
@@ -303,9 +309,18 @@ function displayControls() {
     $('#years').insertAdjacentHTML('beforeend', text);
   });
   activeYear = yearArray[0];
+
+  // indicator selector
+  let indicatorArray = getIndicatorsFromLegendObj();
+  indicatorArray.forEach((indicator, i) => {
+    let checked = (i == 0) ? 'checked' : '';
+    let text = `<label><input type="radio" name="activeIndicator" value="${ indicator[0] }" ${ checked }>${ indicator[1] }</label><br>`;
+    $('#indicators').insertAdjacentHTML('beforeend', text);
+  });
+  activeIndicator = indicatorArray[0][0];
 }
 
-function getActiveYears() {
+function getYearsFromLegendObj() {
   let yearArray = [];
   for (let indicatorVal in legend) {
     for (let yearVal in legend[indicatorVal]) {
@@ -316,4 +331,12 @@ function getActiveYears() {
     }
   }
   return yearArray;
+}
+
+function getIndicatorsFromLegendObj() {
+  let indicArray = [];
+  for (let indicatorVal in legend) {
+    indicArray.push([indicatorVal, legend[indicatorVal].indicator_name]);
+  }
+  return indicArray;
 }
