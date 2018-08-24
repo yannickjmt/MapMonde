@@ -2,7 +2,7 @@
 
 const D = document;
 const $ = D.querySelector.bind(D);
-const $$ = (selector, startNode) => [...(startNode||D).querySelectorAll(selector)];
+//* const $$ = (selector, startNode) => [...(startNode||D).querySelectorAll(selector)];
 //* $(‘#button”) same as getElementByID
 //* $$(‘button’). selects all element of type button (then can use .map for ex)
 
@@ -18,7 +18,7 @@ var countries = {};
 //*      Year2 : {value: '', scale: ''}
 //*    }
 //*  }
-//? should I implement scales?
+//? should I implement scales (ie position on the legend scale - doesn't seem necessary)?
 
 var legend = {};
 //*  IndicatorID1: { 
@@ -117,24 +117,22 @@ function fillCountry() {
   }
 }
 
-function testAPI() {
-  const urlAPI = $('#request').value;
-  console.log(urlAPI);
-  callAPI(urlAPI, 'text')
-    .then(function fulfilled(result) {
-      processApiAnswer(result);
-      displayControls();
-      fillMapAndLegend();
-    })
-    .catch(function(err) {
-      console.log('Caught error in test API : ' + err.message);
-    });
+async function testAPI() {
+  const urlAPI = $('#request').value.split('\n');
+
+  // asynchronous and parallel API calls and result process
+  let results = urlAPI.map(async (url) => await callAPI(url, 'text'));
+  for (const result of results) {
+    processApiAnswer(await result);
+  }
+  displayControls();
+  fillMapAndLegend();
 }
 
 async function callAPI(url, type) {
   try {
-    let svg = await ajax(url, type);
-    return svg;
+    let json = await ajax(url, type);
+    return json;
   }
   catch(err) {
     console.log('error while calling API : ' + err.message);
