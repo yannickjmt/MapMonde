@@ -36,7 +36,8 @@ var activeYear = '';
 var activeIndicator = '';
 
 document.addEventListener('DOMContentLoaded', function() {
-  ajaxXML('../assets/images/world.svg')
+  //load SVG and initialize country object
+  getSVG('../assets/images/world.svg', 'XML')
     .then(
       function fulfilled(result) {
         $('#svgContainer').appendChild(result.documentElement);
@@ -51,26 +52,26 @@ document.addEventListener('DOMContentLoaded', function() {
             {'country_name': country.getAttribute('data-name'),
               'country_code': country.getAttribute('data-id')};
         }
-      },
-      function rejected(err) {
-        console.log('Caught error in DomContentLoaded rejecter : ' + err.message);
       }
     )
     .catch(function(err) {
-      console.log('Caught error in DomContentLoaded : ' + err.message);
+      console.log('Caught error in SVG processing : ' + err.message);
     });
   
+  // refresh map on active year change
   $('#years').addEventListener('change', function() {
     activeYear = $('#years').elements['activeYear'].value;
     fillMapAndLegend();
   });
 });
 
-function ajaxXML(url) {
+
+function ajax(url, type) {
   return new Promise(function(resolve, reject) {
     var xhr = new XMLHttpRequest();
     xhr.onload = function() {
-      resolve(this.responseXML);
+      if (type == 'text') resolve(this.responseText);
+      else if (type == 'XML') resolve(this.responseXML);
     };
     xhr.onerror = reject;
     xhr.open('GET', url);
@@ -78,18 +79,15 @@ function ajaxXML(url) {
   });
 }
 
-function ajaxTXT(url) {
-  return new Promise(function(resolve, reject) {
-    var xhr = new XMLHttpRequest();
-    xhr.onload = function() {
-      resolve(this.responseText);
-    };
-    xhr.onerror = reject;
-    xhr.open('GET', url);
-    xhr.send();
-  });
+async function getSVG(url, type) {
+  try {
+    let svg = await ajax(url, type);
+    return svg;
+  }
+  catch(err) {
+    console.log('error while retrieving svg : ' + err.message);
+  }
 }
-
 
 function fillCountry() {
   //var infoBoxHTML = $('#card-body').innerHTML;
@@ -122,21 +120,25 @@ function fillCountry() {
 function testAPI() {
   const urlAPI = $('#request').value;
   console.log(urlAPI);
-  ajaxTXT(urlAPI)
-    .then(
-      function fulfilled(result) {
-        processApiAnswer(result);
-        displayControls();
-        fillMapAndLegend();
-
-      },
-      function rejected(err) {
-        console.log('caught error in testAPI rejecter : ' + err.message);
-      }
-    )
+  callAPI(urlAPI, 'text')
+    .then(function fulfilled(result) {
+      processApiAnswer(result);
+      displayControls();
+      fillMapAndLegend();
+    })
     .catch(function(err) {
       console.log('Caught error in test API : ' + err.message);
     });
+}
+
+async function callAPI(url, type) {
+  try {
+    let svg = await ajax(url, type);
+    return svg;
+  }
+  catch(err) {
+    console.log('error while calling API : ' + err.message);
+  }
 }
 
 function fillMapAndLegend() {
@@ -170,7 +172,7 @@ function processApiAnswer(result) {
         }
         // push value into global legend array
         // values array will be reduced later to get the legend scale
-        pushValuesToLegendObj(JSONcountry.indicator.id, JSONcountry.indicator.value, JSONcountry.date, JSONcountry.value);
+        pushValueToLegendObj(JSONcountry.indicator.id, JSONcountry.indicator.value, JSONcountry.date, JSONcountry.value);
       }
     }
   }
@@ -180,7 +182,7 @@ function processApiAnswer(result) {
   reduceLegend();
 }
 
-function pushValuesToLegendObj(indicatorID, IndicatorName, year, value) {
+function pushValueToLegendObj(indicatorID, IndicatorName, year, value) {
   if (legend[indicatorID]) {
     if (legend[indicatorID][year]) {
       // add value to existing array for year and indicatorID
