@@ -1,3 +1,5 @@
+import style from  '../styles/main.css';
+
 'use strict';
 
 const D = document;
@@ -67,6 +69,12 @@ document.addEventListener('DOMContentLoaded', function() {
   $('#indicators').addEventListener('change', function() {
     activeIndicator = $('#indicators').elements['activeIndicator'].value;
     fillMapAndLegend();
+  });
+  $('#button_test').addEventListener('click', function() {
+    fillCountry();
+  });
+  $('#button_API').addEventListener('click', function() {
+    testAPI();
   });
 });
 
@@ -286,7 +294,7 @@ function getClassName(value, indicator, year) {
 
 // very temporary
 function displayLegend() {
-  // const indicator = 'SP.POP.TOTL';
+  // TODO change values in thousands, millons, etc. if necessary
   let arr = legend[activeIndicator][activeYear].values;
   arr.forEach((val, index) => {
     let bgID = '#legend' + index;
