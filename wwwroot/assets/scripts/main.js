@@ -1,4 +1,6 @@
-import style from  '../styles/main.css';
+import '../styles/main.css';
+import style from  '../../../node_modules/nouislider/distribute/nouislider.css';
+var noUiSlider = require('nouislider');
 
 'use strict';
 
@@ -60,14 +62,14 @@ document.addEventListener('DOMContentLoaded', function() {
       console.log('Caught error in SVG processing : ' + err.message);
     });
   
-  // refresh map on active year or indicator change
+  // refresh map on indicator change
   // ugly but will do for now
-  $('#years').addEventListener('change', function() {
-    activeYear = $('#years').elements['activeYear'].value;
-    fillMapAndLegend();
-  });
   $('#indicators').addEventListener('change', function() {
     activeIndicator = $('#indicators').elements['activeIndicator'].value;
+    
+    //year slider may need to be updated with new year values
+    displayControls();
+    
     fillMapAndLegend();
   });
   $('#button_test').addEventListener('click', function() {
@@ -76,7 +78,11 @@ document.addEventListener('DOMContentLoaded', function() {
   $('#button_API').addEventListener('click', function() {
     testAPI();
   });
+
+ 
 });
+
+
 
 
 function ajax(url, type) {
@@ -295,49 +301,90 @@ function getClassName(value, indicator, year) {
 // very temporary
 function displayLegend() {
   // TODO change values in thousands, millons, etc. if necessary
-  let arr = legend[activeIndicator][activeYear].values;
-  arr.forEach((val, index) => {
-    let bgID = '#legend' + index;
-    let textID = bgID + '-text';
-    $(bgID).className = 'legend' + index;
-    $(textID).innerHTML = val.toLocaleString();
-    $(textID).className = 'legendText';
-  });
+ 
+  if (legend[activeIndicator][activeYear] === undefined) {
+    // when indicators don't all have same year range
+    console.log('no legend value to display');
+    // TODO implement cleanLegend()
+  }
+  else {
+    let arr = legend[activeIndicator][activeYear].values;
+    arr.forEach((val, index) => {
+      let bgID = '#legend' + index;
+      let textID = bgID + '-text';
+      $(bgID).className = 'legend' + index;
+      $(textID).innerHTML = val.toLocaleString();
+      $(textID).className = 'legendText';
+    });
+  }
 }
 
 function displayControls() {
   // TODO find a better display
-  // years selector
-  // sort years and check the first year of the list in the form
-  let yearArray = getYearsFromLegendObj();
-  yearArray.sort((a, b) => b - a);
-  yearArray.forEach( (year, i) => {
-    let checked = (i == 0) ? 'checked' : '';
-    let text = `<label><input type="radio" name="activeYear" value="${ year }" ${ checked }>${ year }</label><br>`;
-    $('#years').insertAdjacentHTML('beforeend', text);
-  });
-  activeYear = yearArray[0];
 
   // indicator selector
   let indicatorArray = getIndicatorsFromLegendObj();
   indicatorArray.forEach((indicator, i) => {
-    let checked = (i == 0) ? 'checked' : '';
+    let checked = (activeIndicator !== '')
+      ? ''
+      : (i == 0)
+        ? 'checked'
+        : '';
+    // let checked = (i == 0) ? 'checked' : '';
     let text = `<label><input type="radio" name="activeIndicator" value="${ indicator[0] }" ${ checked }>${ indicator[1] }</label><br>`;
     $('#indicators').insertAdjacentHTML('beforeend', text);
   });
-  activeIndicator = indicatorArray[0][0];
+  // select first indicator in list at the initial call of this function
+  if (activeIndicator === '') activeIndicator = indicatorArray[0][0];
+
+  // years selector
+  // sort years and check the first year of the list in the form
+  let yearArray = getYearsFromLegendObj();
+  yearArray.sort((a, b) => a - b);
+  // yearArray.forEach( (year, i) => {
+  //   let checked = (i == 0) ? 'checked' : '';
+  //   let text = `<label><input type="radio" name="activeYear" value="${ year }" ${ checked }>${ year }</label><br>`;
+  //   $('#years').insertAdjacentHTML('beforeend', text);
+  // });
+  activeYear = yearArray[0];
+
+  //can't create slider with only one value
+  if (yearArray.length > 1) {
+    var slider = $('#slider');
+    createUpdateSlider(slider, yearArray);
+    var inputFormat = $('#slider-value');
+    slider.noUiSlider.on('update', function( values, handle ) {
+      inputFormat.innerHTML = values[handle];
+      activeYear = values[handle];
+      fillMapAndLegend();
+    });
+  } 
+  else {
+    console.log('single year');
+    //TODO implement destroy/hide year slider bc that component needs at least 2 values
+  }
+
+
 }
 
 function getYearsFromLegendObj() {
   let yearArray = [];
-  for (let indicatorVal in legend) {
-    for (let yearVal in legend[indicatorVal]) {
-      let year = legend[indicatorVal][yearVal];
-      if (typeof year.reduced === 'boolean') {
-        if (!yearArray.includes(yearVal)) yearArray.push(yearVal);
-      }
+  // for (let indicatorVal in legend) {
+  //   for (let yearVal in legend[indicatorVal]) {
+  //     let year = legend[indicatorVal][yearVal];
+  //     if (typeof year.reduced === 'boolean') {
+  //       if (!yearArray.includes(yearVal)) yearArray.push(yearVal);
+  //     }
+  //   }
+  // }
+  // only get years relevant to active indicator
+  for (let yearVal in legend[activeIndicator]) {
+    let year = legend[activeIndicator][yearVal];
+    if (typeof year.reduced === 'boolean') {
+      if (!yearArray.includes(yearVal)) yearArray.push(yearVal);
     }
   }
+
   return yearArray;
 }
 
@@ -347,4 +394,55 @@ function getIndicatorsFromLegendObj() {
     indicArray.push([indicatorVal, legend[indicatorVal].indicator_name]);
   }
   return indicArray;
+}
+
+function createUpdateSlider(sliderElement, yearArr) {
+  const filter = (value) => {
+    // filters value to display for scale
+    // returns 0 = no value, 1 = large value, 2 = small value
+    // type = 1 for min and max value, 2 for others
+    // display value every floor(lenght/10) steps to keep total number of values displayed in check 
+    if (yearArr.length < 10) {
+      return 1;
+    } else {
+      let tmp = Math.floor(yearArr.length / 10);
+      return value % tmp == 0 ? 1 : 0;
+    }
+  };
+
+  // cannot use noUiSlider.updateOptions() with current settings, so we need to destroy it
+  if (sliderElement.noUiSlider !== undefined) sliderElement.noUiSlider.destroy();
+  
+  noUiSlider.create(sliderElement, {
+    start: 0,
+    connect: true,
+    // tooltips: true,
+    step: 1,
+    range: {
+      'min': 0,
+      'max': yearArr.length - 1
+    },
+    format: {
+      to: function ( value ) {
+        // weird occasional bug when value = x.99999
+        return yearArr[Math.round(value)];
+      },
+      from: function ( value ) {
+        return value;
+      }
+    },
+    pips: {
+      mode: 'steps',
+      density: 10,
+      filter: filter,
+      format: {
+        to: function ( value ) {
+          return yearArr[Math.round(value)];
+        },
+        from: function ( value ) {
+          return value;
+        }
+      }
+    }
+  });
 }

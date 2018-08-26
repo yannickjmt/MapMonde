@@ -1,7 +1,10 @@
 var path = require('path');
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+var MiniCssExtractPlugin = require('mini-css-extract-plugin');
+var WriteFilePlugin = require('write-file-webpack-plugin');
+var webpack = require('webpack');
 
 module.exports = {
+  devtool: 'eval-source-map',
   entry: './wwwroot/assets/scripts/main.js',
   output: {
     filename: 'bundle.js',
@@ -11,14 +14,18 @@ module.exports = {
     rules: [
       {
         test: /\.css$/,
-        use: [MiniCssExtractPlugin.loader, "css-loader"]
+        use: [MiniCssExtractPlugin.loader, 'css-loader']
       }
     ]
   },
   plugins: [
     new MiniCssExtractPlugin({
-      filename: "[name].css",
-      chunkFilename: "[id].css"
-    })
+      filename: '[name].css',
+      chunkFilename: '[id].css'
+    }),
+    new webpack.ProvidePlugin({
+      noUiSlider: 'nouislider'
+    }),
+    new WriteFilePlugin
   ]
 };

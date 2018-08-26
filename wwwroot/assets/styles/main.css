@@ -52,11 +52,23 @@ path:hover {
     grid-area: map;
 }
 .selectors {
-    border: 1px solid blue;
+    /* border: 1px solid blue; */
     grid-area: selectors;
     display:grid;
     grid-template-columns: 1fr 1fr;
-    grid-template-rows: 1fr;
+    grid-template-rows: 200px 200px 200px 200px 200px 1fr;
+    grid-template-areas:
+        "slider slider"
+        "selector-years selector-indicators";
+}
+.slider {
+    display: block;
+    padding: 20px;
+    grid-area: slider;
+}
+.slider-value {
+    position: relative;
+    top: -300px;
 }
 .apiIO {
     grid-area: apiIO;
