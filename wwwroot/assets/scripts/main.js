@@ -62,16 +62,6 @@ document.addEventListener('DOMContentLoaded', function() {
       console.log('Caught error in SVG processing : ' + err.message);
     });
   
-  // refresh map on indicator change
-  // ugly but will do for now
-  $('#indicators').addEventListener('change', function() {
-    activeIndicator = $('#indicators').elements['activeIndicator'].value;
-    
-    //year slider may need to be updated with new year values
-    displayControls();
-    
-    fillMapAndLegend();
-  });
   $('#button_test').addEventListener('click', function() {
     fillCountry();
   });
@@ -81,9 +71,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
  
 });
-
-
-
 
 function ajax(url, type) {
   return new Promise(function(resolve, reject) {
@@ -144,7 +131,8 @@ async function testAPI() {
   for (const result of results) {
     processApiAnswer(await result);
   }
-  displayControls();
+  buildIndicatorsSelector();
+  buildYearsSelector();
   fillMapAndLegend();
 }
 
@@ -319,42 +307,65 @@ function displayLegend() {
   }
 }
 
-function displayControls() {
-  // TODO find a better display
-
-  // indicator selector
+function buildIndicatorsSelector() {
   let indicatorArray = getIndicatorsFromLegendObj();
-  indicatorArray.forEach((indicator, i) => {
-    let checked = (activeIndicator !== '')
-      ? ''
-      : (i == 0)
-        ? 'checked'
-        : '';
-    // let checked = (i == 0) ? 'checked' : '';
-    let text = `<label><input type="radio" name="activeIndicator" value="${ indicator[0] }" ${ checked }>${ indicator[1] }</label><br>`;
-    $('#indicators').insertAdjacentHTML('beforeend', text);
-  });
-  // select first indicator in list at the initial call of this function
-  if (activeIndicator === '') activeIndicator = indicatorArray[0][0];
 
-  // years selector
-  // sort years and check the first year of the list in the form
+  if (indicatorArray.length > 0) {
+    if ($('#indicators-select')) {
+      $('#indicators-select').removeEventListener('change', listenChangeIndic);
+      $('#indicators').removeChild($('#indicators-select'));
+    }
+    // (re) create select and options
+    let frag = document.createDocumentFragment(),
+      elOption, elSelect;
+    elSelect = document.createElement('select');
+    elSelect.setAttribute('id', 'indicators-select');
+    elSelect.setAttribute('class', 'indicators-select');
+    
+    indicatorArray.forEach((indicator, i) => {
+      elOption = frag.appendChild(document.createElement('option'));
+      elOption.text = indicator[1];
+      elOption.value = indicator[0];
+      elOption.selected = (i === indicatorArray.length - 1);
+    });
+    
+    elSelect.appendChild(frag);
+    $('#indicators').appendChild(elSelect);
+    
+    // select last indicator in list as active
+    // normally after new fetch data request, new indicator should be at end of array
+    ////at the initial call of this function
+    //if (activeIndicator === '') 
+    activeIndicator = indicatorArray[indicatorArray.length - 1][0];
+
+    $('#indicators').addEventListener('change', listenChangeIndic);
+  }
+}
+
+function listenChangeIndic() {
+  let s = $('#indicators-select');
+  activeIndicator = s.options[s.selectedIndex].value;
+
+  // when indicator changes we may have to rebuild year slider
+  // because of indicator / year independance
+  buildYearsSelector();
+    
+  fillMapAndLegend();
+}
+
+function buildYearsSelector() {
   let yearArray = getYearsFromLegendObj();
   yearArray.sort((a, b) => a - b);
-  // yearArray.forEach( (year, i) => {
-  //   let checked = (i == 0) ? 'checked' : '';
-  //   let text = `<label><input type="radio" name="activeYear" value="${ year }" ${ checked }>${ year }</label><br>`;
-  //   $('#years').insertAdjacentHTML('beforeend', text);
-  // });
+
   activeYear = yearArray[0];
 
   //can't create slider with only one value
   if (yearArray.length > 1) {
     var slider = $('#slider');
     createUpdateSlider(slider, yearArray);
-    var inputFormat = $('#slider-value');
+    var sliderValue = $('#slider-value');
     slider.noUiSlider.on('update', function( values, handle ) {
-      inputFormat.innerHTML = values[handle];
+      sliderValue.innerHTML = values[handle];
       activeYear = values[handle];
       fillMapAndLegend();
     });
@@ -363,8 +374,6 @@ function displayControls() {
     console.log('single year');
     //TODO implement destroy/hide year slider bc that component needs at least 2 values
   }
-
-
 }
 
 function getYearsFromLegendObj() {

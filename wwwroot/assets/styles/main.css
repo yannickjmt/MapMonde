@@ -3,7 +3,7 @@ path {
     fill-rule: evenodd;
 }
 path:hover {
-    stroke-width: 4px; 
+    stroke-width: 3px; 
 }
 
 .noData {
