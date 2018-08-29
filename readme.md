@@ -23,6 +23,9 @@ Here you should say what actually happens when you execute the code above.
 ### Built With
 List main libraries, frameworks used including versions (React, Angular etc...)
 
+lightweight, highly customizable range slider
+noUiSlider https://github.com/leongersen/noUiSlider
+
 ### Prerequisites
 What is needed to set up the dev environment. For instance, global dependencies or any other tools. include download links.
 
@@ -39,6 +42,16 @@ packagemanager install
 ```
 
 And state what happens step-by-step. If there is any virtual environment, local server or database feeder needed, explain here.
+
+Slider component : 
+
+npm install nouislider
+
+Webpack with css plugin
+npm i mini-css-extract-plugin css-loader --save-dev
+
+npm run dev : bundles the files for development
+npm run watch : start a process that automatically bundles the files
 
 ### Building
 

@@ -1,5 +1,10 @@
+import '../../../node_modules/nouislider/distribute/nouislider.css';
+import '../../../node_modules/css-modal/build/modal.css';
 import '../styles/main.css';
-import style from  '../../../node_modules/nouislider/distribute/nouislider.css';
+
+import SelectPure from 'select-pure';
+
+
 var noUiSlider = require('nouislider');
 
 'use strict';
@@ -39,6 +44,23 @@ var legend = {};
 var activeYear = '';
 var activeIndicator = '';
 
+// due to custom multi select component, default indic must be given
+var formIndicators = ['NY.GDP.MKTP.CD'];
+
+const myOptions = [
+  { label: 'Population, total', value: 'SP.POP.TOTL'},
+  { label: 'GDP (current US$)', value: 'NY.GDP.MKTP.CD'},
+  { label: 'GDP growth (annual %)', value: 'NY.GDP.MKTP.KD.ZG'},
+  { label: 'GDP per capita, PPP (current international $)', value: 'NY.GDP.PCAP.PP.CD'},
+  { label: 'Central government debt, total (% of GDP)', value: 'GC.DOD.TOTL.GD.ZS'},
+  { label: 'Inflation, consumer prices (annual %)', value: 'FP.CPI.TOTL.ZG'},
+  { label: 'Current account balance (% of GDP)', value: 'BN.CAB.XOKA.GD.ZS'},
+  { label: 'Foreign direct investment, net inflows (% of GDP)', value: 'BX.KLT.DINV.WD.GD.ZS'},
+  { label: 'Renewable electricity (% in total electricity output)', value: '4.1_SHARE.RE.IN.ELECTRICITY'},
+  { label: 'Gini Coefficient', value: '3.0.Gini'},
+  { label: 'Literacy rate, youth total (% of people ages 15-24)', value: '1.1_YOUTH.LITERACY.RATE'}
+];
+
 document.addEventListener('DOMContentLoaded', function() {
   //load SVG and initialize country object
   getSVG('../assets/images/world.svg', 'XML')
@@ -65,11 +87,15 @@ document.addEventListener('DOMContentLoaded', function() {
   $('#button_test').addEventListener('click', function() {
     fillCountry();
   });
-  $('#button_API').addEventListener('click', function() {
-    testAPI();
-  });
+  // $('#button_API').addEventListener('click', function() {
+  //   testAPI();
+  // });
 
- 
+  buildForm();
+
+  // land on the modal window
+  window.location.hash = 'modal-stretch';
+
 });
 
 function ajax(url, type) {
@@ -123,11 +149,79 @@ function fillCountry() {
   }
 }
 
-async function testAPI() {
-  const urlAPI = $('#request').value.split('\n');
 
+function buildForm() {
+// generate the select-pure component 
+  let instanceSelect = new SelectPure('.indicator-select-form', {
+    options: myOptions,
+    multiple: true,
+    // bug with this component, needs a default value for multi-select
+    value: ['NY.GDP.MKTP.CD'],
+    icon: 'fas fa-times',
+    // could not find way to access those values otherwise
+    onChange: value => { 
+      formIndicators = value; 
+    }
+  });
+
+  //create the year slider for the form
+  noUiSlider.create($('#slider-form'), {
+    start: [ 2000, 2017 ],
+    range: {
+      'min': [  1890 ],
+      'max': [ 2027 ]
+    },
+    padding: 10,
+    step: 1,
+    margin: 1,
+    connect: true,
+    tooltips: [ true, true ],
+    format: {
+      to: function ( value ) {
+        // weird occasional bug when value = x.99999
+        return Math.round(value);
+      },
+      from: function ( value ) {
+        return value;
+      }
+    },
+    pips: {
+      mode: 'values',
+      values: [1900, 2017],
+      density: 10
+    }
+  });
+  // var sliderValue = $('#slider-value');
+  // $('#slider-form').noUiSlider.on('update', function( values, handle ) {
+  //   if (handle) {
+  //     // $('#slider-form-value-max').innerHTML = values[handle];
+  //   } else {
+  //     // $('#slider-form-value-min').innerHTML = values[handle];
+  //   }
+  // });
+
+  $('#button-form').addEventListener('click', function() {
+    let urlArray = genApiURLs();
+    // console.log(urlArray);
+    fetchAndProcessData(urlArray);
+    window.location.hash = '#!';
+  });
+}
+
+function genApiURLs() {
+  let urlArray = [];
+  let years = $('#slider-form').noUiSlider.get();
+  for (let i in formIndicators) {
+    let url = `http://api.worldbank.org/v2/countries/all/indicators/${formIndicators[i]}?format=json&date=${years[0]}:${years[1]}&per_page=32000`;
+    urlArray.push(url);
+  }
+  return urlArray;
+}
+
+async function fetchAndProcessData(urlsAPI) {
+  // const urlAPI = $('#request').value.split('\n');
   // asynchronous and parallel API calls and result process
-  let results = urlAPI.map(async (url) => await callAPI(url, 'text'));
+  let results = urlsAPI.map(async (url) => await callAPI(url, 'text'));
   for (const result of results) {
     processApiAnswer(await result);
   }

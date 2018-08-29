@@ -5,14 +5,56 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>World Map</title>
     <link rel="stylesheet" href="dist/main.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
     <!-- <script src="assets/scripts/main.js"></script> -->
     <script src="dist/bundle.js"></script>
   </head>
   <body>
+    <section class="modal--show" id="modal-stretch"
+      tabindex="-1" role="dialog" data-cssmodal-stretch
+      aria-labelledby="stackable-label" aria-hidden="true">
+  
+      <div class="modal-inner">
+        <!-- <header id="modal-label">Choose a year range and an indicator selection.</header> -->
+        <div class="modal-content" >
+          <div id="slider-form" class="slider-form"></div>
+          <!-- <div class="slider-form-value">
+            Year between <span id="slider-form-value-min"></span> and <span id="slider-form-value-max"></span>
+          </div> -->
+          <span class="indicator-select-form"></span>
+          <div class="button-alpha button-form">
+            <!-- <div class="container-button"> -->
+            <button id="button-form" class="btn btn-dark btn-lg">&nbsp;&nbsp;&nbsp;&nbsp;<i class="fas fa-globe-americas"></i>&nbsp;&nbsp;&nbsp;&nbsp;</button>
+            <!-- </div> -->
+            </div>
+        </div>
+      </div>
+    
+      <a href="#!" class="modal-close" title="Close this modal"
+          data-dismiss="modal" data-close="Close">&times;</a>
+    </section>
+<!--   
+    <section class="modal--show" id="modal-text" 
+      tabindex="-1" role="dialog" aria-labelledby="modal-label" 
+      aria-hidden="true" data-cssmodal-stretch>
+
+      <div class="modal-inner">
+        <header id="modal-label">Please select a year range and indicators</header>
+        <div class="modal-content">
+          <span class="example"></span>
+          <input type="text" name="fname"><br>
+        </div>
+      </div>
+
+      <a href="#!" class="modal-close" title="Close this modal" data-close="Close" data-dismiss="modal">?</a>
+    </section>
+
+     -->
     <div class="container">
       <div class="header">
         <p>
           <button id="button_test" type="button" class="button">Test manip map</button><button id="button_API" type="button">Test API</button>
+          <a href="#modal-stretch">Modal</a>
           <span id="card-body"></span>
         </p>
       </div>

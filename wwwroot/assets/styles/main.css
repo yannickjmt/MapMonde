@@ -1,3 +1,66 @@
+/*  
+    ========================================
+    Reset CSS
+    http://meyerweb.com/eric/tools/css/reset/ 
+    v2.0 | 20110126
+    License: none (public domain)
+    ========================================
+*/
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+body {
+	line-height: 1;
+}
+ol, ul {
+	list-style: none;
+}
+blockquote, q {
+	quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+/*
+	========================================
+	Main & Map
+	========================================
+*/
+
+body {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
 path {
     fill: #f2f2f2;
     fill-rule: evenodd;
@@ -73,6 +136,13 @@ path:hover {
 .apiIO {
     grid-area: apiIO;
 }
+
+/*
+	========================================
+	Legend
+	========================================
+*/
+
 .legend {
     grid-area: legend;
     border: 1px solid green;
@@ -112,8 +182,251 @@ path:hover {
     background-color: #008080;
 }
 
+/*
+	========================================
+	Form
+	========================================
+*/
 
-input[type=radio] {
-	height: 20px;
-	width: 30px;
+.slider-form {
+    /* border: 1px solid red; */
+    display: block;
+    margin-top: 40px;
+    /* padding: 20px 20px 100px 20px; */
+    
 }
+.slider-form-value {
+    /* border: 1px solid blue;; */
+    display: block;
+    padding-top: 60px;
+}
+.indicator-select-form {
+    /* border: 1px solid green; */
+    padding-top: 60px;
+}
+.button-form {
+    align-self: center;
+    margin-top: auto;
+}
+
+/*
+	========================================
+	Select-pure Component
+	========================================
+*/
+
+.select-wrapper {
+    margin: auto;
+    max-width: 600px;
+    width: calc(100% - 40px);
+  }
+  
+  .select-pure__select {
+    align-items: center;
+    background: #f9f9f8;
+    border-radius: 4px;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+    box-sizing: border-box;
+    color: #363b3e;
+    cursor: pointer;
+    display: flex;
+    font-size: 16px;
+    font-weight: 500;
+    justify-content: left;
+    min-height: 44px;
+    padding: 5px 10px;
+    position: relative;
+    transition: 0.2s;
+    width: 100%;
+  }
+  
+  .select-pure__options {
+    border-radius: 4px;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+    box-sizing: border-box;
+    color: #363b3e;
+    display: none;
+    left: 0;
+    max-height: 60vh;
+    overflow-y: scroll;
+    position: absolute;
+    top: 50px;
+    width: 100%;
+    z-index: 5;
+  }
+  
+  .select-pure__select--opened .select-pure__options {
+    display: block;
+  }
+  
+  .select-pure__option {
+    background: #fff;
+    border-bottom: 1px solid #e4e4e4;
+    box-sizing: border-box;
+    height: 44px;
+    line-height: 25px;
+    padding: 10px;
+  }
+  
+  .select-pure__option--selected {
+    color: #e4e4e4;
+    cursor: initial;
+    pointer-events: none;
+  }
+  
+  .select-pure__option--hidden {
+    display: none;
+  }
+  
+  .select-pure__selected-label {
+    /* background: #5e6264; */
+    background: #3F4351;
+    border-radius: 4px;
+    color: #fff;
+    cursor: initial;
+    display: inline-block;
+    margin: 5px 10px 5px 0;
+    padding: 3px 7px;
+  }
+  
+  .select-pure__selected-label:last-of-type {
+    margin-right: 0;
+  }
+  
+  .select-pure__selected-label i {
+    cursor: pointer;
+    display: inline-block;
+    margin-left: 7px;
+  }
+  
+  .select-pure__selected-label i:hover {
+    color: #e4e4e4;
+  }
+  
+  .select-pure__autocomplete {
+    background: #f9f9f8;
+    border-bottom: 1px solid #e4e4e4;
+    border-left: none;
+    border-right: none;
+    border-top: none;
+    box-sizing: border-box;
+    font-size: 16px;
+    outline: none;
+    padding: 10px;
+    width: 100%;
+  }
+
+/*
+	========================================
+	CSS Modal Plugin
+	========================================
+*/
+
+[data-cssmodal-stretch] .modal-inner {
+    top: 10%;
+      min-height: 80%;
+  }
+  [data-cssmodal-stretch] .modal-content {
+      height: 70vh;
+      background: white;
+      max-height: none !important;
+      overflow-y: visible;
+      overflow-x: visible;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      border: 0px;
+      /* padding-top: 40px; */
+  }
+  [data-cssmodal-stretch] .modal-close:after {
+    top: 10%;
+    margin-top: -25px;
+  }
+  @media screen and (max-width: 30em) {
+    [data-cssmodal-stretch] .modal-inner {
+      top: 0;
+    }
+    [data-cssmodal-stretch] .modal-close:after {
+      margin-top: 0;
+    }
+  }
+
+  /*
+	========================================
+	Button from https://github.com/loup-brun/buttons
+	========================================
+*/
+
+/* .container-button {
+    padding-left: 2%;
+    padding-right: 2%;
+    max-width: 700px;
+    margin: 0 auto; 
+} */
+
+/* button, a {
+    outline: none;
+    -webkit-tap-highlight-color: transparent; 
+} */
+
+/* a {
+        text-decoration: none;
+        padding-bottom: 2px;
+        border-bottom: 1px solid #52C11F;
+        color: #52C11F;
+        transition: border-color 0.2s; }
+a:hover {
+          border-color: transparent; } */
+
+.button-alpha .btn {
+    outline: none;
+    -webkit-tap-highlight-color: transparent; 
+    display: inline-block;
+    margin: 6px;
+    font-size: inherit;
+    line-height: 1.42;
+    /* padding: 0.8em 1.6em; */
+    padding: 0.2em 1em;
+    font-weight: normal;
+    border-width: 0;
+    border-style: solid;
+    background: transparent;
+    border-radius: 0.2666666667em;
+    cursor: pointer;
+    font-family: "Booster Next FY", "Avenir Next", Avenir, sans-serif;
+    user-select: none;
+    vertical-align: bottom;
+    transition: box-shadow 0.2s, transform 0.2s, color 0.2s; }
+    .button-alpha .btn.btn-disabled {
+      cursor: not-allowed;
+      opacity: 0.8; }
+      .button-alpha .btn.btn-disabled:active {
+        opacity: 0.6; }
+    .button-alpha .btn:hover {
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.5); }
+    .button-alpha .btn:active {
+      transform: translateY(3px); }
+
+.button-alpha .btn-dark {
+    box-shadow: 0 3px 0 0 #1e1f26, 0 4px 4px -1px rgba(0, 0, 0, 0.6), 0 4px 6px 1px rgba(0, 0, 0, 0.3), 0 1px 2px 1px transparent inset, 0 18px 32px -2px rgba(255, 255, 255, 0.1) inset;
+    background-color: #3F4351;
+    background-image: linear-gradient(-45deg, #3F4351, #384758);
+    color: #E6EAEF; }
+    .button-alpha .btn-dark:hover {
+      box-shadow: 0 3px 0 0 #1e1f26, 0 6px 4px -1px rgba(0, 0, 0, 0.3), 0 4px 16px rgba(0, 0, 0, 0.5), 0 1px 2px 1px transparent inset, 0 18px 32px -2px rgba(255, 255, 255, 0.14) inset; }
+    .button-alpha .btn-dark:active {
+      box-shadow: 0 0px 0 0 #121418, 0 3px 0 0 transparent, 0 4px 16px transparent, 0 1px 2px 1px rgba(0, 0, 0, 0.5) inset, 0 -18px 32px -2px rgba(255, 255, 255, 0.1) inset;
+      transition: 0s;
+      color: #1e1f26;
+      text-shadow: 0 1px 0 rgba(255, 255, 255, 0.3); 
+    }
+.btn-sm {
+    font-size: 0.85em !important; }
+      
+.btn-md {
+    font-size: 1.2em !important; }
+      
+.btn-lg {
+    font-size: 2.6em !important; }
