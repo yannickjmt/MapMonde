@@ -78,6 +78,9 @@ document.addEventListener('DOMContentLoaded', function() {
             {'country_name': country.getAttribute('data-name'),
               'country_code': country.getAttribute('data-id')};
         }
+
+        // country tooltip
+        svgObj.addEventListener('mouseover', showCountryInfo, false);
       }
     )
     .catch(function(err) {
@@ -87,14 +90,17 @@ document.addEventListener('DOMContentLoaded', function() {
   $('#button_test').addEventListener('click', function() {
     fillCountry();
   });
-  // $('#button_API').addEventListener('click', function() {
-  //   testAPI();
-  // });
 
   buildForm();
 
   // land on the modal window
   window.location.hash = 'modal-stretch';
+
+  // country tooltip must follow mouse
+  document.addEventListener('mousemove', function(event) {
+    $('#tooltip').style.left = (event.pageX - 105) + 'px';
+    $('#tooltip').style.top = (event.pageY - 80) + 'px';
+  }, false);
 
 });
 
@@ -548,4 +554,47 @@ function createUpdateSlider(sliderElement, yearArr) {
       }
     }
   });
+}
+
+function showCountryInfo(event) {
+  let countryCode = event.target.getAttribute('data-id');
+  let tooltip = $('#tooltip');
+  if (countryCode == null) {
+    tooltip.style.visibility = 'hidden';
+    tooltip.style.opacity = 0;
+  } else {
+    let country = countries[countryCode];
+    if (country) {
+      let html = `<div class="tooltip-header">${country.country_name} (${countryCode})</div>`;
+
+      
+      if (activeIndicator != '') {
+        let countryIndic = country[activeIndicator];
+        let indicatorName = legend[activeIndicator].indicator_name;
+        let value;
+
+        if (countryIndic) {
+          if (countryIndic[activeYear]) {
+            value = countryIndic[activeYear].value;
+            if (value == null) {
+              value = 'no data';
+            }
+          } else {
+            value = 'no data';
+          }
+        } else {
+          value = 'no data';
+        }
+        html += `<div>${indicatorName} : ${value}</div>`;
+      }
+      tooltip.innerHTML = html;
+      tooltip.style.visibility = 'visible';
+      tooltip.style.opacity = 0.9;
+      tooltip.style.webkitTransform = 'scale(1)';
+      tooltip.style.MozTransform = 'scale(1)';
+      tooltip.style.msTransform = 'scale(1)';
+      tooltip.style.OTransform = 'scale(1)';
+      tooltip.style.transform = 'scale(1)';
+    }
+  }
 }
