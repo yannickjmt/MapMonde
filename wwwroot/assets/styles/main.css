@@ -237,6 +237,7 @@ path:hover {
     font-family: verdana;
     font-size: 11px;
     top: -5px;
+    right: -2px;
     position: relative;
 }
 .legend1 {

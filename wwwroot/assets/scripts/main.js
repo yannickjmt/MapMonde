@@ -402,7 +402,7 @@ function displayLegend() {
       let textID = bgID + '-text';
       $(bgID).classList.add('legend' + index);
       $(bgID).classList.add('legend-n');
-      $(textID).innerHTML = val.toLocaleString();
+      $(textID).innerHTML = formatNumber(val);
       $(textID).className = 'legend-text';
     });
   }
@@ -583,7 +583,7 @@ function showCountryInfo(event) {
         } else {
           value = 'no data';
         }
-        html += `<div>${indicatorName} : ${value}</div>`;
+        html += `<div>${indicatorName} : ${formatNumber(value)}</div>`;
       }
       tooltip.innerHTML = html;
       tooltip.style.visibility = 'visible';
@@ -596,3 +596,20 @@ function showCountryInfo(event) {
     }
   }
 }
+
+const formatNumber = (n) => {
+  if (Math.abs(n) < 10 ) {
+    n = Math.round(n * 100)/100;
+  } else if (Math.abs(n) < 1000 ) {
+    n = Math.round(n * 10) / 10;
+  } else if (Math.abs(n) < 1000000) {
+    n = Math.round(n).toLocaleString('en-US');
+  } else if (Math.abs(n) < 1000000000) {
+    n = Math.round(n / 100000) / 10 + 'm';
+  } else if (Math.abs(n) < 1000000000000) {
+    n = (Math.round(n / 100000000) / 10).toLocaleString('en-US') + 'b';
+  } else {
+    n = (Math.round(n / 10000000)).toLocaleString('en-US') + 'b';
+  }
+  return n;
+};
