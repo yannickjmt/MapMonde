@@ -6,7 +6,6 @@
     <title>World Map</title>
     <link rel="stylesheet" href="dist/main.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
-    <!-- <script src="assets/scripts/main.js"></script> -->
     <script src="dist/bundle.js"></script>
   </head>
   <body>
@@ -33,6 +32,7 @@
       <a href="#!" class="modal-close" title="Close this modal"
           data-dismiss="modal" data-close="Close">&times;</a>
     </section>
+
     <div class="container">
       <div class="header">
         <p>
@@ -40,38 +40,32 @@
           <a href="#modal-stretch">Modal</a>
           <span id="card-body"></span>
         </p>
+
       </div>
-      <!-- <div class="card">
-        <div id="card-body" class="card-body">
-            
-        </div>
-      </div> -->
       <div class="map" id="svgContainer">
       </div>
       <div class="selectors">
         <div class="slider">
           <div id="slider"></div>
-          <div id="slider-value" class="slider-value"></div>
-        </div>
-        <div class="selector-years">
-
+          <!-- <div id="slider-value" class="slider-value"></div> -->
         </div>
         <div class="selector-indicators">
           <form id="indicators"></form>
         </div>
+        <section class="floating-legend">
+            <div id="legend1"></div><div id="legend0-text"></div>
+            <div id="legend2"></div><div id="legend1-text"></div>
+            <div id="legend3"></div><div id="legend2-text"></div>
+            <div id="legend4"></div><div id="legend3-text"></div>
+            <div id="legend5"></div><div id="legend4-text"></div>
+            <div id="legend6"></div><div id="legend5-text"></div>
+            <div id="legend7"></div><div id="legend6-text"></div>
+            <div id="legend8"></div><div id="legend7-text"></div>
+            <div id="legend0"></div><div id="legend8-text"></div>
+        </section>
       </div>
-      <div class="legend">
-        <div id="legend1"></div><div class="legendText" id="legend0-text"></div>
-        <div id="legend2"></div><div class="legendText" id="legend1-text"></div>
-        <div id="legend3"></div><div class="legendText" id="legend2-text"></div>
-        <div id="legend4"></div><div class="legendText" id="legend3-text"></div>
-        <div id="legend5"></div><div class="legendText" id="legend4-text"></div>
-        <div id="legend6"></div><div class="legendText" id="legend5-text"></div>
-        <div id="legend7"></div><div class="legendText" id="legend6-text"></div>
-        <div id="legend8"></div><div class="legendText" id="legend7-text"></div>
-        <div id="legend0"></div><div class="legendText" id="legend8-text"></div>
- 
-      </div>
+
+
       <div class="apiIO">
        
         <textarea id="request" rows="5" cols="100">http://api.worldbank.org/v2/countries/all/indicators/SP.POP.TOTL?format=json&date=2017&per_page=10000

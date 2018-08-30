@@ -386,23 +386,24 @@ function getClassName(value, indicator, year) {
   return 'background' + index;
 }
 
-// very temporary
 function displayLegend() {
   // TODO change values in thousands, millons, etc. if necessary
  
   if (legend[activeIndicator][activeYear] === undefined) {
     // when indicators don't all have same year range
+    // should never go there normally?
     console.log('no legend value to display');
-    // TODO implement cleanLegend()
+    // TODO implement cleanLegend() 
   }
   else {
     let arr = legend[activeIndicator][activeYear].values;
     arr.forEach((val, index) => {
       let bgID = '#legend' + index;
       let textID = bgID + '-text';
-      $(bgID).className = 'legend' + index;
+      $(bgID).classList.add('legend' + index);
+      $(bgID).classList.add('legend-n');
       $(textID).innerHTML = val.toLocaleString();
-      $(textID).className = 'legendText';
+      $(textID).className = 'legend-text';
     });
   }
 }
@@ -460,20 +461,17 @@ function buildYearsSelector() {
   activeYear = yearArray[0];
 
   //can't create slider with only one value
+  //we forced 2 years minimum range in the form
   if (yearArray.length > 1) {
     var slider = $('#slider');
     createUpdateSlider(slider, yearArray);
-    var sliderValue = $('#slider-value');
+    // var sliderValue = $('#slider-value');
     slider.noUiSlider.on('update', function( values, handle ) {
-      sliderValue.innerHTML = values[handle];
+      // sliderValue.innerHTML = values[handle];
       activeYear = values[handle];
       fillMapAndLegend();
     });
   } 
-  else {
-    console.log('single year');
-    //TODO implement destroy/hide year slider bc that component needs at least 2 values
-  }
 }
 
 function getYearsFromLegendObj() {

@@ -57,12 +57,24 @@ table {
 	========================================
 */
 
+:root {
+    --color-noData: #f2f2f2;
+    --color-1: #8b0000;
+    --color-2: #cf3b59;
+    --color-3: #f78599;
+    --color-4: #ffd8cd;
+    --color-5: #81dd8e;
+    --color-6: #63be8a;
+    --color-7: #3f9e86;
+    --color-8: #008080;
+}
+
 body {
     font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
 
 path {
-    fill: #f2f2f2;
+    fill: var(--color-noData);
     fill-rule: evenodd;
     -webkit-transition: 0.1s ease-in-out;
     -moz-transition: 0.1s ease-in-out;
@@ -79,31 +91,31 @@ path:hover {
 }
 
 .noData {
-    fill: #f2f2f2;
+    fill: var(--color-noData);
 }
 .background1 {
-    fill: #8b0000;
+    fill: var(--color-1);
 }
 .background2 {
-    fill: #cf3b59;
+    fill: var(--color-2);
 }
 .background3 {
-    fill: #f78599;
+    fill: var(--color-3);
 }
 .background4 {
-    fill: #ffd8cd;
+    fill: var(--color-4);
 }
 .background5 {
-    fill: #81dd8e;
+    fill: var(--color-5);
 }
 .background6 {
-    fill: #63be8a;
+    fill: var(--color-6);
 }
 .background7 {
-    fill: #3f9e86;
+    fill: var(--color-7);
 }
 .background8 {
-    fill: #008080;
+    fill: var(--color-8);
 }
 
 .container {
@@ -113,10 +125,11 @@ path:hover {
     grid-template-areas: 
         "header header"
         "map map"
-        "selectors legend"
+        "selectors selectors"
         "apiIO apiIO";
 }
 .header {
+    position: relative;
     grid-area: header;
     border: 1px solid red;
 }
@@ -124,28 +137,28 @@ path:hover {
     grid-area: map;
 }
 .selectors {
-    /* border: 1px solid blue; */
+    border: 1px solid blue;
     grid-area: selectors;
     display:grid;
     grid-template-columns: 1fr 1fr;
-    grid-template-rows: 200px 200px 200px 200px 200px 1fr;
+    grid-template-rows: 200px;
     grid-template-areas:
-        "slider slider"
-        "selector-years selector-indicators";
+        "slider selector-indicators"
 }
 .slider {
     display: block;
     padding: 20px;
     grid-area: slider;
 }
-.slider-value {
+/* .slider-value {
     position: relative;
     top: -300px;
-}
+} */
 .apiIO {
     grid-area: apiIO;
 }
 
+/* Tooltip slightly modified from http://codepen.io/Firdaus-Sabain/pen/zqonf/ */
 .tooltip {
     opacity: 0;
     z-index: 99;
@@ -201,43 +214,54 @@ path:hover {
 	========================================
 */
 
-.legend {
-    grid-area: legend;
-    border: 1px solid green;
-    /* position: relative; */
+.floating-legend {
+    position: relative;
+    top: -480px;
+    left: 50px;
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
-    padding: 10px;
-    
+    grid-template-columns: 50px 200px;
+    grid-template-rows: 25px 25px 25px 25px 25px 25px 25px 25px 25px;
 }
-.legendText {
-    font-family: verdana;
+.legend-n {
+    border-top: 2px solid black;
+    border-left: 2px solid black;
+    border-right: 2px solid black;
 }
+.legend-n:nth-last-child(2) {
+    border-top: 2px solid black;
+    border-left: 0;
+    border-right: 0;
 
+}
+.legend-text {
+    font-family: verdana;
+    font-size: 11px;
+    top: -5px;
+    position: relative;
+}
 .legend1 {
-    background-color: #8b0000;
+    background-color: var(--color-1);
 }
 .legend2 {
-    background-color: #cf3b59;
+    background-color: var(--color-2);
 }
 .legend3 {
-    background-color: #f78599;
+    background-color: var(--color-3);
 }
 .legend4 {
-    background-color: #ffd8cd;
+    background-color: var(--color-4);
 }
 .legend5 {
-    background-color: #81dd8e;
+    background-color: var(--color-5);
 }
 .legend6 {
-    background-color: #63be8a;
+    background-color: var(--color-6);
 }
 .legend7 {
-    background-color: #3f9e86;
+    background-color: var(--color-7);
 }
 .legend8 {
-    background-color: #008080;
+    background-color: var(--color-8);
 }
 
 /*
@@ -416,27 +440,6 @@ path:hover {
 	Button from https://github.com/loup-brun/buttons
 	========================================
 */
-
-/* .container-button {
-    padding-left: 2%;
-    padding-right: 2%;
-    max-width: 700px;
-    margin: 0 auto; 
-} */
-
-/* button, a {
-    outline: none;
-    -webkit-tap-highlight-color: transparent; 
-} */
-
-/* a {
-        text-decoration: none;
-        padding-bottom: 2px;
-        border-bottom: 1px solid #52C11F;
-        color: #52C11F;
-        transition: border-color 0.2s; }
-a:hover {
-          border-color: transparent; } */
 
 .button-alpha .btn {
     outline: none;
