@@ -505,10 +505,10 @@ function createUpdateSlider(sliderElement, yearArr) {
     // returns 0 = no value, 1 = large value, 2 = small value
     // type = 1 for min and max value, 2 for others
     // display value every floor(lenght/10) steps to keep total number of values displayed in check 
-    if (yearArr.length < 10) {
+    if (yearArr.length < 12) {
       return 1;
     } else {
-      let tmp = Math.floor(yearArr.length / 10);
+      let tmp = Math.floor((yearArr.length + 8) / 10);
       return value % tmp == 0 ? 1 : 0;
     }
   };
