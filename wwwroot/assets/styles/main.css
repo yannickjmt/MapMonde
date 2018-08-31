@@ -69,8 +69,17 @@ table {
     --color-8: #008080;
 }
 
+html {
+    overflow-x: hidden;
+    overflow-y: visible;
+}
 body {
     font-family: Verdana, Geneva, Tahoma, sans-serif;
+    background-color: #3F4351;
+    margin: 5px;
+    margin-top: 0;
+    margin-bottom: 0;
+    min-height: 100vh;
 }
 
 path {
@@ -120,30 +129,68 @@ path:hover {
 
 .container {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: 100px auto 500px 500px;
+    grid-template-columns: 1fr;
+    grid-template-rows: 90px auto auto 20px;
     grid-template-areas: 
-        "header header"
-        "map map"
-        "selectors selectors"
-        "apiIO apiIO";
+        "header"
+        "map"
+        "selectors"
+        "footer";
+    /* align-content: stretch; */
+    min-height: 99vh;
+
+    /* margin-bottom: auto; */
 }
 .header {
     position: relative;
     grid-area: header;
-    border: 1px solid red;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    /* border: 1px solid red; */
+
+}
+.header-icons {
+    /* border: 1px solid green; */
+    width: 200px;
+    text-align: center;
+    /* margin: auto; */
+    /* border-right: 10px solid red; */
+    /* border-bottom-right-radius: 5px; */
+}
+
+.header-title {
+    width: auto;
+    height: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: auto;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    font-size: 20px;
 }
 .map {
     grid-area: map;
+    background-color: white;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
 }
 .selectors {
     border: 1px solid blue;
+    background-color: white;
     grid-area: selectors;
-    display:grid;
-    grid-template-columns: 1fr 1fr;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    display:flex;
+    align-items: flex-start;
+    justify-content: center;
+
+    /* grid-template-columns: 1fr 1fr;
     grid-template-rows: 200px;
     grid-template-areas:
-        "slider selector-indicators"
+        "slider selector-indicators" */
 }
 .slider {
     display: block;
@@ -154,6 +201,14 @@ path:hover {
     position: relative;
     top: -300px;
 } */
+
+.footer {
+    height: 20px;
+    border: 1px solid red;
+    grid-area: footer;
+    align-self: end;
+    margin: auto;
+}
 .apiIO {
     grid-area: apiIO;
 }
@@ -172,7 +227,8 @@ path:hover {
     border-radius: 3px;
     text-align: left;
     text-shadow: 1px 1px 2px #111;
-    background: rgba(51,51,51,0.9);
+    /* background: rgba(51,51,51,0.9); */
+    background: rgba(63,67,81,0.9);
     border: 1px solid rgba(34,34,34,0.9);
     box-shadow: 0px 0px 3px rgba(0,0,0,0.5);
     -webkit-transition: transform .2s ease-in-out;
@@ -193,7 +249,7 @@ path:hover {
     position: absolute;
 }
 
-.tooltip:before,.tooltip:after {
+.tooltip:before, .tooltip:after {
     content: '';
     border-left: 10px solid transparent;
     border-right: 10px solid transparent;
@@ -215,11 +271,14 @@ path:hover {
 */
 
 .floating-legend {
-    position: relative;
-    top: -480px;
-    left: 50px;
+    position: absolute;
+    /* top: -480px;
+    left: 50px; */
+    top: 40vw;
+    left: 30px;
+    width: 160px;
     display: grid;
-    grid-template-columns: 50px 200px;
+    grid-template-columns: 50px 100px;
     grid-template-rows: 25px 25px 25px 25px 25px 25px 25px 25px 25px;
 }
 .legend-n {
@@ -460,30 +519,56 @@ path:hover {
     font-family: "Booster Next FY", "Avenir Next", Avenir, sans-serif;
     user-select: none;
     vertical-align: bottom;
-    transition: box-shadow 0.2s, transform 0.2s, color 0.2s; }
+    transition: box-shadow 0.2s, transform 0.2s, color 0.2s;
+}
     .button-alpha .btn.btn-disabled {
-      cursor: not-allowed;
-      opacity: 0.8; }
-      .button-alpha .btn.btn-disabled:active {
-        opacity: 0.6; }
+        cursor: not-allowed;
+        opacity: 0.8;
+    }
+    .button-alpha .btn.btn-disabled:active {
+        opacity: 0.6; 
+    }
     .button-alpha .btn:hover {
-      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.5); }
+        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.5); 
+    }
     .button-alpha .btn:active {
-      transform: translateY(3px); }
+        transform: translateY(3px); 
+    }
 
 .button-alpha .btn-dark {
     box-shadow: 0 3px 0 0 #1e1f26, 0 4px 4px -1px rgba(0, 0, 0, 0.6), 0 4px 6px 1px rgba(0, 0, 0, 0.3), 0 1px 2px 1px transparent inset, 0 18px 32px -2px rgba(255, 255, 255, 0.1) inset;
     background-color: #3F4351;
     background-image: linear-gradient(-45deg, #3F4351, #384758);
-    color: #E6EAEF; }
+    color: #E6EAEF; 
+}
     .button-alpha .btn-dark:hover {
-      box-shadow: 0 3px 0 0 #1e1f26, 0 6px 4px -1px rgba(0, 0, 0, 0.3), 0 4px 16px rgba(0, 0, 0, 0.5), 0 1px 2px 1px transparent inset, 0 18px 32px -2px rgba(255, 255, 255, 0.14) inset; }
-    .button-alpha .btn-dark:active {
-      box-shadow: 0 0px 0 0 #121418, 0 3px 0 0 transparent, 0 4px 16px transparent, 0 1px 2px 1px rgba(0, 0, 0, 0.5) inset, 0 -18px 32px -2px rgba(255, 255, 255, 0.1) inset;
-      transition: 0s;
-      color: #1e1f26;
-      text-shadow: 0 1px 0 rgba(255, 255, 255, 0.3); 
+        box-shadow: 0 3px 0 0 #1e1f26, 0 6px 4px -1px rgba(0, 0, 0, 0.3), 0 4px 16px rgba(0, 0, 0, 0.5), 0 1px 2px 1px transparent inset, 0 18px 32px -2px rgba(255, 255, 255, 0.14) inset;
     }
+    .button-alpha .btn-dark:active {
+        box-shadow: 0 0px 0 0 #121418, 0 3px 0 0 transparent, 0 4px 16px transparent, 0 1px 2px 1px rgba(0, 0, 0, 0.5) inset, 0 -18px 32px -2px rgba(255, 255, 255, 0.1) inset;
+        transition: 0s;
+        color: #1e1f26;
+        text-shadow: 0 1px 0 rgba(255, 255, 255, 0.3); 
+    }
+
+.button-alpha .btn-light {
+    box-shadow: 0 3px 0 0 #b7c3d1, 0 4px 4px -1px rgba(0, 0, 0, 0.6), 0 4px 6px 1px rgba(0, 0, 0, 0.3), 0 1px 2px 1px transparent inset, 0 18px 32px -2px rgba(255, 255, 255, 0.1) inset;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.5); 
+    background-color: #f2f2f2;
+    background-image: linear-gradient(-45deg, #f2f2f2, #e4edf1);
+    color: #3F4351;
+}
+    .button-alpha .btn-light:hover {
+        /* box-shadow: 0 3px 0 0 #b7c3d1, 0 6px 4px -1px rgba(0, 0, 0, 0.3), 0 4px 16px rgba(0, 0, 0, 0.5), 0 1px 2px 1px transparent inset, 0 18px 32px -2px rgba(255, 255, 255, 0.14) inset; */
+        box-shadow: inset 0 0 1px 1px rgba(0, 0, 0, 0.5);
+    }
+    .button-alpha .btn-light:active {
+        box-shadow: 0 0px 0 0 #a8b6c7, 0 3px 0 0 transparent, 0 4px 16px transparent, 0 1px 2px 1px rgba(0, 0, 0, 0.5) inset, 0 -18px 32px -2px rgba(255, 255, 255, 0.1) inset;
+        transition: 0s;
+        color: #b7c3d1;
+        text-shadow: 0 1px 0 rgba(255, 255, 255, 0.3); 
+    }
+
 .btn-sm {
     font-size: 0.85em !important; }
       

@@ -87,9 +87,9 @@ document.addEventListener('DOMContentLoaded', function() {
       console.log('Caught error in SVG processing : ' + err.message);
     });
   
-  $('#button_test').addEventListener('click', function() {
-    fillCountry();
-  });
+  // $('#button_test').addEventListener('click', function() {
+  //   fillCountry();
+  // });
 
   buildForm();
 
@@ -126,35 +126,6 @@ async function getSVG(url, type) {
     console.log('error while retrieving svg : ' + err.message);
   }
 }
-
-function fillCountry() {
-  //var infoBoxHTML = $('#card-body').innerHTML;
-  //how to manage cvs with JS 
-  //http://www.petercollingridge.co.uk/tutorials/svg/interactive/javascript/
-  //https://stackoverflow.com/questions/14068031/embedding-external-svg-in-html-for-javascript-manipulation
-  
-  // var svgObject = document.getElementById('svgContainer').firstElementChild;
-  
-  var USA = svgObj.getElementById('RU');
-  //USA.style.fill = "#333";
-  USA.setAttributeNS(null, 'class', 'background2');
-  // console.log(USA.getAttribute("data-name"));
-  //   console.log(country.getAttribute("fill"));
-  //   console.log(country.getAttributeNS(null, "fill"));
-  //   country.setAttributeNS(null, "fill", "#333");
-
-  function showCountryInfo(event) {
-    $('#card-body').innerHTML = event.target.getAttribute('newAttr');
-  }
-  svgObj.addEventListener('click', showCountryInfo, false);
-  
-  countries = Array.from(svgObj.querySelectorAll('path'));
-  for (let country of countries) {
-    country.setAttributeNS(null, 'newAttr', country.getAttribute('data-name') 
-      + ' ' + country.getAttribute('data-id'));
-  }
-}
-
 
 function buildForm() {
 // generate the select-pure component 
@@ -234,6 +205,7 @@ async function fetchAndProcessData(urlsAPI) {
   buildIndicatorsSelector();
   buildYearsSelector();
   fillMapAndLegend();
+  updateTitle();
 }
 
 async function callAPI(url, type) {
@@ -252,7 +224,7 @@ function fillMapAndLegend() {
 }
 
 function processApiAnswer(result) {
-  $('#answer').value = result;
+  //$('#answer').value = result;
   let JSONObj = JSON.parse(result);
 
   for (let JSONcountry of JSONObj[1]) {
@@ -450,8 +422,8 @@ function listenChangeIndic() {
   // when indicator changes we may have to rebuild year slider
   // because of indicator / year independance
   buildYearsSelector();
-    
   fillMapAndLegend();
+  updateTitle();
 }
 
 function buildYearsSelector() {
@@ -470,6 +442,7 @@ function buildYearsSelector() {
       // sliderValue.innerHTML = values[handle];
       activeYear = values[handle];
       fillMapAndLegend();
+      updateTitle();
     });
   } 
 }
@@ -598,18 +571,26 @@ function showCountryInfo(event) {
 }
 
 const formatNumber = (n) => {
-  if (Math.abs(n) < 10 ) {
-    n = Math.round(n * 100)/100;
-  } else if (Math.abs(n) < 1000 ) {
-    n = Math.round(n * 10) / 10;
-  } else if (Math.abs(n) < 1000000) {
-    n = Math.round(n).toLocaleString('en-US');
-  } else if (Math.abs(n) < 1000000000) {
-    n = Math.round(n / 100000) / 10 + 'm';
-  } else if (Math.abs(n) < 1000000000000) {
-    n = (Math.round(n / 100000000) / 10).toLocaleString('en-US') + 'b';
-  } else {
-    n = (Math.round(n / 10000000)).toLocaleString('en-US') + 'b';
+  if (typeof n == 'number') {
+    if (Math.abs(n) < 10 ) {
+      n = Math.round(n * 100)/100;
+    } else if (Math.abs(n) < 1000 ) {
+      n = Math.round(n * 10) / 10;
+    } else if (Math.abs(n) < 1000000) {
+      n = Math.round(n).toLocaleString('en-US');
+    } else if (Math.abs(n) < 1000000000) {
+      n = Math.round(n / 100000) / 10 + 'm';
+    } else if (Math.abs(n) < 1000000000000) {
+      n = (Math.round(n / 100000000) / 10).toLocaleString('en-US') + 'b';
+    } else {
+      n = (Math.round(n / 1000000000)).toLocaleString('en-US') + 'b';
+    }
   }
   return n;
+};
+
+const updateTitle = () => {
+  let indicatorName = legend[activeIndicator].indicator_name;
+  let html = ` : ${indicatorName}, in ${activeYear}.`;
+  $('#header-content').innerHTML = html;
 };
