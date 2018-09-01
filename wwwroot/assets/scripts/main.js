@@ -270,10 +270,13 @@ function processApiAnswer(result) {
 function pushValueToLegendObj(indicatorID, IndicatorName, year, value) {
   if (legend[indicatorID]) {
     if (legend[indicatorID][year]) {
-      // add value to existing array for year and indicatorID
-      let arr = legend[indicatorID][year]['values'];
-      arr.push(value);
-      legend[indicatorID][year]['values'] = arr;
+      // reduced = true means we already processed all data for this year and indicator
+      if (legend[indicatorID][year].reduced == false) {
+        // add value to existing array for year and indicatorID
+        let arr = legend[indicatorID][year]['values'];
+        arr.push(value);
+        legend[indicatorID][year]['values'] = arr;
+      }
     }
     else {
       // create new year property for indicatorID
@@ -437,7 +440,9 @@ function buildYearsSelector() {
   let yearArray = getYearsFromLegendObj();
   yearArray.sort((a, b) => a - b);
 
-  activeYear = yearArray[0];
+  if ((activeYear == '') || (!yearArray.includes(activeYear))) {
+    activeYear = yearArray[0];
+  }
 
   //can't create slider with only one value
   //we forced 2 years minimum range in the form
@@ -456,14 +461,6 @@ function buildYearsSelector() {
 
 function getYearsFromLegendObj() {
   let yearArray = [];
-  // for (let indicatorVal in legend) {
-  //   for (let yearVal in legend[indicatorVal]) {
-  //     let year = legend[indicatorVal][yearVal];
-  //     if (typeof year.reduced === 'boolean') {
-  //       if (!yearArray.includes(yearVal)) yearArray.push(yearVal);
-  //     }
-  //   }
-  // }
   // only get years relevant to active indicator
   for (let yearVal in legend[activeIndicator]) {
     let year = legend[activeIndicator][yearVal];
@@ -501,7 +498,7 @@ function createUpdateSlider(sliderElement, yearArr) {
   if (sliderElement.noUiSlider !== undefined) sliderElement.noUiSlider.destroy();
   
   noUiSlider.create(sliderElement, {
-    start: 0,
+    start: yearArr.indexOf(activeYear),
     connect: true,
     // tooltips: true,
     step: 1,
