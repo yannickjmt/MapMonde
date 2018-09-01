@@ -33,7 +33,11 @@
           data-dismiss="modal" data-close="Close">&times;</a>
     </section>
     <div id="tooltip" class="tooltip"></div>
-
+    <div id="blank" class="blank"></div>
+    <div id="spinner-wrapper" class="spinner-wrapper">
+      <div id="spinner" class="spinner"></div>
+      <div id="spinner-text" class="spinner-text"></div>
+    </div>
     <div class="container">
       <div class="header">
         <div class="button-alpha header-icons">
@@ -42,13 +46,7 @@
         </div>
         <div class="header-title">
           <span>World Bank Open Data<span id="header-content"></span></span>
-
         </div>
-        <!-- <p>
-          <button id="button_test" type="button" class="button">Test manip map</button><button id="button_API" type="button">Test API</button>
-          <a href="#modal-stretch">Modal</a>
-          <span id="card-body"></span>
-        </p> -->
         <section class="floating-legend">
             <div id="legend1"></div><div id="legend0-text"></div>
             <div id="legend2"></div><div id="legend1-text"></div>
@@ -67,7 +65,6 @@
         <div class="selectors-slider">
 
           <div id="slider"></div>
-          <!-- <div id="slider-value" class="slider-value"></div> -->
         </div>
         <div class="selectors-indicators styled-select semi-square">
           <form id="indicators"></form>

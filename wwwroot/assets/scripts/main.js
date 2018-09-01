@@ -44,9 +44,9 @@ var legend = {};
 var activeYear = '';
 var activeIndicator = '';
 
-// due to custom multi select component, default indic must be given
-var formIndicators = ['NY.GDP.MKTP.CD'];
 
+
+// the first indicator will be the default one on the form select (component requirement)
 const myOptions = [
   { label: 'Population, total', value: 'SP.POP.TOTL'},
   { label: 'GDP (current US$)', value: 'NY.GDP.MKTP.CD'},
@@ -60,6 +60,9 @@ const myOptions = [
   { label: 'Gini Coefficient', value: '3.0.Gini'},
   { label: 'Literacy rate, youth total (% of people ages 15-24)', value: '1.1_YOUTH.LITERACY.RATE'}
 ];
+
+// Workaround bc of the multi select onChange event not being triggered on creation
+var formIndicators = [myOptions[0].value];
 
 document.addEventListener('DOMContentLoaded', function() {
   //load SVG and initialize country object
@@ -129,11 +132,12 @@ async function getSVG(url, type) {
 
 function buildForm() {
 // generate the select-pure component 
-  let instanceSelect = new SelectPure('.indicator-select-form', {
+  
+let instanceSelect = new SelectPure('.indicator-select-form', {
     options: myOptions,
     multiple: true,
-    // bug with this component, needs a default value for multi-select
-    value: ['NY.GDP.MKTP.CD'],
+    // problem with this component, it needs a default value for multi-select
+    value: [myOptions[0].value],
     icon: 'fas fa-times',
     // could not find way to access those values otherwise
     onChange: value => { 
@@ -196,16 +200,20 @@ function genApiURLs() {
 }
 
 async function fetchAndProcessData(urlsAPI) {
-  // const urlAPI = $('#request').value.split('\n');
+  
+  spinner.style.display = 'block';
+  displaySpinner('Fetching World Bank Data');
   // asynchronous and parallel API calls and result process
   let results = urlsAPI.map(async (url) => await callAPI(url, 'text'));
   for (const result of results) {
     processApiAnswer(await result);
   }
+  displaySpinner('Building Map');
   buildIndicatorsSelector();
   buildYearsSelector();
   fillMapAndLegend();
   updateTitle();
+  hideSpinner();
 }
 
 async function callAPI(url, type) {
@@ -224,7 +232,7 @@ function fillMapAndLegend() {
 }
 
 function processApiAnswer(result) {
-  //$('#answer').value = result;
+  displaySpinner('Processing Data');
   let JSONObj = JSON.parse(result);
 
   for (let JSONcountry of JSONObj[1]) {
@@ -295,7 +303,6 @@ function reduceLegend() {
 
 function reduceArray(arr) {
   // creates the legend range depending on actual values
-  // TODO: round numbers depending on certain conditions
   // TODO: find cool algo using median doesn't work well
   //       separating into equally large block of values for the moment
   const legendArr = [];
@@ -479,9 +486,9 @@ function getIndicatorsFromLegendObj() {
 function createUpdateSlider(sliderElement, yearArr) {
   const filter = (value) => {
     // filters value to display for scale
-    // returns 0 = no value, 1 = large value, 2 = small value
+    // can return 0 = no value, 1 = large value, 2 = small value
     // type = 1 for min and max value, 2 for others
-    // display value every floor(lenght/10) steps to keep total number of values displayed in check 
+    // this will display maximum 11 values on the slider
     if (yearArr.length < 12) {
       return 1;
     } else {
@@ -593,4 +600,16 @@ const updateTitle = () => {
   let indicatorName = legend[activeIndicator].indicator_name;
   let html = ` : ${indicatorName}, in ${activeYear}.`;
   $('#header-content').innerHTML = html;
+};
+
+const displaySpinner = (message) => {
+  $('#blank').style.display = 'block';
+  $('#spinner-text').innerHTML = message;
+  $('#spinner-wrapper').style.display = 'block';
+};
+
+const hideSpinner = () => {
+  $('#spinner-text').innerHTML = '';
+  $('#spinner-wrapper').style.display = 'none';
+  $('#blank').style.display = 'none';
 };

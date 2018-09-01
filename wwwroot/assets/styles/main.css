@@ -138,12 +138,10 @@ body {
 }
 .selectors-slider {
     width: 450px;
-    /* border: 1px solid red; */
     padding: 20px;
 }
 .selectors-indicators {
     width: 350px;
-    /* border: 1px solid green; */
     padding: 20px;
     height: 29px;
     overflow: hidden;
@@ -241,7 +239,6 @@ path:hover {
     border-radius: 3px;
     text-align: left;
     text-shadow: 1px 1px 2px #111;
-    /* background: rgba(51,51,51,0.9); */
     background: rgba(63,67,81,0.9);
     border: 1px solid rgba(34,34,34,0.9);
     box-shadow: 0px 0px 3px rgba(0,0,0,0.5);
@@ -341,19 +338,15 @@ path:hover {
 	========================================
 */
 .slider-form {
-    /* border: 1px solid red; */
     display: block;
     margin-top: 40px;
-    /* padding: 20px 20px 100px 20px; */
     
 }
 .slider-form-value {
-    /* border: 1px solid blue;; */
     display: block;
     padding-top: 60px;
 }
 .indicator-select-form {
-    /* border: 1px solid green; */
     padding-top: 60px;
 }
 .button-form {
@@ -488,7 +481,6 @@ path:hover {
       flex-direction: column;
       justify-content: flex-start;
       border: 0px;
-      /* padding-top: 40px; */
   }
   [data-cssmodal-stretch] .modal-close:after {
     top: 10%;
@@ -605,3 +597,76 @@ path:hover {
     top: 0px;
 }
 
+/*
+	========================================
+	Loader http://cfoucht.com/loadlab/
+	========================================
+*/
+.blank {
+    display: none;
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    background-color: rgba(255, 255, 255, 0.605);
+}
+.spinner-wrapper {
+    display: none;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-right: -50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+}
+.spinner-text {
+    padding: 20px;
+    font-family: "Courier New", Monaco;
+    font-size: 20px;
+}
+.spinner{
+    position: relative;
+    margin: auto;
+    height: 115px;
+    width: 115px;
+    border: 6px solid transparent;
+    border-top-color: var(--color-1);
+    border-bottom-color: var(--color-1);
+    border-radius: 50%;
+    
+    -webkit-animation: spin 3s linear infinite;
+            animation: spin 3s linear infinite;
+  }
+  .spinner::before{
+    content: "";
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    bottom: 20px;
+    left: 20px;
+    border: 6px solid transparent;
+    border-top-color: var(--color-3);
+    border-bottom-color: var(--color-3);
+    border-radius: 50%;
+    -webkit-animation: spin 1.5s linear infinite;
+    animation: spin 1.5s linear infinite;
+  }
+  @-webkit-keyframes spin {
+      from {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+      }
+      to {
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
+      }
+  }
+  @keyframes spin {
+      from {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+      }
+      to {
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
+      }
+  }
