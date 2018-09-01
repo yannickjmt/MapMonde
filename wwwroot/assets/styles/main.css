@@ -139,10 +139,12 @@ body {
 .selectors-slider {
     width: 450px;
     padding: 20px;
+    padding-left: 0;
 }
 .selectors-indicators {
-    width: 350px;
+    width: 400px;
     padding: 20px;
+    padding-right: 0;
     height: 29px;
     overflow: hidden;
 }
@@ -306,6 +308,13 @@ path:hover {
     position: relative;
     top: -5px;
     right: -2px;
+}
+.legend-text-noData {
+    top: 5px;
+}
+.legendNoData {
+    background-color: var(--color-noData);
+    border: 2px solid black;
 }
 .legend1 {
     background-color: var(--color-1);

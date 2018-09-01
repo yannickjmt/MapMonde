@@ -90,10 +90,6 @@ document.addEventListener('DOMContentLoaded', function() {
       console.log('Caught error in SVG processing : ' + err.message);
     });
   
-  // $('#button_test').addEventListener('click', function() {
-  //   fillCountry();
-  // });
-
   buildForm();
 
   // land on the modal window
@@ -241,24 +237,19 @@ function processApiAnswer(result) {
     // process API result only if country code exists in SVG and countries global object
     // (many unknown country codes)
     if (country) {
-
-      //Sometimes World Bank returns a record without a value, we discard it
-      if (JSONcountry.value != null) {
-        let year = {};
-        year[JSONcountry.date] = { 'value': JSONcountry.value};
-
-        let countryIndicator = country[JSONcountry.indicator.id];
-        if (countryIndicator) {
-          //we add another year into the indicator object data
-          Object.assign(countryIndicator, year);
-        } else {
-          //we create the indicator object
-          country[JSONcountry.indicator.id] = year;
-        }
-        // push value into global legend array
-        // values array will be reduced later to get the legend scale
-        pushValueToLegendObj(JSONcountry.indicator.id, JSONcountry.indicator.value, JSONcountry.date, JSONcountry.value);
+      let year = {};
+      year[JSONcountry.date] = { 'value': JSONcountry.value};
+      let countryIndicator = country[JSONcountry.indicator.id];
+      if (countryIndicator) {
+        //we add another year into the indicator object data
+        Object.assign(countryIndicator, year);
+      } else {
+        //we create the indicator object
+        country[JSONcountry.indicator.id] = year;
       }
+      // push value into global legend array
+      // values array will be reduced later to get the legend scale
+      pushValueToLegendObj(JSONcountry.indicator.id, JSONcountry.indicator.value, JSONcountry.date, JSONcountry.value);
     }
   }
 
@@ -306,38 +297,27 @@ function reduceLegend() {
 
 function reduceArray(arr) {
   // creates the legend range depending on actual values
-  // TODO: find cool algo using median doesn't work well
-  //       separating into equally large block of values for the moment
+  // separating into equally large block of values which works decently well
   const legendArr = [];
-  //const min = Math.min(...arr);
-  const max = Math.max(...arr);
+  
+  // filter out null values
+  // we didn't filter at the country object level so that rest of the map could be drawn
+  // in case of whole set is null
+  arr = arr.filter(n => (n===null) ? false : true);
 
-
-  arr.sort((a, b) => a - b);
-  for (let i = 0; i < 8; i++) {
-    legendArr.push(arr[Math.round(i * arr.length / 8)]);
+  if (arr.length > 0) {
+    arr.sort((a, b) => a - b);
+    const max = Math.max(...arr);
+    for (let i = 0; i < 8; i++) {
+      legendArr.push(arr[Math.round(i * arr.length / 8)]);
+    }
+    legendArr.push(max);
   }
-  legendArr.push(max);
 
-  // * using median : does not work well for pop for example
-  // const range = min - max;
-  // arr.sort((a, b) => a - b);
-  // var mid = arr.length / 2;
-  // const median = mid % 1 ? arr[mid - 0.5] : (arr[mid - 1] + arr[mid]) / 2;
-
-  // for (let i = 0; i < 4; i++) {
-  //   legendArr.push(min + i*(median - min)/4);
-  // }
-  // for (let i = 0; i <= 4; i++) {
-  //   legendArr.push(median + i*(max - median)/4);
-  // }
   return legendArr;
 }
 
 function updateMapColors() {
-// ? maybe need year and indicator array for dynamic change
-
-  // const indicator = 'SP.POP.TOTL';
   let classCountry;
 
   // assign CSS class each to svg element
@@ -369,26 +349,40 @@ function getClassName(value, indicator, year) {
 }
 
 function displayLegend() {
-  // TODO change values in thousands, millons, etc. if necessary
- 
-  if (legend[activeIndicator][activeYear] === undefined) {
-    // when indicators don't all have same year range
-    // should never go there normally?
-    console.log('no legend value to display');
-    // TODO implement cleanLegend() 
+  if ((legend[activeIndicator] === undefined) || (legend[activeIndicator][activeYear] === undefined)) {
+    // Sometimes the API return results full of null values for the whole year
+    setLegendNoData();
   }
   else {
     let arr = legend[activeIndicator][activeYear].values;
-    arr.forEach((val, index) => {
-      let bgID = '#legend' + index;
-      let textID = bgID + '-text';
-      $(bgID).classList.add('legend' + index);
-      $(bgID).classList.add('legend-n');
-      $(textID).innerHTML = formatNumber(val);
-      $(textID).className = 'legend-text';
-    });
+    if (arr.length == 0) {
+      setLegendNoData();
+    } else {
+      arr.forEach((val, index) => {
+        let bgID = '#legend' + index;
+        let textID = bgID + '-text';
+        $(bgID).className = 'legend' + index;
+        $(bgID).classList.add('legend-n');
+        $(textID).innerHTML = formatNumber(val);
+        $(textID).className = 'legend-text';
+      });
+    }
   }
 }
+
+const setLegendNoData = () => {
+  for (let i = 0; i <= 8; i++) {
+    let bgID = '#legend' + i;
+    let textID = bgID + '-text';
+    $(bgID).className = '';
+    $(textID).innerHTML = '';
+    $(textID).className = '';
+  }
+  $('#legend0').className = 'legendNoData';
+  $('#legend8-text').className = 'legend-text';
+  $('#legend8-text').classList.add('legend-text-noData');
+  $('#legend8-text').innerHTML = 'No data';
+};
 
 function buildIndicatorsSelector() {
   let indicatorArray = getIndicatorsFromLegendObj();
@@ -417,8 +411,6 @@ function buildIndicatorsSelector() {
     
     // select last indicator in list as active
     // normally after new fetch data request, new indicator should be at end of array
-    ////at the initial call of this function
-    //if (activeIndicator === '') 
     activeIndicator = indicatorArray[indicatorArray.length - 1][0];
 
     $('#indicators').addEventListener('change', listenChangeIndic);
@@ -598,7 +590,9 @@ const formatNumber = (n) => {
 };
 
 const updateTitle = () => {
-  let indicatorName = legend[activeIndicator].indicator_name;
+  
+  // TODO improve this dirty workaround when whole data set returns null value
+  let indicatorName = (legend[activeIndicator]) ? legend[activeIndicator].indicator_name : activeIndicator;
   let html = ` : ${indicatorName}, in ${activeYear}.`;
   $('#header-content').innerHTML = html;
 };
