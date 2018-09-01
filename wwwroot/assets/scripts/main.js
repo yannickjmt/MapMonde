@@ -4,7 +4,6 @@ import '../styles/main.css';
 
 import SelectPure from 'select-pure';
 
-
 var noUiSlider = require('nouislider');
 
 'use strict';
@@ -44,21 +43,58 @@ var legend = {};
 var activeYear = '';
 var activeIndicator = '';
 
-
-
 // the first indicator will be the default one on the form select (component requirement)
 const myOptions = [
-  { label: 'Population, total', value: 'SP.POP.TOTL'},
+  // Economy
   { label: 'GDP (current US$)', value: 'NY.GDP.MKTP.CD'},
   { label: 'GDP growth (annual %)', value: 'NY.GDP.MKTP.KD.ZG'},
   { label: 'GDP per capita, PPP (current international $)', value: 'NY.GDP.PCAP.PP.CD'},
-  { label: 'Central government debt, total (% of GDP)', value: 'GC.DOD.TOTL.GD.ZS'},
-  { label: 'Inflation, consumer prices (annual %)', value: 'FP.CPI.TOTL.ZG'},
+  { label: 'Inflation, consumer prices (annual %)', value: 'FP.CPI.TOTL.ZG'}, // reverse colors
   { label: 'Current account balance (% of GDP)', value: 'BN.CAB.XOKA.GD.ZS'},
-  { label: 'Foreign direct investment, net inflows (% of GDP)', value: 'BX.KLT.DINV.WD.GD.ZS'},
-  { label: 'Renewable electricity (% in total electricity output)', value: '4.1_SHARE.RE.IN.ELECTRICITY'},
-  { label: 'Gini Coefficient', value: '3.0.Gini'},
-  { label: 'Literacy rate, youth total (% of people ages 15-24)', value: '1.1_YOUTH.LITERACY.RATE'}
+  { label: 'Gross savings (% of GDP)', value: 'NY.GNS.ICTR.ZS'},
+  { label: 'Industry (including construction), value added (% of GDP)', value: 'NV.IND.TOTL.ZS'},
+  { label: 'Manufacturing, value added (% of GDP)', value: 'NV.IND.MANF.ZS'},
+  { label: 'Services, value added (% of GDP)', value: 'NV.SRV.TOTL.ZS'},
+  { label: 'Agriculture, forestry, and fishing, value added (% of GDP)', value: 'NV.AGR.TOTL.ZS'}, 
+  { label: 'Exports of goods and services (% of GDP)', value: 'NE.EXP.GNFS.ZS'},
+  { label: 'Imports of goods and services (% of GDP)', value: 'NE.IMP.GNFS.ZS'}, //reverse colors
+  { label: 'Real interest rate (%)', value: 'FR.INR.RINR'}, 
+  
+  //Demography
+  { label: 'Population, total', value: 'SP.POP.TOTL'},
+  { label: 'Mortality rate, under-5 (per 1,000 live births)', value: 'SH.DYN.MORT'}, // reverse colors
+  { label: 'Population growth (annual %)', value: 'SP.POP.GROW'},
+  { label: 'International migrant stock, total', value: 'SM.POP.TOTL'},
+  { label: 'Fertility rate, total (births per woman)', value: 'SP.DYN.TFRT.IN'},
+  { label: 'Mortality caused by road traffic injury', value: 'SH.STA.TRAF.P5'}, // reverse colors
+  
+  // Environment & Climate Change
+  { label: 'CO2 emissions (kt)', value: 'EN.ATM.CO2E.KT'}, // reverse colors
+  { label: 'CO2 emissions (metric tons per capita)', value: 'EN.ATM.CO2E.PC'}, //reverse colors
+  { label: 'Renewable energy consumption (% of total)', value: 'EG.FEC.RNEW.ZS'},
+  { label: 'Electric power consumption (kWh per capita)', value: 'EG.USE.ELEC.KH.PC'},  // reverse colors
+  { label: 'PM2.5 air pollution, mean annual exposure', value: 'EN.ATM.PM25.MC.M3'}, // reverse colors
+
+  // Health
+  { label: 'Life expectancy at birth, total (years)', value: 'SP.DYN.LE00.IN'},
+  
+  // Development
+  { label: 'Mobile cellular subscriptions (per 100 people)', value: 'IT.CEL.SETS.P2'},
+  { label: 'GINI index (World Bank estimate)', value: 'SI.POV.GINI'},     //very incomplete reverse colors
+
+  // Labor
+  { label: 'Unemployment, total (% of total labor force)', value: 'SL.UEM.TOTL.ZS'}, // reverse colors
+  { label: 'Unemployment, youth total (% of total labor force ages 15-24)', value: 'SL.UEM.1524.ZS'}, //reverse colors
+  
+  // Public Sector
+  { label: 'Military expenditure (% of central government expenditure)', value: 'MS.MIL.XPND.ZS'}, // reverse colors
+  { label: 'Expense (% of GDP)', value: 'GC.XPN.TOTL.GD.ZS'}, // reverse colors
+  { label: 'Total tax rate (% of commercial profits)', value: 'IC.TAX.TOTL.CP.ZS'}, // reverse colors
+  { label: 'Proportion of seats held by women in national parliaments (%)', value: 'SG.GEN.PARL.ZS'},
+  
+  //Agriculture & Rural Development
+  { label: 'Rural population (% of total population)', value: 'SP.RUR.TOTL.ZS'},
+  { label: 'Forest area (sq. km)', value: 'AG.LND.FRST.K2'}, //(not so interesting on map)
 ];
 
 // Workaround bc of the multi select onChange event not being triggered on creation
@@ -132,7 +168,7 @@ function buildForm() {
 let instanceSelect = new SelectPure('.indicator-select-form', {
     options: myOptions,
     multiple: true,
-    // problem with this component, it needs a default value for multi-select
+    // problem with this component, it needs a default value
     value: [myOptions[0].value],
     icon: 'fas fa-times',
     // could not find way to access those values otherwise
@@ -141,12 +177,11 @@ let instanceSelect = new SelectPure('.indicator-select-form', {
     }
   });
 
-  //create the year slider for the form
   noUiSlider.create($('#slider-form'), {
-    start: [ 2000, 2017 ],
+    start: [ 2000, (new Date()).getFullYear() - 1 ],
     range: {
-      'min': [  1890 ],
-      'max': [ 2027 ]
+      'min': [  1950 ],
+      'max': [ (new Date()).getFullYear() + 9 ]
     },
     padding: 10,
     step: 1,
@@ -164,22 +199,13 @@ let instanceSelect = new SelectPure('.indicator-select-form', {
     },
     pips: {
       mode: 'values',
-      values: [1900, 2017],
+      values: [1960, (new Date()).getFullYear() - 1],
       density: 10
     }
   });
-  // var sliderValue = $('#slider-value');
-  // $('#slider-form').noUiSlider.on('update', function( values, handle ) {
-  //   if (handle) {
-  //     // $('#slider-form-value-max').innerHTML = values[handle];
-  //   } else {
-  //     // $('#slider-form-value-min').innerHTML = values[handle];
-  //   }
-  // });
 
   $('#button-form').addEventListener('click', function() {
     let urlArray = genApiURLs();
-    // console.log(urlArray);
     fetchAndProcessData(urlArray);
     window.location.hash = '#!';
   });
@@ -199,7 +225,7 @@ async function fetchAndProcessData(urlsAPI) {
   
   spinner.style.display = 'block';
   displaySpinner('Fetching World Bank Data');
-  // asynchronous and parallel API calls and result process
+  // asynchronous and parallel API calls
   let results = urlsAPI.map(async (url) => await callAPI(url, 'text'));
   for (const result of results) {
     processApiAnswer(await result);
@@ -234,7 +260,7 @@ function processApiAnswer(result) {
   for (let JSONcountry of JSONObj[1]) {
     let country = countries[JSONcountry.country.id];
     
-    // process API result only if country code exists in SVG and countries global object
+    // process API result only if country code exists in the SVG & the countries global object
     // (many unknown country codes)
     if (country) {
       let year = {};
@@ -254,7 +280,6 @@ function processApiAnswer(result) {
   }
 
   //replace array from global legend with reduced final scale
-  //may do that later in the process if handling multiple queries
   reduceLegend();
 }
 
@@ -270,7 +295,7 @@ function pushValueToLegendObj(indicatorID, IndicatorName, year, value) {
       }
     }
     else {
-      // create new year property for indicatorID
+      // create new year property for indicatorID with single elt array
       legend[indicatorID][year] = {'reduced': false, 'values':[value]};
     }
   } else {
@@ -296,8 +321,8 @@ function reduceLegend() {
 }
 
 function reduceArray(arr) {
-  // creates the legend range depending on actual values
-  // separating into equally large block of values which works decently well
+  // create the legend range, will be used to separate into equally large sets the country values
+  // we get n+1 boundaries to build a legend with n colors
   const legendArr = [];
   
   // filter out null values
@@ -320,7 +345,7 @@ function reduceArray(arr) {
 function updateMapColors() {
   let classCountry;
 
-  // assign CSS class each to svg element
+  // assign CSS class each to svg element if valid value
   for (let svgCountry of svgCountries) {
     let svgCountryCode = svgCountry.getAttribute('data-id');
     let countryIndic = countries[svgCountryCode][activeIndicator];
@@ -437,7 +462,7 @@ function buildYearsSelector() {
   }
 
   //can't create slider with only one value
-  //we forced 2 years minimum range in the form
+  //taken care of by forcing 2 years minimum range in the form
   if (yearArray.length > 1) {
     var slider = $('#slider');
     createUpdateSlider(slider, yearArray);
@@ -492,7 +517,6 @@ function createUpdateSlider(sliderElement, yearArr) {
   noUiSlider.create(sliderElement, {
     start: yearArr.indexOf(activeYear),
     connect: true,
-    // tooltips: true,
     step: 1,
     range: {
       'min': 0,

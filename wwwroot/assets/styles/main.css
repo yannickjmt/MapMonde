@@ -58,6 +58,7 @@ table {
 */
 
 :root {
+    --color-bg: #3F4351;
     --color-noData: #f2f2f2;
     --color-1: #8b0000;
     --color-2: #cf3b59;
@@ -75,7 +76,7 @@ html {
 }
 body {
     font-family: Verdana, Geneva, Tahoma, sans-serif;
-    background-color: #3F4351;
+    background-color: var(--color-bg);
     margin: 5px;
     margin-top: 0;
     margin-bottom: 0;
@@ -150,7 +151,7 @@ body {
 }
 .selectors-indicators  select {
     background: transparent;
-    background-color: #3F4351;
+    background-color: var(--color-bg);
     color: #fff;
     border: none;
     font-size: 14px;
@@ -435,7 +436,7 @@ path:hover {
   
   .select-pure__selected-label {
     /* background: #5e6264; */
-    background: #3F4351;
+    background: var(--color-bg);
     border-radius: 4px;
     color: #fff;
     cursor: initial;
@@ -545,8 +546,8 @@ path:hover {
 
 .button-alpha .btn-dark {
     box-shadow: 0 3px 0 0 #1e1f26, 0 4px 4px -1px rgba(0, 0, 0, 0.6), 0 4px 6px 1px rgba(0, 0, 0, 0.3), 0 1px 2px 1px transparent inset, 0 18px 32px -2px rgba(255, 255, 255, 0.1) inset;
-    background-color: #3F4351;
-    background-image: linear-gradient(-45deg, #3F4351, #384758);
+    background-color: var(--color-bg);
+    background-image: linear-gradient(-45deg, var(--color-bg), #384758);
     color: #E6EAEF; 
 }
     .button-alpha .btn-dark:hover {
@@ -564,7 +565,7 @@ path:hover {
     box-shadow: 0 2px 12px rgba(0, 0, 0, 0.5); 
     background-color: #f2f2f2;
     background-image: linear-gradient(-45deg, #f2f2f2, #e4edf1);
-    color: #3F4351;
+    color: var(--color-bg);
 }
     .button-alpha .btn-light:hover {
         /* box-shadow: 0 3px 0 0 #b7c3d1, 0 6px 4px -1px rgba(0, 0, 0, 0.3), 0 4px 16px rgba(0, 0, 0, 0.5), 0 1px 2px 1px transparent inset, 0 18px 32px -2px rgba(255, 255, 255, 0.14) inset; */
@@ -593,10 +594,10 @@ path:hover {
 */
 
 .noUi-connect {
-    background: #3F4351;
+    background: var(--color-1);
 }
 .noUi-pips {
-    color: #3F4351;
+    color: var(--color-bg);
     font-size: 14px;
 }
 .noUi-value {
