@@ -585,8 +585,12 @@ const formatNumber = (n) => {
       n = Math.round(n * 10) / 10;
     } else if (Math.abs(n) < 1000000) {
       n = Math.round(n).toLocaleString('en-US');
+    } else if (Math.abs(n) < 10000000) {
+      n = Math.round(n / 10000) / 100 + 'm';
     } else if (Math.abs(n) < 1000000000) {
       n = Math.round(n / 100000) / 10 + 'm';
+    } else if (Math.abs(n) < 10000000000) {
+      n = (Math.round(n / 10000000) / 100).toLocaleString('en-US') + 'b';
     } else if (Math.abs(n) < 1000000000000) {
       n = (Math.round(n / 100000000) / 10).toLocaleString('en-US') + 'b';
     } else {
