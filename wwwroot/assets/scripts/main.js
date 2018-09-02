@@ -576,7 +576,7 @@ function showCountryInfo(event) {
         } else {
           value = 'no data';
         }
-        html += `<div>${indicatorName} : ${formatNumber(value)}</div>`;
+        html += `<div>${indicatorName}&#160;: ${formatNumber(value)}</div>`;
       }
       tooltip.innerHTML = html;
       tooltip.style.visibility = 'visible';

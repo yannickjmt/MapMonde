@@ -143,7 +143,7 @@ body {
     padding-left: 0;
 }
 .selectors-indicators {
-    width: 400px;
+    max-width: 620px;
     padding: 20px;
     padding-right: 0;
     height: 29px;
@@ -615,6 +615,7 @@ path:hover {
 .blank {
     display: none;
     position: absolute;
+    z-index: 10;
     height: 100%;
     width: 100%;
     background-color: rgba(255, 255, 255, 0.605);
@@ -622,6 +623,7 @@ path:hover {
 .spinner-wrapper {
     display: none;
     position: absolute;
+    z-index:11;
     top: 50%;
     left: 50%;
     margin-right: -50%;
