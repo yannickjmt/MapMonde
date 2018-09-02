@@ -3,7 +3,7 @@ import '../../../node_modules/css-modal/build/modal.css';
 import '../styles/main.css';
 
 import SelectPure from 'select-pure';
-import indicatorList from 'indicatorList';
+import indicatorsList from './indicatorsList';
 
 var noUiSlider = require('nouislider');
 
@@ -40,7 +40,9 @@ var legend = {};
 var activeYear = '';
 var activeIndicator = '';
 
-const optionsIndicatorForm = indicatorList();
+const optionsIndicatorForm = indicatorsList();
+
+const legendRangeNum = 8;
 
 // Workaround bc of the multi select onChange event not being triggered on creation
 var formIndicators = [optionsIndicatorForm[0].value];
@@ -179,7 +181,6 @@ async function fetchAndProcessData(urlsAPI) {
   buildIndicatorsSelector();
   buildYearsSelector();
   fillMapAndLegend();
-  updateTitle();
   hideSpinner();
 }
 
@@ -194,6 +195,7 @@ async function callAPI(url, type) {
 }
 
 function fillMapAndLegend() {
+  updateTitle();
   updateMapColors();
   displayLegend();
 }
@@ -266,7 +268,7 @@ function reduceLegend() {
 
 function reduceArray(arr) {
   // create the legend range, will be used to separate the country values into equally large sets
-  // we get n+1 boundaries to build a legend with n colors
+  // we get n+1 boundaries to build a legend with n colors (n = legendRangeNum)
   const legendArr = [];
   
   // filter out null values
@@ -277,8 +279,8 @@ function reduceArray(arr) {
   if (arr.length > 0) {
     arr.sort((a, b) => a - b);
     const max = Math.max(...arr);
-    for (let i = 0; i < 8; i++) {
-      legendArr.push(arr[Math.round(i * arr.length / 8)]);
+    for (let i = 0; i < legendRangeNum; i++) {
+      legendArr.push(arr[Math.round(i * arr.length / legendRangeNum)]);
     }
     legendArr.push(max);
   }
@@ -314,7 +316,10 @@ function updateMapColors() {
 function getClassName(value, indicator, year) {
   let rangeLegend = legend[indicator][year].values;
   let index = rangeLegend.findIndex( a => a >= value);
-  return 'background' + index;
+  //reverse map colors if needed (ie small value = good, big = bad)
+  return optionsIndicatorForm.find(m => m.value == indicator).toReverse ?
+    'background' + (rangeLegend.length - index) :
+    'background' + index;
 }
 
 function displayLegend() {
@@ -323,11 +328,15 @@ function displayLegend() {
     setLegendNoData();
   }
   else {
-    let arr = legend[activeIndicator][activeYear].values;
-    if (arr.length == 0) {
+    let rangeLegend = legend[activeIndicator][activeYear].values;
+    let toReverse = optionsIndicatorForm.find(m => m.value == activeIndicator).toReverse;
+    if (rangeLegend.length == 0) {
       setLegendNoData();
     } else {
-      arr.forEach((val, index) => {
+      rangeLegend.forEach((val, index) => {
+        if (toReverse) {
+          index = rangeLegend.length - index -1;
+        }
         let bgID = '#legend' + index;
         let textID = bgID + '-text';
         $(bgID).className = 'legend' + index;
@@ -340,7 +349,7 @@ function displayLegend() {
 }
 
 const setLegendNoData = () => {
-  for (let i = 0; i <= 8; i++) {
+  for (let i = 0; i <= legendRangeNum; i++) {
     let bgID = '#legend' + i;
     let textID = bgID + '-text';
     $(bgID).className = '';
@@ -348,9 +357,9 @@ const setLegendNoData = () => {
     $(textID).className = '';
   }
   $('#legend0').className = 'legendNoData';
-  $('#legend8-text').className = 'legend-text';
-  $('#legend8-text').classList.add('legend-text-noData');
-  $('#legend8-text').innerHTML = 'No data';
+  $('#legend0-text').className = 'legend-text';
+  $('#legend0-text').classList.add('legend-text-noData');
+  $('#legend0-text').innerHTML = 'No data';
 };
 
 function buildIndicatorsSelector() {
@@ -394,7 +403,6 @@ function listenChangeIndic() {
   // because of indicator / year independance
   buildYearsSelector();
   fillMapAndLegend();
-  updateTitle();
 }
 
 function buildYearsSelector() {
@@ -415,7 +423,6 @@ function buildYearsSelector() {
       // sliderValue.innerHTML = values[handle];
       activeYear = values[handle];
       fillMapAndLegend();
-      updateTitle();
     });
   } 
 }
