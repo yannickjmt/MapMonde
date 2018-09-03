@@ -60,14 +60,14 @@ table {
 :root {
     --color-bg: #3F4351;
     --color-noData: #f2f2f2;
-    --color-1: #8b0000;
+    /* --color-1: #8b0000;
     --color-2: #cf3b59;
     --color-3: #f78599;
     --color-4: #ffd8cd;
     --color-5: #81dd8e;
     --color-6: #63be8a;
     --color-7: #3f9e86;
-    --color-8: #008080;
+    --color-8: #008080; */
 }
 
 html {
@@ -104,7 +104,7 @@ body {
     justify-content: flex-start;
 }
 .header-icons {
-    width: 200px;
+    width: 120px;
     text-align: center;
 }
 .header-title {
@@ -223,6 +223,12 @@ path:hover {
 .background8 {
     fill: var(--color-8);
 }
+.background9 {
+    fill: var(--color-9);
+}
+.background10 {
+    fill: var(--color-10);
+}
 
 /*
 	========================================
@@ -285,12 +291,12 @@ path:hover {
 */
 .floating-legend {
     position: absolute;
-    top: calc(40vw - 50px);
+    top: calc(40vw - 90px);
     left: 30px;
     width: 160px;
     display: grid;
     grid-template-columns: 50px 100px;
-    grid-template-rows: 25px 25px 25px 25px 25px 25px 25px 25px 25px;
+    grid-template-rows: 25px 25px 25px 25px 25px 25px 25px 25px 25px 25px 25px;
 }
 .legend-n {
     border-top: 2px solid black;
@@ -340,6 +346,12 @@ path:hover {
 }
 .legend8 {
     background-color: var(--color-8);
+}
+.legend9 {
+    background-color: var(--color-9);
+}
+.legend10 {
+    background-color: var(--color-10);
 }
 
 /*
@@ -594,7 +606,7 @@ path:hover {
 */
 
 .noUi-connect {
-    background: var(--color-1);
+    background: var(--color-7);
 }
 .noUi-pips {
     color: var(--color-bg);
@@ -618,7 +630,7 @@ path:hover {
     z-index: 10;
     height: 100%;
     width: 100%;
-    background-color: rgba(255, 255, 255, 0.605);
+    background-color: rgba(255, 255, 255, 0.756);
 }
 .spinner-wrapper {
     display: none;
@@ -641,8 +653,8 @@ path:hover {
     height: 115px;
     width: 115px;
     border: 6px solid transparent;
-    border-top-color: var(--color-1);
-    border-bottom-color: var(--color-1);
+    border-top-color: var(--color-9);
+    border-bottom-color: var(--color-9);
     border-radius: 50%;
     
     -webkit-animation: spin 3s linear infinite;
@@ -656,8 +668,8 @@ path:hover {
     bottom: 20px;
     left: 20px;
     border: 6px solid transparent;
-    border-top-color: var(--color-3);
-    border-bottom-color: var(--color-3);
+    border-top-color: var(--color-6);
+    border-bottom-color: var(--color-6);
     border-radius: 50%;
     -webkit-animation: spin 1.5s linear infinite;
     animation: spin 1.5s linear infinite;

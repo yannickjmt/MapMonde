@@ -4,6 +4,7 @@ import '../styles/main.css';
 
 import SelectPure from 'select-pure';
 import indicatorsList from './indicatorsList';
+import paletteChange from './paletteChange';
 
 var noUiSlider = require('nouislider');
 
@@ -42,7 +43,8 @@ var activeIndicator = '';
 
 const optionsIndicatorForm = indicatorsList();
 
-const legendRangeNum = 8;
+const legendRangeNum = 10;
+var activePalette = 0;
 
 // Workaround bc of the multi select onChange event not being triggered on creation
 var formIndicators = [optionsIndicatorForm[0].value];
@@ -84,6 +86,12 @@ document.addEventListener('DOMContentLoaded', function() {
     $('#tooltip').style.top = (event.pageY - 80) + 'px';
   }, false);
 
+  $('#button-palette').addEventListener('click', function() {
+    activePalette = paletteChange(activePalette);
+  });
+
+  activePalette = paletteChange();
+
 });
 
 function ajax(url, type) {
@@ -111,8 +119,7 @@ async function getSVG(url, type) {
 
 function buildForm() {
 // generate the select-pure component 
-  
-let instanceSelect = new SelectPure('.indicator-select-form', {
+  let instanceSelect = new SelectPure('.indicator-select-form', {
     options: optionsIndicatorForm,
     multiple: true,
     // problem with this component, it needs a default value
@@ -316,6 +323,7 @@ function updateMapColors() {
 function getClassName(value, indicator, year) {
   let rangeLegend = legend[indicator][year].values;
   let index = rangeLegend.findIndex( a => a >= value);
+  if (index == 0) index = 1;
   //reverse map colors if needed (ie small value = good, big = bad)
   return optionsIndicatorForm.find(m => m.value == indicator).toReverse ?
     'background' + (rangeLegend.length - index) :
