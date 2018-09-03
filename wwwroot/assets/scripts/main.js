@@ -49,7 +49,7 @@ var activePalette = 0;
 // Workaround bc of the multi select onChange event not being triggered on creation
 var formIndicators = [optionsIndicatorForm[0].value];
 
-const debug = false;
+const debug = true;
 const log = (message) => {
   if (debug) { 
     console.log(message);
@@ -176,7 +176,7 @@ const genApiURLs = () => {
   let urlArray = [];
   let years = $('#slider-form').noUiSlider.get();
   for (let i in formIndicators) {
-    let url = `http://api.worldbank.org/v2/countries/all/indicators/${formIndicators[i]}?format=json&date=${years[0]}:${years[1]}&per_page=32000`;
+    let url = `https://api.worldbank.org/v2/countries/all/indicators/${formIndicators[i]}?format=json&date=${years[0]}:${years[1]}&per_page=32000`;
     urlArray.push(url);
   }
   return urlArray;
