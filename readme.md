@@ -1,118 +1,54 @@
-# MapMonde &middot; [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com) [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](https://github.com/your/your-project/blob/master/LICENSE)
-## Visualize World Bank data by countries on a browser.
+# MapMonde &middot; [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
-This web app pulls data from the World Bank API and displays it on a scalable SVG world map.
+## Visualize World Bank Data in a Browser.
 
-Todo :
+This web page pulls data from the World Bank API and displays it on a scalable SVG world map.
 
+Features : 
+- Multi indicator queries in parralel
+- Quick and easy navigation between years and indicators
+- A curated list of 35 of the most relevant indicators.
+- A choice of different cartography-adapted palettes of colors
 
-
-## Installing / Getting started
-
-A quick introduction of the minimal setup you need to get a hello world up &
-running.
-
-```shell
-commands here
-```
-
-Here you should say what actually happens when you execute the code above.
-
+#
 ## Developing
 
 ### Built With
-List main libraries, frameworks used including versions (React, Angular etc...)
 
-lightweight, highly customizable range slider
-noUiSlider https://github.com/leongersen/noUiSlider
+[noUiSlider](https://github.com/leongersen/noUiSlider) : lightweight, highly customizable range slider
+
+[CSS Modals](https://github.com/drublic/css-modal) : Modals built out of pure CSS
+
+[SelectPure](https://github.com/maksymddd/select-pure) : Multi select javascript component
 
 ### Prerequisites
-What is needed to set up the dev environment. For instance, global dependencies or any other tools. include download links.
-
+Webpack with write-file-webpack-plugin and mini-css-extract-plugin
 
 ### Setting up Dev
 
-Here's a brief intro about what a developer must do in order to start developing
-the project further:
-
 ```shell
-git clone https://github.com/your/your-project.git
-cd your-project/
-packagemanager install
+npm install css-modal --save
+npm install select-pure --save
+npm install nouislider --save
+npm install mini-css-extract-plugin css-loader --save-dev
+npm install write-file-webpack-plugin --save-dev
 ```
-
-And state what happens step-by-step. If there is any virtual environment, local server or database feeder needed, explain here.
-
-Slider component : 
-
-npm install nouislider
-
-Webpack with css plugin
-npm i mini-css-extract-plugin css-loader --save-dev
-
-npm run dev : bundles the files for development
-npm run watch : start a process that automatically bundles the files
 
 ### Building
 
-If your project needs some additional steps for the developer to build the
-project after some code changes, state them here. for example:
+Css and Js file build in /wwwroot/dist
 
 ```shell
-./configure
-make
-make install
+npm run dev
+npm run build
 ```
-
-Here again you should state what actually happens when the code above gets
-executed.
-
-### Deploying / Publishing
-give instructions on how to build and release a new version
-In case there's some step you have to take that publishes this project to a
-server, this is the right time to state it.
-
-```shell
-packagemanager deploy your-project -s server.com -u username -p password
-```
-
-And again you'd need to tell what the previous code actually does.
-
-## Versioning
-
-We can maybe use [SemVer](http://semver.org/) for versioning. For the versions available, see the [link to tags on this repository](/tags).
-
-
-## Configuration
-
-Here you should write what are all of the configurations a user can enter when
-using the project.
-
-## Tests
-
-Describe and show how to run the tests with code examples.
-Explain what these tests test and why.
-
-```shell
-Give an example
-```
-
-## Style guide
-
-Explain your code style and show how to check it.
-
+#
 ## Api Reference
 
 [World Bank API](https://datahelpdesk.worldbank.org/knowledgebase/articles/889392-api-documentation)
 
 
 
-
-## Database
-
-Explaining what database (and version) has been used. Provide download links.
-Documents your database design and schemas, relations etc... 
-
 ## Licensing
 
-State what the license is and how to find the text version of the license.
+[gpl-3.0](https://www.gnu.org/licenses/gpl-3.0.en.html)

@@ -50,11 +50,11 @@ var activePalette = 0;
 var formIndicators = [optionsIndicatorForm[0].value];
 
 const debug = false;
-function log(message) {
+const log = (message) => {
   if (debug) { 
     console.log(message);
   }
-}
+};
 
 document.addEventListener('DOMContentLoaded', function() {
   //load SVG and initialize country object
@@ -101,7 +101,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 });
 
-function ajax(url, type) {
+const ajax= (url, type) => {
   return new Promise(function(resolve, reject) {
     var xhr = new XMLHttpRequest();
     xhr.onload = function() {
@@ -112,7 +112,7 @@ function ajax(url, type) {
     xhr.open('GET', url);
     xhr.send();
   });
-}
+};
 
 async function getSVG(url, type) {
   try {
@@ -124,7 +124,7 @@ async function getSVG(url, type) {
   }
 }
 
-function buildForm() {
+const buildForm = () => {
 // generate the select-pure component 
   let instanceSelect = new SelectPure('.indicator-select-form', {
     options: optionsIndicatorForm,
@@ -170,9 +170,9 @@ function buildForm() {
     fetchAndProcessData(urlArray);
     window.location.hash = '#!';
   });
-}
+};
 
-function genApiURLs() {
+const genApiURLs = () => {
   let urlArray = [];
   let years = $('#slider-form').noUiSlider.get();
   for (let i in formIndicators) {
@@ -180,11 +180,10 @@ function genApiURLs() {
     urlArray.push(url);
   }
   return urlArray;
-}
+};
 
 async function fetchAndProcessData(urlsAPI) {
   
-  spinner.style.display = 'block';
   displaySpinner('Fetching World Bank Data');
   // asynchronous and parallel API calls
   let results = urlsAPI.map(async (url) => await callAPI(url, 'text'));
@@ -212,13 +211,13 @@ async function callAPI(url, type) {
   }
 }
 
-function fillMapAndLegend() {
+const fillMapAndLegend = () => {
   updateTitle();
   updateMapColors();
   displayLegend();
-}
+};
 
-function processApiAnswer(result) {
+const processApiAnswer = (result) => {
   displaySpinner('Processing Data');
   try {
     let JSONObj = JSON.parse(result);
@@ -261,9 +260,9 @@ function processApiAnswer(result) {
   
   //replace array from global legend with reduced final scale
   reduceLegend();
-}
+};
 
-function pushValueToLegendObj(indicatorID, IndicatorName, year, value) {
+const pushValueToLegendObj = (indicatorID, IndicatorName, year, value) => {
   if (legend[indicatorID]) {
     if (legend[indicatorID][year]) {
       // reduced = true means we already processed all data for this year and indicator
@@ -285,9 +284,9 @@ function pushValueToLegendObj(indicatorID, IndicatorName, year, value) {
     legend[indicatorID] = yearObj;
     legend[indicatorID]['indicator_name'] = IndicatorName;
   }
-}
+};
 
-function reduceLegend() {
+const reduceLegend = () => {
   for (let indicatorVal in legend) {
     for (let yearVal in legend[indicatorVal]) {
       let year = legend[indicatorVal][yearVal];
@@ -298,9 +297,9 @@ function reduceLegend() {
       }
     }
   }
-}
+};
 
-function reduceArray(arr) {
+const reduceArray= (arr) => {
   // create the legend range, will be used to separate the country values into equally large sets
   // we get n+1 boundaries to build a legend with n colors (n = legendRangeNum)
   const legendArr = [];
@@ -320,9 +319,9 @@ function reduceArray(arr) {
   }
 
   return legendArr;
-}
+};
 
-function updateMapColors() {
+const updateMapColors = () => {
   let classCountry;
 
   // assign CSS class each to svg element if valid value
@@ -345,9 +344,9 @@ function updateMapColors() {
     }
     svgCountry.setAttributeNS(null, 'class', classCountry);
   }
-}
+};
 
-function getClassName(value, indicator, year) {
+const getClassName = (value, indicator, year) => {
   let rangeLegend = legend[indicator][year].values;
   let index = rangeLegend.findIndex( a => a >= value);
   if (index == 0) index = 1;
@@ -355,9 +354,9 @@ function getClassName(value, indicator, year) {
   return optionsIndicatorForm.find(m => m.value == indicator).toReverse ?
     'background' + (rangeLegend.length - index) :
     'background' + index;
-}
+};
 
-function displayLegend() {
+const displayLegend= () => {
   if ((legend[activeIndicator] === undefined) || (legend[activeIndicator][activeYear] === undefined)) {
     // Sometimes the API return results full of null values for the whole year
     setLegendNoData();
@@ -381,7 +380,7 @@ function displayLegend() {
       });
     }
   }
-}
+};
 
 const setLegendNoData = () => {
   for (let i = 0; i <= legendRangeNum; i++) {
@@ -397,7 +396,7 @@ const setLegendNoData = () => {
   $('#legend0-text').innerHTML = 'No data';
 };
 
-function buildIndicatorsSelector() {
+const buildIndicatorsSelector = () => {
   let indicatorArray = getIndicatorsFromLegendObj();
 
   if (indicatorArray.length > 0) {
@@ -428,9 +427,9 @@ function buildIndicatorsSelector() {
 
     $('#indicators').addEventListener('change', listenChangeIndic);
   }
-}
+};
 
-function listenChangeIndic() {
+const listenChangeIndic = () => {
   let s = $('#indicators-select');
   activeIndicator = s.options[s.selectedIndex].value;
 
@@ -438,9 +437,9 @@ function listenChangeIndic() {
   // because of indicator / year independance
   buildYearsSelector();
   fillMapAndLegend();
-}
+};
 
-function buildYearsSelector() {
+const buildYearsSelector = () => {
   let yearArray = getYearsFromLegendObj();
   yearArray.sort((a, b) => a - b);
 
@@ -460,9 +459,9 @@ function buildYearsSelector() {
       fillMapAndLegend();
     });
   } 
-}
+};
 
-function getYearsFromLegendObj() {
+const getYearsFromLegendObj = () => {
   let yearArray = [];
   // only get years relevant to active indicator
   for (let yearVal in legend[activeIndicator]) {
@@ -473,17 +472,17 @@ function getYearsFromLegendObj() {
   }
 
   return yearArray;
-}
+};
 
-function getIndicatorsFromLegendObj() {
+const getIndicatorsFromLegendObj = () => {
   let indicArray = [];
   for (let indicatorVal in legend) {
     indicArray.push([indicatorVal, legend[indicatorVal].indicator_name]);
   }
   return indicArray;
-}
+};
 
-function createUpdateSlider(sliderElement, yearArr) {
+const createUpdateSlider = (sliderElement, yearArr) => {
   const filter = (value) => {
     // filters value to display for scale
     // can return 0 = no value, 1 = large value, 2 = small value
@@ -531,9 +530,9 @@ function createUpdateSlider(sliderElement, yearArr) {
       }
     }
   });
-}
+};
 
-function showCountryInfo(event) {
+const showCountryInfo = (event) => {
   let countryCode = event.target.getAttribute('data-id');
   let tooltip = $('#tooltip');
   if (countryCode == null) {
@@ -574,7 +573,7 @@ function showCountryInfo(event) {
       tooltip.style.transform = 'scale(1)';
     }
   }
-}
+};
 
 const formatNumber = (n) => {
   if (typeof n == 'number') {
@@ -600,7 +599,6 @@ const formatNumber = (n) => {
 };
 
 const updateTitle = () => {
-  
   // whole data set returns null value sometimes
   if (activeIndicator != '') {
     let indicatorName = (legend[activeIndicator]) ? legend[activeIndicator].indicator_name : activeIndicator;

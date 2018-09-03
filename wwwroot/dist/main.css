@@ -1,0 +1,1281 @@
+/*! nouislider - 11.1.0 - 2018-04-02 11:18:13 */
+/* Functional styling;
+ * These styles are required for noUiSlider to function.
+ * You don't need to change these rules to apply your design.
+ */
+.noUi-target,
+.noUi-target * {
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  -webkit-user-select: none;
+  -ms-touch-action: none;
+  touch-action: none;
+  -ms-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+.noUi-target {
+  position: relative;
+  direction: ltr;
+}
+.noUi-base,
+.noUi-connects {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  z-index: 1;
+}
+/* Wrapper for all connect elements.
+ */
+.noUi-connects {
+  overflow: hidden;
+  z-index: 0;
+}
+.noUi-connect,
+.noUi-origin {
+  will-change: transform;
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  -ms-transform-origin: 0 0;
+  -webkit-transform-origin: 0 0;
+  transform-origin: 0 0;
+}
+/* Offset direction
+ */
+html:not([dir="rtl"]) .noUi-horizontal .noUi-origin {
+  left: auto;
+  right: 0;
+}
+/* Give origins 0 height/width so they don't interfere with clicking the
+ * connect elements.
+ */
+.noUi-vertical .noUi-origin {
+  width: 0;
+}
+.noUi-horizontal .noUi-origin {
+  height: 0;
+}
+.noUi-handle {
+  position: absolute;
+}
+.noUi-state-tap .noUi-connect,
+.noUi-state-tap .noUi-origin {
+  -webkit-transition: transform 0.3s;
+  transition: transform 0.3s;
+}
+.noUi-state-drag * {
+  cursor: inherit !important;
+}
+/* Slider size and handle placement;
+ */
+.noUi-horizontal {
+  height: 18px;
+}
+.noUi-horizontal .noUi-handle {
+  width: 34px;
+  height: 28px;
+  left: -17px;
+  top: -6px;
+}
+.noUi-vertical {
+  width: 18px;
+}
+.noUi-vertical .noUi-handle {
+  width: 28px;
+  height: 34px;
+  left: -6px;
+  top: -17px;
+}
+html:not([dir="rtl"]) .noUi-horizontal .noUi-handle {
+  right: -17px;
+  left: auto;
+}
+/* Styling;
+ * Giving the connect element a border radius causes issues with using transform: scale
+ */
+.noUi-target {
+  background: #FAFAFA;
+  border-radius: 4px;
+  border: 1px solid #D3D3D3;
+  box-shadow: inset 0 1px 1px #F0F0F0, 0 3px 6px -5px #BBB;
+}
+.noUi-connects {
+  border-radius: 3px;
+}
+.noUi-connect {
+  background: #3FB8AF;
+}
+/* Handles and cursors;
+ */
+.noUi-draggable {
+  cursor: ew-resize;
+}
+.noUi-vertical .noUi-draggable {
+  cursor: ns-resize;
+}
+.noUi-handle {
+  border: 1px solid #D9D9D9;
+  border-radius: 3px;
+  background: #FFF;
+  cursor: default;
+  box-shadow: inset 0 0 1px #FFF, inset 0 1px 7px #EBEBEB, 0 3px 6px -3px #BBB;
+}
+.noUi-active {
+  box-shadow: inset 0 0 1px #FFF, inset 0 1px 7px #DDD, 0 3px 6px -3px #BBB;
+}
+/* Handle stripes;
+ */
+.noUi-handle:before,
+.noUi-handle:after {
+  content: "";
+  display: block;
+  position: absolute;
+  height: 14px;
+  width: 1px;
+  background: #E8E7E6;
+  left: 14px;
+  top: 6px;
+}
+.noUi-handle:after {
+  left: 17px;
+}
+.noUi-vertical .noUi-handle:before,
+.noUi-vertical .noUi-handle:after {
+  width: 14px;
+  height: 1px;
+  left: 6px;
+  top: 14px;
+}
+.noUi-vertical .noUi-handle:after {
+  top: 17px;
+}
+/* Disabled state;
+ */
+[disabled] .noUi-connect {
+  background: #B8B8B8;
+}
+[disabled].noUi-target,
+[disabled].noUi-handle,
+[disabled] .noUi-handle {
+  cursor: not-allowed;
+}
+/* Base;
+ *
+ */
+.noUi-pips,
+.noUi-pips * {
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+.noUi-pips {
+  position: absolute;
+  color: #999;
+}
+/* Values;
+ *
+ */
+.noUi-value {
+  position: absolute;
+  white-space: nowrap;
+  text-align: center;
+}
+.noUi-value-sub {
+  color: #ccc;
+  font-size: 10px;
+}
+/* Markings;
+ *
+ */
+.noUi-marker {
+  position: absolute;
+  background: #CCC;
+}
+.noUi-marker-sub {
+  background: #AAA;
+}
+.noUi-marker-large {
+  background: #AAA;
+}
+/* Horizontal layout;
+ *
+ */
+.noUi-pips-horizontal {
+  padding: 10px 0;
+  height: 80px;
+  top: 100%;
+  left: 0;
+  width: 100%;
+}
+.noUi-value-horizontal {
+  -webkit-transform: translate(-50%, 50%);
+  transform: translate(-50%, 50%);
+}
+.noUi-rtl .noUi-value-horizontal {
+  -webkit-transform: translate(50%, 50%);
+  transform: translate(50%, 50%);
+}
+.noUi-marker-horizontal.noUi-marker {
+  margin-left: -1px;
+  width: 2px;
+  height: 5px;
+}
+.noUi-marker-horizontal.noUi-marker-sub {
+  height: 10px;
+}
+.noUi-marker-horizontal.noUi-marker-large {
+  height: 15px;
+}
+/* Vertical layout;
+ *
+ */
+.noUi-pips-vertical {
+  padding: 0 10px;
+  height: 100%;
+  top: 0;
+  left: 100%;
+}
+.noUi-value-vertical {
+  -webkit-transform: translate(0, -50%);
+  transform: translate(0, -50%, 0);
+  padding-left: 25px;
+}
+.noUi-rtl .noUi-value-vertical {
+  -webkit-transform: translate(0, 50%);
+  transform: translate(0, 50%);
+}
+.noUi-marker-vertical.noUi-marker {
+  width: 5px;
+  height: 2px;
+  margin-top: -1px;
+}
+.noUi-marker-vertical.noUi-marker-sub {
+  width: 10px;
+}
+.noUi-marker-vertical.noUi-marker-large {
+  width: 15px;
+}
+.noUi-tooltip {
+  display: block;
+  position: absolute;
+  border: 1px solid #D9D9D9;
+  border-radius: 3px;
+  background: #fff;
+  color: #000;
+  padding: 5px;
+  text-align: center;
+  white-space: nowrap;
+}
+.noUi-horizontal .noUi-tooltip {
+  -webkit-transform: translate(-50%, 0);
+  transform: translate(-50%, 0);
+  left: 50%;
+  bottom: 120%;
+}
+.noUi-vertical .noUi-tooltip {
+  -webkit-transform: translate(0, -50%);
+  transform: translate(0, -50%);
+  top: 50%;
+  right: 120%;
+}
+
+/**
+ * CSS Modal
+ * http://drublic.github.com/css-modal
+ *
+ * @author Hans Christian Reinl - @drublic
+ */
+/**
+ * CSS Modal Configuration
+ * http://drublic.github.com/css-modal
+ *
+ * @author Hans Christian Reinl - @drublic
+ */
+html {
+  overflow-y: scroll;
+  -webkit-overflow-scrolling: touch; }
+
+.has-overlay {
+  overflow: hidden;
+  height: auto; }
+  .has-overlay > body {
+    height: 100%;
+    overflow: hidden; }
+
+.modal--fade, .modal--show {
+  -webkit-transform: translate(0, 100%);
+  -moz-transform: translate(0, 100%);
+  -o-transform: translate(0, 100%);
+  -ms-transform: translate(0, 100%);
+  transform: translate(0, 100%);
+  -webkit-transform: translate3d(0, 100%, 0);
+  transform: translate3d(0, 100%, 0);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 999;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+  opacity: 0;
+  display: none\9; }
+  .modal--fade:target, .modal--show:target, .is-active.modal--fade, .is-active.modal--show {
+    -webkit-transform: translate(0, 0);
+    -moz-transform: translate(0, 0);
+    -o-transform: translate(0, 0);
+    -ms-transform: translate(0, 0);
+    transform: translate(0, 0);
+    width: auto;
+    height: auto;
+    opacity: 1; }
+  .is-active.modal--fade, .is-active.modal--show {
+    display: block\9;
+    height: 100% \9;
+    width: 100% \9; }
+  .modal--fade:target, .modal--show:target, .is-active.modal--fade, .is-active.modal--show {
+    display: block\9; }
+  .modal--fade .modal-inner, .modal--show .modal-inner {
+    position: absolute;
+    top: 60px;
+    left: 50%;
+    z-index: 20;
+    margin-left: -325px;
+    width: 650px;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch; }
+    .modal--fade .modal-inner > img, .modal--show .modal-inner > img,
+    .modal--fade .modal-inner > video,
+    .modal--show .modal-inner > video,
+    .modal--fade .modal-inner > iframe,
+    .modal--show .modal-inner > iframe {
+      width: 100%;
+      height: auto;
+      min-height: 300px; }
+    .modal--fade .modal-inner > img, .modal--show .modal-inner > img {
+      width: auto;
+      max-width: 100%; }
+    .modal--fade .modal-inner iframe, .modal--show .modal-inner iframe {
+      display: block;
+      width: 100%;
+      border: 0; }
+  .modal--fade .modal-content, .modal--show .modal-content {
+    position: relative;
+    max-height: 400px;
+    max-height: 60vh;
+    overflow-x: hidden;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch; }
+    .modal--fade .modal-content > *, .modal--show .modal-content > * {
+      max-width: 100%; }
+  .modal--fade footer, .modal--show footer {
+    border-top: 1px solid white;
+    padding: 0 1.2em 18px;
+    background: #f0f0f0;
+    border-radius: 2px; }
+  .modal--fade .modal-close, .modal--show .modal-close {
+    display: block;
+    height: 1px;
+    clip: rect(0 0 0 0);
+    margin: -1px;
+    overflow: hidden; }
+    .modal--fade .modal-close:focus:after, .modal--show .modal-close:focus:after {
+      outline: 1px dotted;
+      outline: -webkit-focus-ring-color auto 5px; }
+    .modal--fade .modal-close:before, .modal--show .modal-close:before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 10; }
+    .modal--fade .modal-close:after, .modal--show .modal-close:after {
+      content: '\D7';
+      position: absolute;
+      top: 35px;
+      right: 50%;
+      z-index: 20;
+      margin-right: -325px; }
+  @media screen and (max-width: 690px) {
+    .modal--fade .modal-inner, .modal--show .modal-inner {
+      width: auto;
+      left: 20px;
+      right: 20px;
+      margin-left: 0; }
+    .modal--fade .modal-close:after, .modal--show .modal-close:after {
+      margin-right: 0 !important;
+      right: 20px; } }
+  @media screen and (max-width: 30em) {
+    .modal--fade, .modal--show {
+      -webkit-transform: translate(0, 400px);
+      -webkit-transform: translate3d(0, 100%, 0);
+      transform: translate3d(0, 100%, 0);
+      -webkit-transition: opacity 1ms .25s;
+      -moz-transition: opacity 1ms .25s;
+      -o-transition: opacity 1ms .25s;
+      -ms-transition: opacity 1ms .25s;
+      transition: opacity 1ms .25s;
+      display: block;
+      right: auto;
+      bottom: auto; }
+      .modal--fade:target, .modal--show:target, .is-active.modal--fade, .is-active.modal--show {
+        width: 100%;
+        height: 100%; }
+        .modal--fade:target .modal-close, .modal--show:target .modal-close, .is-active.modal--fade .modal-close, .is-active.modal--show .modal-close {
+          display: block; }
+      .modal--fade .modal-inner, .modal--show .modal-inner {
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 100%;
+        overflow: auto; }
+      .modal--fade .modal-content, .modal--show .modal-content {
+        max-height: none;
+        -ms-word-break: break-all;
+        word-break: break-all;
+        word-break: break-word;
+        -webkit-hyphens: auto;
+        -moz-hyphens: auto;
+        hyphens: auto; }
+      .modal--fade .modal-close, .modal--show .modal-close {
+        display: none;
+        right: auto; }
+        .modal--fade .modal-close:before, .modal--show .modal-close:before {
+          content: '';
+          position: fixed;
+          top: 0;
+          left: 0;
+          right: 0;
+          z-index: 20; }
+        .modal--fade .modal-close:after, .modal--show .modal-close:after {
+          top: 5px !important;
+          right: 5px;
+          left: auto;
+          margin-left: 0; } }
+  @media screen and (max-height: 46em) and (min-width: 30em) {
+    .modal--fade .modal-content, .modal--show .modal-content {
+      max-height: 340px;
+      max-height: 50vh; } }
+  @media screen and (max-height: 36em) and (min-width: 30em) {
+    .modal--fade .modal-content, .modal--show .modal-content {
+      max-height: 265px;
+      max-height: 40vh; } }
+  .is-stacked.modal--fade, .is-stacked.modal--show {
+    -webkit-transform: translate(0, 0) scale(1, 1);
+    -moz-transform: translate(0, 0) scale(1, 1);
+    -o-transform: translate(0, 0) scale(1, 1);
+    -ms-transform: translate(0, 0) scale(1, 1);
+    transform: translate(0, 0) scale(1, 1);
+    opacity: 1; }
+    .is-stacked.modal--fade .modal-inner, .is-stacked.modal--show .modal-inner {
+      -webkit-animation: scaleDown .7s ease both;
+      -moz-animation: scaleDown .7s ease both;
+      animation: scaleDown .7s ease both; }
+    .is-stacked.modal--fade .modal-close, .is-stacked.modal--show .modal-close {
+      opacity: 0; }
+    @media screen and (max-width: 30em) {
+      .is-stacked.modal--fade, .is-stacked.modal--show {
+        -webkit-animation: scaleDown .7s ease both;
+        -moz-animation: scaleDown .7s ease both;
+        animation: scaleDown .7s ease both; }
+        .is-stacked.modal--fade .modal-inner, .is-stacked.modal--show .modal-inner {
+          -webkit-animation: none;
+          -moz-animation: none;
+          animation: none; }
+        .is-stacked.modal--fade .modal-close, .is-stacked.modal--show .modal-close {
+          opacity: 1; } }
+
+/**
+ * All animations for CSS Modal
+ *
+ * Available:
+ * - %modal--transition-fade (fade)
+ * - %modal--transition-zoomIn (zooms in)
+ * - %modal--transition-plainScreen (hides background)
+ *
+ * Usage:
+ *
+ * .selector {
+ * 		@extend %modal--transition-fade;
+ * }
+ *
+ */
+@media screen and (min-width: 30em) {
+  .modal--fade {
+    transition: opacity 0.4s; } }
+
+/**
+ * CSS Modal Themes
+ * http://drublic.github.com/css-modal
+ *
+ * @author Hans Christian Reinl - @drublic
+ */
+/*
+ * Global Theme Styles
+ */
+.modal--fade, .modal--show {
+  color: #222;
+  line-height: 1.3; }
+  .modal--fade .modal-inner, .modal--show .modal-inner {
+    border-radius: 2px;
+    background: #fff;
+    -webkit-box-shadow: 0 0 30px rgba(0, 0, 0, 0.6);
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.6);
+    max-width: 100%;
+    -webkit-transition: max-width 0.25s linear, margin-left 0.125s linear;
+    transition: max-width 0.25s linear, margin-left 0.125s linear; }
+  .modal--fade header, .modal--show header {
+    border-bottom: 1px solid #ddd;
+    padding: 0 1.2em; }
+    .modal--fade header > h2, .modal--show header > h2 {
+      margin: 0.5em 0; }
+  .modal--fade .modal-content, .modal--show .modal-content {
+    border-bottom: 1px solid #ddd;
+    padding: 15px 1.2em; }
+  .modal--fade footer, .modal--show footer {
+    border-top: 1px solid white;
+    padding: 0 1.2em 18px;
+    background: #f0f0f0;
+    border-radius: 2px; }
+  .modal--fade .modal-close, .modal--show .modal-close {
+    text-indent: -100px; }
+    .modal--fade .modal-close:before, .modal--show .modal-close:before {
+      background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAQAAAC1+jfqAAAAEUlEQVQoz2NgeEYAjioYSQoAzOTmAXhPhyoAAAAASUVORK5CYII="); }
+    .modal--fade .modal-close:after, .modal--show .modal-close:after {
+      content: '\D7';
+      background: #fff;
+      border-radius: 2px;
+      padding: 2px 8px;
+      font-size: 1.2em;
+      text-decoration: none;
+      text-indent: 0; }
+  @media screen and (max-width: 30em) {
+    .modal--fade .modal-close:before, .modal--show .modal-close:before {
+      background: #27aae2;
+      height: 3em;
+      -webkit-box-shadow: 0 0 5px rgba(0, 0, 0, 0.6);
+      box-shadow: 0 0 5px rgba(0, 0, 0, 0.6); }
+    .modal--fade .modal-inner, .modal--show .modal-inner {
+      padding-top: 3em;
+      -webkit-box-shadow: none;
+      box-shadow: none; }
+    .modal--fade .modal-close, .modal--show .modal-close {
+      text-decoration: none; }
+      .modal--fade .modal-close:after, .modal--show .modal-close:after {
+        content: attr(data-close);
+        font-size: 1em;
+        padding: 0.5em 1em; } }
+
+/*
+ * Plain Screen Theme Styles
+ */
+/**
+ * Apply the desired modal behavior to your container selector
+ */
+
+/*  
+    ========================================
+    Reset CSS
+    http://meyerweb.com/eric/tools/css/reset/ 
+    v2.0 | 20110126
+    License: none (public domain)
+    ========================================
+*/
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+body {
+	line-height: 1;
+}
+ol, ul {
+	list-style: none;
+}
+blockquote, q {
+	quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+/*
+	========================================
+	Body
+	========================================
+*/
+
+:root {
+    --color-bg: #3F4351;
+    --color-noData: #f2f2f2;
+    /* --color-1: #8b0000;
+    --color-2: #cf3b59;
+    --color-3: #f78599;
+    --color-4: #ffd8cd;
+    --color-5: #81dd8e;
+    --color-6: #63be8a;
+    --color-7: #3f9e86;
+    --color-8: #008080; */
+}
+
+html {
+    overflow-x: hidden;
+    overflow-y: visible;
+}
+body {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    background-color: var(--color-bg);
+    margin: 5px;
+    margin-top: 0;
+    margin-bottom: 0;
+    min-height: 100vh;
+}
+
+.container {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 90px auto 1fr 20px;
+    grid-template-areas: 
+        "header"
+        "map"
+        "selectors"
+        "footer";
+    align-content: start;
+    min-height: 100vh;
+}
+
+.header {
+    position: relative;
+    grid-area: header;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+.header-icons {
+    width: 120px;
+    text-align: center;
+}
+.header-title {
+    width: auto;
+    height: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: auto;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    font-size: 20px;
+}
+
+.map {
+    grid-area: map;
+    background-color: white;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+}
+
+.selectors {
+    background-color: white;
+    grid-area: selectors;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    display:flex;
+    align-items: flex-start;
+    justify-content: center;
+
+}
+.selectors-slider {
+    width: 450px;
+    padding: 20px;
+    padding-left: 0;
+}
+.selectors-indicators {
+    max-width: 620px;
+    padding: 20px;
+    padding-right: 0;
+    height: 29px;
+    overflow: hidden;
+}
+.selectors-indicators  select {
+    background: transparent;
+    background-color: var(--color-bg);
+    color: #fff;
+    border: none;
+    font-size: 14px;
+    height: 29px;
+    padding: 5px; /* If you add too much padding here, the options won't show in IE */
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+ }
+
+.footer {
+    height: 20px;
+    grid-area: footer;
+    margin: auto;
+}
+.footer-text {
+    font-size: 12px;
+    color: #b1b1b1;
+    vertical-align: text-bottom;
+    align-self: end;
+}
+
+/*
+	========================================
+	Map
+	========================================
+*/
+path {
+    fill: var(--color-noData);
+    fill-rule: evenodd;
+    -webkit-transition: 0.1s ease-in-out;
+    -moz-transition: 0.1s ease-in-out;
+    -o-transition: 0.1s ease-in-out;
+    transition: 0.1s ease-in-out;
+}
+path:hover {
+    stroke-width: 2px;
+    -webkit-transform: translate(2px, -2px);
+    -moz-transform: translate(2px, -2px);
+    -o-transform: translate(2px, -2px);
+    -ms-transform: translate(2px, -2px);
+    transform: translate(2px, -2px);
+}
+
+.noData {
+    fill: var(--color-noData);
+}
+.background1 {
+    fill: var(--color-1);
+}
+.background2 {
+    fill: var(--color-2);
+}
+.background3 {
+    fill: var(--color-3);
+}
+.background4 {
+    fill: var(--color-4);
+}
+.background5 {
+    fill: var(--color-5);
+}
+.background6 {
+    fill: var(--color-6);
+}
+.background7 {
+    fill: var(--color-7);
+}
+.background8 {
+    fill: var(--color-8);
+}
+.background9 {
+    fill: var(--color-9);
+}
+.background10 {
+    fill: var(--color-10);
+}
+
+/*
+	========================================
+	Tooltip slightly modified from http://codepen.io/Firdaus-Sabain/pen/zqonf/
+	========================================
+*/
+.tooltip {
+    opacity: 0;
+    z-index: 99;
+    color: rgb(225, 225, 225);
+    width: 190px;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    font-size: 11px;
+    padding: 5px 10px;
+    border-radius: 3px;
+    text-align: left;
+    text-shadow: 1px 1px 2px #111;
+    background: rgba(63,67,81,0.9);
+    border: 1px solid rgba(34,34,34,0.9);
+    box-shadow: 0px 0px 3px rgba(0,0,0,0.5);
+    -webkit-transition: transform .2s ease-in-out;
+    -moz-transition: transform .2s ease-in-out;
+    -o-transition: transform .2s ease-in-out;
+    -ms-transition: transform .2s ease-in-out;
+    transition: transform .2s ease-in-out;
+    -webkit-transition: opacity .2s ease-in-out;
+    -moz-transition: opacity .2s ease-in-out;
+    -o-transition: opacity .2s ease-in-out;
+    -ms-transition: opacity .2s ease-in-out;
+    transition: opacity .2s ease-in-out;
+    -webkit-transform: scale(0);
+    -moz-transform: scale(0);
+    -o-transform: scale(0);
+    -ms-transform: scale(0);
+    transform: scale(0);
+    position: absolute;
+}
+
+.tooltip:before, .tooltip:after {
+    content: '';
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-top: 10px solid rgba(51,51,51,0.9);
+    position: absolute;
+    bottom: -10px;
+    left: 43%;
+}
+
+.tooltip-header {
+    font-weight: 700;
+    padding-bottom: 10px;
+}
+
+/*
+	========================================
+	Legend
+	========================================
+*/
+.floating-legend {
+    position: absolute;
+    top: calc(40vw - 90px);
+    left: 30px;
+    width: 160px;
+    display: grid;
+    grid-template-columns: 50px 100px;
+    grid-template-rows: 25px 25px 25px 25px 25px 25px 25px 25px 25px 25px 25px;
+}
+.legend-n {
+    border-top: 2px solid black;
+    border-left: 2px solid black;
+    border-right: 2px solid black;
+}
+.legend-n:nth-last-child(2) {
+    border-top: 2px solid black;
+    border-left: 0;
+    border-right: 0;
+
+}
+.legend-text {
+    font-family: verdana;
+    font-size: 12px;
+    position: relative;
+    top: -5px;
+    right: -2px;
+}
+.legend-text-noData {
+    top: 5px;
+}
+.legendNoData {
+    background-color: var(--color-noData);
+    border: 2px solid black;
+}
+.legend1 {
+    background-color: var(--color-1);
+}
+.legend2 {
+    background-color: var(--color-2);
+}
+.legend3 {
+    background-color: var(--color-3);
+}
+.legend4 {
+    background-color: var(--color-4);
+}
+.legend5 {
+    background-color: var(--color-5);
+}
+.legend6 {
+    background-color: var(--color-6);
+}
+.legend7 {
+    background-color: var(--color-7);
+}
+.legend8 {
+    background-color: var(--color-8);
+}
+.legend9 {
+    background-color: var(--color-9);
+}
+.legend10 {
+    background-color: var(--color-10);
+}
+
+/*
+	========================================
+	Form
+	========================================
+*/
+.slider-form {
+    display: block;
+    margin-top: 40px;
+    
+}
+.slider-form-value {
+    display: block;
+    padding-top: 60px;
+}
+.indicator-select-form {
+    padding-top: 60px;
+}
+.button-form {
+    align-self: center;
+    margin-top: auto;
+}
+
+/*
+	========================================
+	Select-pure Component
+	========================================
+*/
+.select-wrapper {
+    margin: auto;
+    max-width: 600px;
+    width: calc(100% - 40px);
+  }
+  
+  .select-pure__select {
+    align-items: center;
+    background: #f9f9f8;
+    border-radius: 4px;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+    box-sizing: border-box;
+    color: #363b3e;
+    cursor: pointer;
+    display: flex;
+    font-size: 16px;
+    font-weight: 500;
+    justify-content: left;
+    min-height: 44px;
+    padding: 5px 10px;
+    position: relative;
+    transition: 0.2s;
+    width: 100%;
+  }
+  
+  .select-pure__options {
+    border-radius: 4px;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+    box-sizing: border-box;
+    color: #363b3e;
+    display: none;
+    left: 0;
+    max-height: 60vh;
+    overflow-y: scroll;
+    position: absolute;
+    top: 50px;
+    width: 100%;
+    z-index: 5;
+  }
+  
+  .select-pure__select--opened .select-pure__options {
+    display: block;
+  }
+  
+  .select-pure__option {
+    background: #fff;
+    border-bottom: 1px solid #e4e4e4;
+    box-sizing: border-box;
+    height: 44px;
+    line-height: 25px;
+    padding: 10px;
+  }
+  
+  .select-pure__option--selected {
+    color: #e4e4e4;
+    cursor: initial;
+    pointer-events: none;
+  }
+  
+  .select-pure__option--hidden {
+    display: none;
+  }
+  
+  .select-pure__selected-label {
+    /* background: #5e6264; */
+    background: var(--color-bg);
+    border-radius: 4px;
+    color: #fff;
+    cursor: initial;
+    display: inline-block;
+    margin: 5px 10px 5px 0;
+    padding: 3px 7px;
+  }
+  
+  .select-pure__selected-label:last-of-type {
+    margin-right: 0;
+  }
+  
+  .select-pure__selected-label i {
+    cursor: pointer;
+    display: inline-block;
+    margin-left: 7px;
+  }
+  
+  .select-pure__selected-label i:hover {
+    color: #e4e4e4;
+  }
+  
+  .select-pure__autocomplete {
+    background: #f9f9f8;
+    border-bottom: 1px solid #e4e4e4;
+    border-left: none;
+    border-right: none;
+    border-top: none;
+    box-sizing: border-box;
+    font-size: 16px;
+    outline: none;
+    padding: 10px;
+    width: 100%;
+  }
+
+/*
+	========================================
+	CSS Modal Plugin
+	========================================
+*/
+[data-cssmodal-stretch] .modal-inner {
+    top: 10%;
+      min-height: 80%;
+  }
+  [data-cssmodal-stretch] .modal-content {
+      height: 70vh;
+      background: white;
+      max-height: none !important;
+      overflow-y: visible;
+      overflow-x: visible;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      border: 0px;
+  }
+  [data-cssmodal-stretch] .modal-close:after {
+    top: 10%;
+    margin-top: -25px;
+  }
+  @media screen and (max-width: 30em) {
+    [data-cssmodal-stretch] .modal-inner {
+      top: 0;
+    }
+    [data-cssmodal-stretch] .modal-close:after {
+      margin-top: 0;
+    }
+  }
+
+/*
+	========================================
+	Button from https://github.com/loup-brun/buttons
+	========================================
+*/
+.button-alpha .btn {
+    outline: none;
+    -webkit-tap-highlight-color: transparent; 
+    display: inline-block;
+    margin: 6px;
+    font-size: inherit;
+    line-height: 1.42;
+    /* padding: 0.8em 1.6em; */
+    padding: 0.2em 1em;
+    font-weight: normal;
+    border-width: 0;
+    border-style: solid;
+    background: transparent;
+    border-radius: 0.2666666667em;
+    cursor: pointer;
+    font-family: "Booster Next FY", "Avenir Next", Avenir, sans-serif;
+    user-select: none;
+    vertical-align: bottom;
+    transition: box-shadow 0.2s, transform 0.2s, color 0.2s;
+}
+    .button-alpha .btn.btn-disabled {
+        cursor: not-allowed;
+        opacity: 0.8;
+    }
+    .button-alpha .btn.btn-disabled:active {
+        opacity: 0.6; 
+    }
+    .button-alpha .btn:hover {
+        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.5); 
+    }
+    .button-alpha .btn:active {
+        transform: translateY(3px); 
+    }
+
+.button-alpha .btn-dark {
+    box-shadow: 0 3px 0 0 #1e1f26, 0 4px 4px -1px rgba(0, 0, 0, 0.6), 0 4px 6px 1px rgba(0, 0, 0, 0.3), 0 1px 2px 1px transparent inset, 0 18px 32px -2px rgba(255, 255, 255, 0.1) inset;
+    background-color: var(--color-bg);
+    background-image: linear-gradient(-45deg, var(--color-bg), #384758);
+    color: #E6EAEF; 
+}
+    .button-alpha .btn-dark:hover {
+        box-shadow: 0 3px 0 0 #1e1f26, 0 6px 4px -1px rgba(0, 0, 0, 0.3), 0 4px 16px rgba(0, 0, 0, 0.5), 0 1px 2px 1px transparent inset, 0 18px 32px -2px rgba(255, 255, 255, 0.14) inset;
+    }
+    .button-alpha .btn-dark:active {
+        box-shadow: 0 0px 0 0 #121418, 0 3px 0 0 transparent, 0 4px 16px transparent, 0 1px 2px 1px rgba(0, 0, 0, 0.5) inset, 0 -18px 32px -2px rgba(255, 255, 255, 0.1) inset;
+        transition: 0s;
+        color: #1e1f26;
+        text-shadow: 0 1px 0 rgba(255, 255, 255, 0.3); 
+    }
+
+.button-alpha .btn-light {
+    box-shadow: 0 3px 0 0 #b7c3d1, 0 4px 4px -1px rgba(0, 0, 0, 0.6), 0 4px 6px 1px rgba(0, 0, 0, 0.3), 0 1px 2px 1px transparent inset, 0 18px 32px -2px rgba(255, 255, 255, 0.1) inset;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.5); 
+    background-color: #f2f2f2;
+    background-image: linear-gradient(-45deg, #f2f2f2, #e4edf1);
+    color: var(--color-bg);
+}
+    .button-alpha .btn-light:hover {
+        /* box-shadow: 0 3px 0 0 #b7c3d1, 0 6px 4px -1px rgba(0, 0, 0, 0.3), 0 4px 16px rgba(0, 0, 0, 0.5), 0 1px 2px 1px transparent inset, 0 18px 32px -2px rgba(255, 255, 255, 0.14) inset; */
+        box-shadow: inset 0 0 1px 1px rgba(0, 0, 0, 0.5);
+    }
+    .button-alpha .btn-light:active {
+        box-shadow: 0 0px 0 0 #a8b6c7, 0 3px 0 0 transparent, 0 4px 16px transparent, 0 1px 2px 1px rgba(0, 0, 0, 0.5) inset, 0 -18px 32px -2px rgba(255, 255, 255, 0.1) inset;
+        transition: 0s;
+        color: #b7c3d1;
+        text-shadow: 0 1px 0 rgba(255, 255, 255, 0.3); 
+    }
+
+.btn-sm {
+    font-size: 0.85em !important; }
+      
+.btn-md {
+    font-size: 1.2em !important; }
+      
+.btn-lg {
+    font-size: 2.6em !important; }
+
+/*
+	========================================
+	Override nouislider.css
+	========================================
+*/
+
+.noUi-connect {
+    background: var(--color-7);
+}
+.noUi-pips {
+    color: var(--color-bg);
+    font-size: 14px;
+}
+.noUi-value {
+    top: 10px;
+}
+.noUi-marker {
+    top: 0px;
+}
+
+/*
+	========================================
+	Loader http://cfoucht.com/loadlab/
+	========================================
+*/
+.blank {
+    display: none;
+    position: absolute;
+    z-index: 10;
+    height: 100%;
+    width: 100%;
+    background-color: rgba(255, 255, 255, 0.756);
+}
+.spinner-wrapper {
+    display: none;
+    position: absolute;
+    z-index:11;
+    top: 50%;
+    left: 50%;
+    margin-right: -50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+}
+.spinner-text {
+    padding: 20px;
+    font-family: "Courier New", Monaco;
+    font-size: 20px;
+}
+.spinner{
+    position: relative;
+    margin: auto;
+    height: 115px;
+    width: 115px;
+    border: 6px solid transparent;
+    border-top-color: var(--color-9);
+    border-bottom-color: var(--color-9);
+    border-radius: 50%;
+    
+    -webkit-animation: spin 3s linear infinite;
+            animation: spin 3s linear infinite;
+  }
+  .spinner::before{
+    content: "";
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    bottom: 20px;
+    left: 20px;
+    border: 6px solid transparent;
+    border-top-color: var(--color-6);
+    border-bottom-color: var(--color-6);
+    border-radius: 50%;
+    -webkit-animation: spin 1.5s linear infinite;
+    animation: spin 1.5s linear infinite;
+  }
+  @-webkit-keyframes spin {
+      from {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+      }
+      to {
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
+      }
+  }
+  @keyframes spin {
+      from {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+      }
+      to {
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
+      }
+  }
