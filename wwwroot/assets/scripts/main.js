@@ -49,6 +49,13 @@ var activePalette = 0;
 // Workaround bc of the multi select onChange event not being triggered on creation
 var formIndicators = [optionsIndicatorForm[0].value];
 
+const debug = false;
+function log(message) {
+  if (debug) { 
+    console.log(message);
+  }
+}
+
 document.addEventListener('DOMContentLoaded', function() {
   //load SVG and initialize country object
   getSVG('../assets/images/world.svg', 'XML')
@@ -72,7 +79,7 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     )
     .catch(function(err) {
-      console.log('Caught error in SVG processing : ' + err.message);
+      log('Caught error in SVG processing : ' + err.message);
     });
   
   buildForm();
@@ -113,7 +120,7 @@ async function getSVG(url, type) {
     return svg;
   }
   catch(err) {
-    console.log('error while retrieving svg : ' + err.message);
+    log('error while retrieving svg : ' + err.message);
   }
 }
 
@@ -193,11 +200,15 @@ async function fetchAndProcessData(urlsAPI) {
 
 async function callAPI(url, type) {
   try {
+    log(url);
     let json = await ajax(url, type);
     return json;
   }
   catch(err) {
-    console.log('error while calling API : ' + err.message);
+    log('error while calling API : ' + err.message);
+    setTimeout(function(){
+      displayError('error while calling API : ' + err.message);
+    },1);
   }
 }
 
@@ -209,29 +220,45 @@ function fillMapAndLegend() {
 
 function processApiAnswer(result) {
   displaySpinner('Processing Data');
-  let JSONObj = JSON.parse(result);
+  try {
+    let JSONObj = JSON.parse(result);
 
-  for (let JSONcountry of JSONObj[1]) {
-    let country = countries[JSONcountry.country.id];
-    
-    // process API result only if country code exists in the SVG & the countries global object
-    // (many unknown country codes)
-    if (country) {
-      let year = {};
-      year[JSONcountry.date] = { 'value': JSONcountry.value};
-      let countryIndicator = country[JSONcountry.indicator.id];
-      if (countryIndicator) {
-        //we add another year into the indicator object data
-        Object.assign(countryIndicator, year);
-      } else {
-        //we create the indicator object
-        country[JSONcountry.indicator.id] = year;
+    try {
+      for (let JSONcountry of JSONObj[1]) {
+        let country = countries[JSONcountry.country.id];
+
+        // process API result only if country code exists in the SVG & the countries global object
+        // (many unknown country codes)
+        if (country) {
+          let year = {};
+          year[JSONcountry.date] = { 'value': JSONcountry.value};
+          let countryIndicator = country[JSONcountry.indicator.id];
+          if (countryIndicator) {
+            //we add another year into the indicator object data
+            Object.assign(countryIndicator, year);
+          } else {
+            //we create the indicator object
+            country[JSONcountry.indicator.id] = year;
+          }
+          // push value into global legend array
+          // values array will be reduced later to get the legend scale
+          pushValueToLegendObj(JSONcountry.indicator.id, JSONcountry.indicator.value, JSONcountry.date, JSONcountry.value);
+        }
       }
-      // push value into global legend array
-      // values array will be reduced later to get the legend scale
-      pushValueToLegendObj(JSONcountry.indicator.id, JSONcountry.indicator.value, JSONcountry.date, JSONcountry.value);
+    } catch (err) {
+      log(err.message);
+      setTimeout(function(){
+        displayError('Error while processing answer');
+      },1);
     }
+
+  } catch (err) {
+    log(err.message);
+    setTimeout(function(){
+      displayError('Unable to parse API response');
+    },1);
   }
+  
   //replace array from global legend with reduced final scale
   reduceLegend();
 }
@@ -574,10 +601,12 @@ const formatNumber = (n) => {
 
 const updateTitle = () => {
   
-  // TODO improve this dirty workaround when whole data set returns null value
-  let indicatorName = (legend[activeIndicator]) ? legend[activeIndicator].indicator_name : activeIndicator;
-  let html = ` : ${indicatorName}, in ${activeYear}.`;
-  $('#header-content').innerHTML = html;
+  // whole data set returns null value sometimes
+  if (activeIndicator != '') {
+    let indicatorName = (legend[activeIndicator]) ? legend[activeIndicator].indicator_name : activeIndicator;
+    let html = ` : ${indicatorName}, in ${activeYear}.`;
+    $('#header-content').innerHTML = html;
+  }
 };
 
 const displaySpinner = (message) => {
@@ -590,4 +619,11 @@ const hideSpinner = () => {
   $('#spinner-text').innerHTML = '';
   $('#spinner-wrapper').style.display = 'none';
   $('#blank').style.display = 'none';
+};
+
+const displayError = (message) => {
+  displaySpinner(message);
+  setTimeout(function(){
+    hideSpinner();
+  },2000);
 };

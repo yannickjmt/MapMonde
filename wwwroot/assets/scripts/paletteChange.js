@@ -6,9 +6,8 @@ export default function (p) {
     ['#f7fcf0','#ccebe0','#9ed9cf','#77c6c1','#69adb7','#5b97ac','#4c80a1','#3b6997','#28548c','#084081'], // bluegreen blue
     ['#e0ffff','#d4e5ff','#c7ccff','#b8b2fd','#a999fa','#9781f4','#836beb','#6e55dd','#5942c9','#483d8b'], // LightCyan, Blue, DarkSlateBlue
     ['#ffffe0','#d6f3b7','#b0e393','#8fd375','#6fc259','#53af42','#3a9d2d','#238a1b','#0f760b','#006400'], // lightyellow, limegreen, DarkGreen
-    ['#f7f4f9','#f4d4e8','#f0b3d6','#e992c6','#e270b5','#cd5798','#b44277','#9a2e58','#80193a','#67001f'], // pink purple
+    // ['#f7f4f9','#f4d4e8','#f0b3d6','#e992c6','#e270b5','#cd5798','#b44277','#9a2e58','#80193a','#67001f'], // pink purple redundant
     ['#fff7f3','#ffd5dd','#ffb0c8','#fc8bb2','#f1659f','#d05095','#ae3d8a','#8c2980','#6b1575','#49006a'], // pink-yellow purple
-
 
     // diverging
     ['#9e0142','#c13e47','#dd6b51','#f29962','#fdc77b','#c9e69c','#9dc4a1','#809ea4','#6c78a4','#5e4fa2'], // red orange bluegreen purple
