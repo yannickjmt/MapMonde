@@ -10,6 +10,8 @@ Features :
 - A curated list of 35 of the most relevant indicators.
 - A choice of different cartography-adapted palettes of colors
 
+[DEMO](https://mapmonde.netlify.com/)
+
 #
 ## Developing
 
