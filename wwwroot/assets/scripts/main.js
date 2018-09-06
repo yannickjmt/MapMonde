@@ -12,9 +12,6 @@ var noUiSlider = require('nouislider');
 
 const D = document;
 const $ = D.querySelector.bind(D);
-//* const $$ = (selector, startNode) => [...(startNode||D).querySelectorAll(selector)];
-//* $(‘#button”) same as getElementByID
-//* $$(‘button’). selects all element of type button (then can use .map for ex)
 
 var svgCountries =[];
 var svgObj = {};
