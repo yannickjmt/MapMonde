@@ -1,10 +1,10 @@
 # MapMonde &middot; [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
-## Visualize World Bank Data in a Browser.
+## Dynamic world map built with data queried from the World Bank API.
 
 This web page pulls data from the World Bank API and displays it on a scalable SVG world map.
 
-Features : 
+Features: 
 - Multi indicator queries in parralel
 - Quick and easy navigation between years and indicators
 - A curated list of 35 of the most relevant indicators.
@@ -17,11 +17,11 @@ Features :
 
 ### Built With
 
-[noUiSlider](https://github.com/leongersen/noUiSlider) : lightweight, highly customizable range slider
+[noUiSlider](https://github.com/leongersen/noUiSlider): lightweight, highly customizable range slider
 
-[CSS Modals](https://github.com/drublic/css-modal) : Modals built out of pure CSS
+[CSS Modals](https://github.com/drublic/css-modal): Modals built out of pure CSS
 
-[SelectPure](https://github.com/maksymddd/select-pure) : Multi select javascript component
+[SelectPure](https://github.com/maksymddd/select-pure): Multi select javascript component
 
 ### Prerequisites
 Webpack with write-file-webpack-plugin and mini-css-extract-plugin
@@ -48,8 +48,6 @@ npm run build
 ## Api Reference
 
 [World Bank API](https://datahelpdesk.worldbank.org/knowledgebase/articles/889392-api-documentation)
-
-
 
 ## Licensing
 

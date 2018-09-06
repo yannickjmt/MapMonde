@@ -120,7 +120,7 @@ async function getSVG(url, type) {
     return svg;
   }
   catch(err) {
-    log('error while retrieving svg : ' + err.message);
+    log('error while retrieving svg: ' + err.message);
   }
 }
 
@@ -204,9 +204,9 @@ async function callAPI(url, type) {
     return json;
   }
   catch(err) {
-    log('error while calling API : ' + err.message);
+    log('error while calling API: ' + err.message);
     setTimeout(function(){
-      displayError('error while calling API : ' + err.message);
+      displayError('error while calling API: ' + err.message);
     },1);
   }
 }
@@ -561,7 +561,7 @@ const showCountryInfo = (event) => {
         } else {
           value = 'no data';
         }
-        html += `<div>${indicatorName}&#160;: ${formatNumber(value)}</div>`;
+        html += `<div>${indicatorName}: ${formatNumber(value)}</div>`;
       }
       tooltip.innerHTML = html;
       tooltip.style.visibility = 'visible';
@@ -602,7 +602,7 @@ const updateTitle = () => {
   // whole data set returns null value sometimes
   if (activeIndicator != '') {
     let indicatorName = (legend[activeIndicator]) ? legend[activeIndicator].indicator_name : activeIndicator;
-    let html = ` : ${indicatorName}, in ${activeYear}.`;
+    let html = `: ${indicatorName}, in ${activeYear}.`;
     $('#header-content').innerHTML = html;
   }
 };

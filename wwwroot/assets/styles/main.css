@@ -60,19 +60,20 @@ table {
 :root {
     --color-bg: #3F4351;
     --color-noData: #f2f2f2;
-    /* --color-1: #8b0000;
-    --color-2: #cf3b59;
-    --color-3: #f78599;
-    --color-4: #ffd8cd;
-    --color-5: #81dd8e;
-    --color-6: #63be8a;
-    --color-7: #3f9e86;
-    --color-8: #008080; */
+
 }
 
 html {
     overflow-x: hidden;
     overflow-y: visible;
+    /* background-color: white; */
+    min-height: 100vh;
+    width: 100vw;
+    margin: 0;
+    box-sizing: border-box;
+}
+*, *:before, *:after {
+    box-sizing: inherit;
 }
 body {
     font-family: Verdana, Geneva, Tahoma, sans-serif;
@@ -81,6 +82,14 @@ body {
     margin-top: 0;
     margin-bottom: 0;
     min-height: 100vh;
+}
+@media (max-width: 920px) {
+	body {
+        margin: 0;
+        width: 100%;
+        max-width: 100%;
+        /* box-sizing: border-box; */
+	}
 }
 
 .container {
@@ -95,6 +104,13 @@ body {
     align-content: start;
     min-height: 100vh;
 }
+@media (max-width: 920px) {
+	.container {
+        grid-template-rows: auto auto 1fr 20px;
+        width: 100%;
+        max-width: 100vw;
+	}
+}
 
 .header {
     position: relative;
@@ -103,21 +119,53 @@ body {
     align-items: center;
     justify-content: flex-start;
 }
+@media (max-width: 920px) {
+    .header {
+        width: 100%;
+        max-width: 100%;
+		display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: 1fr 1fr;
+        grid-template-areas: 
+            "header-title header-title"
+            "icon1 icon2";
+        /* grid-row-gap: 10px; */
+        align-content: start;
+        justify-items: center;
+	}
+}
+
 .header-icons {
     width: 120px;
+    min-width: 120px;
     text-align: center;
 }
 .header-title {
     width: auto;
     height: auto;
     display: flex;
-    align-items: center;
+    flex-wrap: nowrap;
+    /* align-items: center; */
     justify-content: center;
     margin: auto;
     background: white;
     padding: 20px;
     border-radius: 10px;
     font-size: 20px;
+    grid-area: header-title;
+}
+@media (max-width: 920px) {
+	.header-title {
+        width: calc(100% - 20px);
+        max-width: calc(100% - 20px);
+        font-size: 12px;
+        padding: 5px;
+        border-radius: 5px;
+        margin: 5px;
+        margin-bottom: 0;
+        text-align: center;
+        overflow: hidden;
+	}
 }
 
 .map {
@@ -128,14 +176,16 @@ body {
 }
 
 .selectors {
+    width: 100%;
+    max-width: 100vw;
     background-color: white;
     grid-area: selectors;
     border-bottom-left-radius: 5px;
     border-bottom-right-radius: 5px;
     display:flex;
+    flex-direction: row;
     align-items: flex-start;
     justify-content: center;
-
 }
 .selectors-slider {
     width: 450px;
@@ -146,12 +196,13 @@ body {
     max-width: 620px;
     padding: 20px;
     padding-right: 0;
-    height: 29px;
-    overflow: hidden;
+    /* height: 29px; */
 }
 .selectors-indicators  select {
     background: transparent;
     background-color: var(--color-bg);
+    max-width: 100%;
+    min-width: 100%;
     color: #fff;
     border: none;
     font-size: 14px;
@@ -160,12 +211,42 @@ body {
     -webkit-border-radius: 5px;
     -moz-border-radius: 5px;
     border-radius: 5px;
+    overflow: hidden;
+    white-space:nowrap; 
+    text-overflow: ellipsis;
  }
+ @media (max-width: 920px) {
+    .selectors {
+        border-radius: 0;
+        flex-direction: column;
+        justify-content: space-evenly;
+        align-items: center;
+    }
+    .selectors-slider {
+        width: 92%;
+        max-width: 92%;
+        padding-right:0;
+        border: 0;
+        flex-direction: column;
+	}
+	.selectors-indicators {
+        width: 92%;
+        max-width: 100%;
+        /* padding-left: 5px;
+        padding-right: 5px; */
+        padding: 0;
+        padding-top: 20px;
+        flex-direction: column;
+	}
+}
 
 .footer {
     height: 20px;
     grid-area: footer;
     margin: auto;
+}
+.footer a{
+    color: #b1b1b1;
 }
 .footer-text {
     font-size: 12px;
@@ -296,7 +377,7 @@ path:hover {
     width: 160px;
     display: grid;
     grid-template-columns: 50px 100px;
-    grid-template-rows: 25px 25px 25px 25px 25px 25px 25px 25px 25px 25px 25px;
+    grid-template-rows: repeat(11, 25px);
 }
 .legend-n {
     border-top: 2px solid black;
@@ -307,7 +388,6 @@ path:hover {
     border-top: 2px solid black;
     border-left: 0;
     border-right: 0;
-
 }
 .legend-text {
     font-family: verdana;
@@ -319,6 +399,7 @@ path:hover {
 .legend-text-noData {
     top: 5px;
 }
+
 .legendNoData {
     background-color: var(--color-noData);
     border: 2px solid black;
@@ -352,6 +433,41 @@ path:hover {
 }
 .legend10 {
     background-color: var(--color-10);
+}
+@media (max-width: 920px) {
+	.floating-legend {
+        top: calc(33vw + 50px);
+        left: 15px;
+        width: 70px;
+        grid-template-columns: 30px 40px;
+        grid-template-rows: repeat(11, 15px);
+    }
+    .legend-n {
+        border-top: 1px solid black;
+        border-left: 1px solid black;
+        border-right: 1px solid black;
+    }
+    .legend-n:nth-last-child(2) {
+        border-top: 1px solid black;
+    }
+    .legendNoData {
+        border: 1px solid black;
+    }
+    .legend-text {
+        font-size: 10px;
+    }
+}
+@media (max-width: 600px) {
+	.floating-legend {
+        top: calc(33vw + 50px);
+        left: 10px;
+        width: 50px;
+        grid-template-columns: 20px 30px;
+        grid-template-rows: repeat(11, 10px);
+    }
+    .legend-text {
+        font-size: 8px;
+    }
 }
 
 /*
@@ -434,6 +550,10 @@ path:hover {
     height: 44px;
     line-height: 25px;
     padding: 10px;
+    max-width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
   
   .select-pure__option--selected {
@@ -516,6 +636,14 @@ path:hover {
       margin-top: 0;
     }
   }
+  @media screen and (max-width: 30em) {
+    .modal--fade .modal-close:before, .modal--show .modal-close:before {
+      background: var(--color-8);
+    }
+  }
+  .modal-close:after {
+      color: var(--color-8);
+  }
 
 /*
 	========================================
@@ -575,8 +703,8 @@ path:hover {
 .button-alpha .btn-light {
     box-shadow: 0 3px 0 0 #b7c3d1, 0 4px 4px -1px rgba(0, 0, 0, 0.6), 0 4px 6px 1px rgba(0, 0, 0, 0.3), 0 1px 2px 1px transparent inset, 0 18px 32px -2px rgba(255, 255, 255, 0.1) inset;
     box-shadow: 0 2px 12px rgba(0, 0, 0, 0.5); 
-    background-color: #f2f2f2;
-    background-image: linear-gradient(-45deg, #f2f2f2, #e4edf1);
+    background-color: #fff;
+    background-image: linear-gradient(-45deg, #fff, #e4edf1);
     color: var(--color-bg);
 }
     .button-alpha .btn-light:hover {
@@ -606,11 +734,16 @@ path:hover {
 */
 
 .noUi-connect {
-    background: var(--color-7);
+    background: var(--color-8);
 }
 .noUi-pips {
     color: var(--color-bg);
     font-size: 14px;
+}
+@media (max-width: 920px) {
+	.noUi-pips {
+        font-size: 13px;
+	}
 }
 .noUi-value {
     top: 10px;
