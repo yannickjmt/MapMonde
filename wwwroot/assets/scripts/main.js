@@ -82,7 +82,7 @@ document.addEventListener('DOMContentLoaded', function() {
   buildForm();
 
   // land on the modal window
-  window.location.hash = 'modal-stretch';
+  window.location.hash = 'modal';
 
   // country tooltip must follow mouse
   document.addEventListener('mousemove', function(event) {
@@ -90,6 +90,9 @@ document.addEventListener('DOMContentLoaded', function() {
     $('#tooltip').style.top = (event.pageY - 80) + 'px';
   }, false);
 
+  $('#button-modal').addEventListener('click', function() {
+    window.location.hash = 'modal';
+  });
   $('#button-palette').addEventListener('click', function() {
     activePalette = paletteChange(activePalette);
   });
