@@ -3,48 +3,32 @@ import '../../../node_modules/css-modal/build/modal.css';
 import '../styles/main.css';
 
 import SelectPure from 'select-pure';
-import indicatorsList from './indicatorsList';
-import paletteChange from './paletteChange';
+import Countries from './countries';
+import Legend from './legend';
+import IndicatorsList from './indicatorsList';
+import PaletteChange from './paletteChange';
 
 var noUiSlider = require('nouislider');
 
 'use strict';
 
-const D = document;
-const $ = D.querySelector.bind(D);
+const $ = document.querySelector.bind(document);
 
 var svgCountries =[];
-var svgObj = {};
 
-var countries = {};
-//* ID: {
-//*    'country_name': 'Brazil',
-//*    'country_code': 'BR',
-//*    IndicatorID: {
-//*      Year1 : {value: ''},
-//*      Year2 : {value: ''}
-//*    }
-//*  }
-
-var legend = {};
-//*  IndicatorID1 { 
-//*     'indicator_name': '',
-//*     Year1: {'reduced': false,
-//*             'values': [ , ]
-//*            },
-//*     Year2: { }
-//*   }
+var countries = Countries();
+var legend = Legend();
 
 var activeYear = '';
 var activeIndicator = '';
 
-const optionsIndicatorForm = indicatorsList();
+const indicatorsList = IndicatorsList();
 
 const legendRangeNum = 10;
 var activePalette = 0;
 
 // Workaround bc of the multi select onChange event not being triggered on creation
-var formIndicators = [optionsIndicatorForm[0].value];
+var formIndicators = [indicatorsList[0].value];
 
 const debug = true;
 const log = (message) => {
@@ -59,16 +43,14 @@ document.addEventListener('DOMContentLoaded', function() {
     .then(
       function fulfilled(result) {
         $('#svgContainer').appendChild(result.documentElement);
-        svgObj = $('#svgContainer').firstElementChild;
+        let svgObj = $('#svgContainer').firstElementChild;
 
         //list of countries present in the SVG
         svgCountries = Array.from(svgObj.querySelectorAll('path'));
 
         //initialize countries 
         for (let country of svgCountries) {
-          countries[country.getAttribute('data-id')] = 
-            {'country_name': country.getAttribute('data-name'),
-              'country_code': country.getAttribute('data-id')};
+          countries.setCountry(country.getAttribute('data-id'), country.getAttribute('data-name'));
         }
 
         // country tooltip
@@ -94,16 +76,15 @@ document.addEventListener('DOMContentLoaded', function() {
     window.location.hash = 'modal';
   });
   $('#button-palette').addEventListener('click', function() {
-    activePalette = paletteChange(activePalette);
+    activePalette = PaletteChange(activePalette);
   });
 
-  activePalette = paletteChange();
-
+  activePalette = PaletteChange();
 });
 
 const ajax= (url, type) => {
   return new Promise(function(resolve, reject) {
-    var xhr = new XMLHttpRequest();
+    let xhr = new XMLHttpRequest();
     xhr.onload = function() {
       if (type == 'text') resolve(this.responseText);
       else if (type == 'XML') resolve(this.responseXML);
@@ -127,10 +108,10 @@ async function getSVG(url, type) {
 const buildForm = () => {
 // generate the select-pure component 
   let instanceSelect = new SelectPure('.indicator-select-form', {
-    options: optionsIndicatorForm,
+    options: indicatorsList,
     multiple: true,
     // problem with this component, it needs a default value
-    value: [optionsIndicatorForm[0].value],
+    value: [indicatorsList[0].value],
     icon: 'fas fa-times',
     // could not find way to access those values otherwise
     onChange: value => { 
@@ -224,24 +205,19 @@ const processApiAnswer = (result) => {
 
     try {
       for (let JSONcountry of JSONObj[1]) {
-        let country = countries[JSONcountry.country.id];
 
-        // process API result only if country code exists in the SVG & the countries global object
-        // (many unknown country codes)
-        if (country) {
-          let year = {};
-          year[JSONcountry.date] = { 'value': JSONcountry.value};
-          let countryIndicator = country[JSONcountry.indicator.id];
-          if (countryIndicator) {
-            //we add another year into the indicator object data
-            Object.assign(countryIndicator, year);
-          } else {
-            //we create the indicator object
-            country[JSONcountry.indicator.id] = year;
-          }
+        countries.setValue(JSONcountry.country.id,
+          JSONcountry.indicator.id,
+          JSONcountry.date,
+          JSONcountry.value);
+
+        if (countries[JSONcountry.country.id]) {
           // push value into global legend array
           // values array will be reduced later to get the legend scale
-          pushValueToLegendObj(JSONcountry.indicator.id, JSONcountry.indicator.value, JSONcountry.date, JSONcountry.value);
+          legend.setValue(JSONcountry.indicator.id, 
+            JSONcountry.indicator.value,
+            JSONcountry.date,
+            JSONcountry.value);
         }
       }
     } catch (err) {
@@ -258,112 +234,46 @@ const processApiAnswer = (result) => {
     },1);
   }
   
-  //replace array from global legend with reduced final scale
-  reduceLegend();
-};
-
-const pushValueToLegendObj = (indicatorID, IndicatorName, year, value) => {
-  if (legend[indicatorID]) {
-    if (legend[indicatorID][year]) {
-      // reduced = true means we already processed all data for this year and indicator
-      if (legend[indicatorID][year].reduced == false) {
-        // add value to existing array for year and indicatorID
-        let arr = legend[indicatorID][year]['values'];
-        arr.push(value);
-        legend[indicatorID][year]['values'] = arr;
-      }
-    }
-    else {
-      // create new year property for indicatorID with single elt array
-      legend[indicatorID][year] = {'reduced': false, 'values':[value]};
-    }
-  } else {
-    // create new indicator property
-    let yearObj = {};
-    yearObj[year] = {'reduced': false, 'values':[value]};
-    legend[indicatorID] = yearObj;
-    legend[indicatorID]['indicator_name'] = IndicatorName;
-  }
-};
-
-const reduceLegend = () => {
-  for (let indicatorVal in legend) {
-    for (let yearVal in legend[indicatorVal]) {
-      let year = legend[indicatorVal][yearVal];
-      if ((typeof year.reduced === 'boolean') && (year.reduced === false)) {
-        let arr = reduceArray(year.values);
-        year.values = arr;
-        year.reduced = true;
-      }
-    }
-  }
-};
-
-const reduceArray= (arr) => {
-  // create the legend range, will be used to separate the country values into equally large sets
-  // we get n+1 boundaries to build a legend with n colors (n = legendRangeNum)
-  const legendArr = [];
-  
-  // filter out null values
-  // we didn't filter at the country object level so that rest of the map could be drawn
-  // in case of whole set is null
-  arr = arr.filter(n => (n===null) ? false : true);
-
-  if (arr.length > 0) {
-    arr.sort((a, b) => a - b);
-    const max = Math.max(...arr);
-    for (let i = 0; i < legendRangeNum; i++) {
-      legendArr.push(arr[Math.round(i * arr.length / legendRangeNum)]);
-    }
-    legendArr.push(max);
-  }
-
-  return legendArr;
+  //replace array from global legend with array of legendRangeNum+1 values
+  //that will be used to build the legend scale
+  legend.reduceLegend(legendRangeNum);
 };
 
 const updateMapColors = () => {
-  let classCountry;
-
   // assign CSS class each to svg element if valid value
   for (let svgCountry of svgCountries) {
+
     let svgCountryCode = svgCountry.getAttribute('data-id');
-    let countryIndic = countries[svgCountryCode][activeIndicator];
-    if (countryIndic) {
-      if (countryIndic[activeYear]) {
-        let value = countryIndic[activeYear].value;
-        if (value != null) {
-          classCountry = getClassName(value, activeIndicator, activeYear);
-        } else {
-          classCountry = 'noData';
-        }
-      } else {
-        classCountry = 'noData';
-      }
-    } else {
-      classCountry = 'noData';
-    }
+
+    let countryValue = countries.getValue(svgCountryCode, activeIndicator, activeYear);
+
+    let classCountry = (countryValue === '')
+      ? 'noData'
+      : getClassName(countryValue, activeIndicator, activeYear);
+
     svgCountry.setAttributeNS(null, 'class', classCountry);
   }
 };
 
 const getClassName = (value, indicator, year) => {
-  let rangeLegend = legend[indicator][year].values;
+  let rangeLegend = legend.getValues(indicator, year);
+
   let index = rangeLegend.findIndex( a => a >= value);
   if (index == 0) index = 1;
   //reverse map colors if needed (ie small value = good, big = bad)
-  return optionsIndicatorForm.find(m => m.value == indicator).toReverse ?
+  return indicatorsList.find(m => m.value == indicator).toReverse ?
     'background' + (rangeLegend.length - index) :
     'background' + index;
 };
 
 const displayLegend= () => {
-  if ((legend[activeIndicator] === undefined) || (legend[activeIndicator][activeYear] === undefined)) {
+  let rangeLegend = legend.getValues(activeIndicator, activeYear);
+  if (rangeLegend === null) {
     // Sometimes the API return results full of null values for the whole year
     setLegendNoData();
   }
   else {
-    let rangeLegend = legend[activeIndicator][activeYear].values;
-    let toReverse = optionsIndicatorForm.find(m => m.value == activeIndicator).toReverse;
+    let toReverse = indicatorsList.find(m => m.value == activeIndicator).toReverse;
     if (rangeLegend.length == 0) {
       setLegendNoData();
     } else {
@@ -397,7 +307,7 @@ const setLegendNoData = () => {
 };
 
 const buildIndicatorsSelector = () => {
-  let indicatorArray = getIndicatorsFromLegendObj();
+  let indicatorArray = legend.getIndicators();
 
   if (indicatorArray.length > 0) {
     if ($('#indicators-select')) {
@@ -440,7 +350,7 @@ const listenChangeIndic = () => {
 };
 
 const buildYearsSelector = () => {
-  let yearArray = getYearsFromLegendObj();
+  let yearArray = legend.getYears(activeIndicator);
   yearArray.sort((a, b) => a - b);
 
   if ((activeYear == '') || (!yearArray.includes(activeYear))) {
@@ -450,36 +360,13 @@ const buildYearsSelector = () => {
   //can't create slider with only one value
   //taken care of by forcing 2 years minimum range in the form
   if (yearArray.length > 1) {
-    var slider = $('#slider');
+    let slider = $('#slider');
     createUpdateSlider(slider, yearArray);
-    // var sliderValue = $('#slider-value');
     slider.noUiSlider.on('update', function( values, handle ) {
-      // sliderValue.innerHTML = values[handle];
       activeYear = values[handle];
       fillMapAndLegend();
     });
   } 
-};
-
-const getYearsFromLegendObj = () => {
-  let yearArray = [];
-  // only get years relevant to active indicator
-  for (let yearVal in legend[activeIndicator]) {
-    let year = legend[activeIndicator][yearVal];
-    if (typeof year.reduced === 'boolean') {
-      if (!yearArray.includes(yearVal)) yearArray.push(yearVal);
-    }
-  }
-
-  return yearArray;
-};
-
-const getIndicatorsFromLegendObj = () => {
-  let indicArray = [];
-  for (let indicatorVal in legend) {
-    indicArray.push([indicatorVal, legend[indicatorVal].indicator_name]);
-  }
-  return indicArray;
 };
 
 const createUpdateSlider = (sliderElement, yearArr) => {
@@ -535,34 +422,23 @@ const createUpdateSlider = (sliderElement, yearArr) => {
 const showCountryInfo = (event) => {
   let countryCode = event.target.getAttribute('data-id');
   let tooltip = $('#tooltip');
+
   if (countryCode == null) {
     tooltip.style.visibility = 'hidden';
     tooltip.style.opacity = 0;
   } else {
-    let country = countries[countryCode];
-    if (country) {
-      let html = `<div class="tooltip-header">${country.country_name} (${countryCode})</div>`;
+    let countryName = countries.getCountryName(countryCode);
+    if (countryName != '') {
+      let html = `<div class="tooltip-header">${countryName} (${countryCode})</div>`;
 
-      
       if (activeIndicator != '') {
-        let countryIndic = country[activeIndicator];
-        let indicatorName = legend[activeIndicator].indicator_name;
-        let value;
+        let value = countries.getValue(countryCode, activeIndicator, activeYear);
+        let indicatorName = legend.getIndicatorName(activeIndicator);
 
-        if (countryIndic) {
-          if (countryIndic[activeYear]) {
-            value = countryIndic[activeYear].value;
-            if (value == null) {
-              value = 'no data';
-            }
-          } else {
-            value = 'no data';
-          }
-        } else {
-          value = 'no data';
-        }
+        if (value === '') value = 'no data';
         html += `<div>${indicatorName}: ${formatNumber(value)}</div>`;
       }
+
       tooltip.innerHTML = html;
       tooltip.style.visibility = 'visible';
       tooltip.style.opacity = 0.9;
@@ -601,7 +477,7 @@ const formatNumber = (n) => {
 const updateTitle = () => {
   // whole data set returns null value sometimes
   if (activeIndicator != '') {
-    let indicatorName = (legend[activeIndicator]) ? legend[activeIndicator].indicator_name : activeIndicator;
+    let indicatorName = legend.getIndicatorName(activeIndicator);
     let html = `: ${indicatorName}, in ${activeYear}.`;
     $('#header-content').innerHTML = html;
   }
