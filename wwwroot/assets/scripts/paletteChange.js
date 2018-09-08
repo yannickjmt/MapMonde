@@ -1,4 +1,4 @@
-export default function (p) {
+export default (p) => {
   const pallettes = [
     // rule : "underperforming" color at the beginning, "overperforming" at the end
     // diverging
@@ -14,14 +14,16 @@ export default function (p) {
     ['#e0ffff','#d4e5ff','#c7ccff','#b8b2fd','#a999fa','#9781f4','#836beb','#6e55dd','#5942c9','#483d8b'], // LightCyan, Blue, DarkSlateBlue
     ['#ffffe0','#d6f3b7','#b0e393','#8fd375','#6fc259','#53af42','#3a9d2d','#238a1b','#0f760b','#006400'], // lightyellow, limegreen, DarkGreen
     ['#fff7f3','#ffd5dd','#ffb0c8','#fc8bb2','#f1659f','#d05095','#ae3d8a','#8c2980','#6b1575','#49006a'], // pink-yellow purple
-
   ];
+
   p = (typeof p === 'undefined')
     ? 0
     : pallettes[p+1] ? p+1 : 0;
+
   for (let i = 0; i < pallettes[p].length; i++) {
     let cssVar = '--color-' + (i + 1);
     document.documentElement.style.setProperty(cssVar, pallettes[p][i]);
   }
+
   return p;
-}
+};

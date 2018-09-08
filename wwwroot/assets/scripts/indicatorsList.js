@@ -1,5 +1,7 @@
-export default function () {
+export default () => {
   return [
+    // toReverse : will invert "good" and "bad" colors, ex : High GDP is "good" but high inflation is "bad"
+    
     // Economy
     { label: 'GDP (current US$)', value: 'NY.GDP.MKTP.CD', toReverse: false}, //the first value is used as default when opening the form
     { label: 'GDP growth (annual %)', value: 'NY.GDP.MKTP.KD.ZG', toReverse: false},
@@ -51,4 +53,4 @@ export default function () {
     { label: 'Rural population (% of total population)', value: 'SP.RUR.TOTL.ZS', toReverse: false},
     { label: 'Forest area (sq. km)', value: 'AG.LND.FRST.K2', toReverse: false}
   ];
-}
+};

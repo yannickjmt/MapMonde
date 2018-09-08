@@ -10,6 +10,7 @@ export default function () {
     //*      Year2: { }
     //*   }
     //* }
+
     indicators: {},
 
     setValue(indicatorId, indicatorName, year, value) {
@@ -106,8 +107,6 @@ export default function () {
     return legendArr;
   };
 
-  
+
   return legend;
 }
-
-
