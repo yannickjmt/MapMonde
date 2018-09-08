@@ -1,7 +1,17 @@
 const $ = document.querySelector.bind(document);
 import * as g from './global';
 
-export const ajax = (url, type) => {
+export const getSVG = async (url, type) => {
+  try {
+    let svg = await ajax(url, type);
+    return svg;
+  }
+  catch(err) {
+    log('error while retrieving svg: ' + err.message);
+  }
+};
+
+const ajax = (url, type) => {
   return new Promise(function(resolve, reject) {
     let xhr = new XMLHttpRequest();
     xhr.onload = function() {

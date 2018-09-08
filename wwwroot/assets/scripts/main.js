@@ -4,7 +4,7 @@ import '../styles/main.css';
 
 import * as g from './global';
 import paletteChangeMod from './paletteChange';
-import {ajax, log} from './utils';
+import {getSVG, log} from './utils';
 import {showCountryInfo} from './display';
 import {buildForm} from './ui';
 
@@ -50,19 +50,9 @@ document.addEventListener('DOMContentLoaded', () => {
   $('#button-modal').addEventListener('click', () => {
     window.location.hash = 'modal';
   });
+
   $('#button-palette').addEventListener('click', () => {
     g.activePalette = paletteChangeMod(g.activePalette);
   });
-
   g.activePalette = paletteChangeMod();
 });
-
-const getSVG = async (url, type) => {
-  try {
-    let svg = await ajax(url, type);
-    return svg;
-  }
-  catch(err) {
-    log('error while retrieving svg: ' + err.message);
-  }
-};

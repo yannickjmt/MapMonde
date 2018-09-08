@@ -107,6 +107,5 @@ export default function () {
     return legendArr;
   };
 
-
   return legend;
 }
