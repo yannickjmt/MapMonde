@@ -1,15 +1,17 @@
-import * as g from './global';
+import g from './global';
 import {displaySpinner, hideSpinner, displayError, log} from './utils';
 import {buildIndicatorsSelector, buildYearsSelector} from './ui';
 import {fillMapAndLegend} from './display';
 
 export const fetchAndProcessData = async (urlsAPI) => {
   displaySpinner('Fetching World Bank Data');
+
   // asynchronous and parallel API calls
   let results = urlsAPI.map(async (url) => await postData(url));
   for (const result of results) {
     processApiAnswer(await result);
   }
+
   displaySpinner('Building Map');
   buildIndicatorsSelector();
   buildYearsSelector();
@@ -18,6 +20,7 @@ export const fetchAndProcessData = async (urlsAPI) => {
 };
 
 const postData = async (url) => {
+  log('API fetch url: ' + url);
   return await fetch(url, {
     method: 'GET'
   })
@@ -43,6 +46,7 @@ const processApiAnswer = (result) => {
         JSONcountry.indicator.id,
         JSONcountry.date,
         JSONcountry.value);
+        
       if (g.countries[JSONcountry.country.id]) {
         // push value into global legend array
         // values array will be reduced later to get the legend scale

@@ -935,6 +935,21 @@ path:hover {
     position: absolute;
 }
 
+.tooltip-noCountry {
+    visibility: hidden;
+    opacity: 0;
+}
+
+.tooltip-country {
+    visibility: visible;
+    opacity: 0.9;
+    -webkit-transform: scale(1);
+    -moz-transform: scale(1);
+    -o-transform: scale(1);
+    -ms-transform: scale(1);
+    transform: scale(1);
+}
+
 .tooltip:before, .tooltip:after {
     content: '';
     border-left: 10px solid transparent;
@@ -1350,6 +1365,8 @@ path:hover {
     width: 100%;
     background-color: rgba(255, 255, 255, 0.756);
 }
+
+
 .spinner-wrapper {
     display: none;
     position: absolute;
@@ -1360,6 +1377,11 @@ path:hover {
     transform: translate(-50%, -50%);
     text-align: center;
 }
+
+.visible {
+    display: block;
+}
+
 .spinner-text {
     padding: 20px;
     font-family: "Courier New", Monaco;

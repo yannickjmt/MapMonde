@@ -1,111 +1,105 @@
-export default function () {
-  let legend = {
-    //* Data structure: 
-    //* Indicators {
-    //*   IndicatorID1: { 
-    //*      'indicator_name': '',
-    //*      Year1: {'reduced': false,
-    //*              'values': [ , ]
-    //*             },
-    //*      Year2: { }
-    //*   }
-    //* }
+export default {
+  //* Data structure: 
+  //* Indicators {
+  //*   IndicatorID1: { 
+  //*     'indicator_name': '',
+  //*     years: {
+  //*       Year1: {
+  //*         'shortened': false,
+  //*         'values': [ , ]
+  //*       },
+  //*       Year2: { }
+  //*     }
+  //*   }
+  //* }
 
-    indicators: {},
-
-    setValue(indicatorId, indicatorName, year, value) {
-      if (this.indicators[indicatorId]) {
-        if (this.indicators[indicatorId][year]) {
-          // reduced = true means we already processed all data for this year and indicator
-          if (this.indicators[indicatorId][year].reduced === false) {
-            // add value to existing array for year and indicatorID
-            let arr = this.indicators[indicatorId][year]['values'];
-            arr.push(value);
-            this.indicators[indicatorId][year]['values'] = arr;
-          }
-        }
-        else {
-          // create new year property for indicatorID with single elt array
-          this.indicators[indicatorId][year] = {'reduced': false, 'values':[value]};
-        }
-      } else {
-        // create new indicator property
-        let yearObj = {};
-        yearObj[year] = {'reduced': false, 'values':[value]};
-        this.indicators[indicatorId] = yearObj;
-        this.indicators[indicatorId]['indicator_name'] = indicatorName;
+  indicators: {},
+  
+  setValue(indicatorId, indicatorName, year, value) {
+    let indicObj = this.getCreateIndicator(indicatorId, indicatorName);
+    if (indicObj.years[year]) {
+      // shortened = true means we already processed all data for this year and indicator
+      if (indicObj.years[year].shortened === false) {
+        // add value to existing array for year and indicatorID
+        let arr = indicObj.years[year]['values'];
+        arr.push(value);
+        indicObj.years[year]['values'] = arr;
       }
-    },
+    } else {
+      // create new year property for indicatorID.years with single elt array
+      indicObj.years[year] = {'shortened': false, 'values': [value]};
+    }
+  },
 
-    getValues(indicatorId, year) {
-      if (this.indicators[indicatorId]) {
-        if (this.indicators[indicatorId][year]) {
-          return this.indicators[indicatorId][year].values;
-        }
+  getCreateIndicator(indicatorId, indicatorName) {
+    if (!this.indicators[indicatorId]) {
+      let years = {'years': {}};
+      this.indicators[indicatorId] = years;
+      this.indicators[indicatorId]['indicator_name'] = indicatorName;
+    }
+    return this.indicators[indicatorId];
+  },
+
+  getValues(indicatorId, year) {
+    if (this.indicators[indicatorId]) {
+      if (this.indicators[indicatorId].years[year]) {
+        return this.indicators[indicatorId].years[year].values;
       }
-      return null;
-    },
+    }
+    return null;
+  },
 
-    getYears(indicatorId) {
-      let yearArray = [];
-      // only get years relevant to active indicator
-      for (let yearVal in this.indicators[indicatorId]) {
-        let year = this.indicators[indicatorId][yearVal];
-        if (typeof year.reduced === 'boolean') {
-          //if (!yearArray.includes(yearVal)) yearArray.push(yearVal);
-          yearArray.push(yearVal);
-        }
-      }
-      return yearArray;
-    },
+  getYears(indicatorId) {
+    let yearArray = [];
+    // only get years relevant to active indicator
+    for (let yearVal in this.indicators[indicatorId].years) {
+      yearArray.push(yearVal);
+    }
+    return yearArray;
+  },
 
-    getIndicators() {
-      let indicArray = [];
-      for (let indicatorVal in this.indicators) {
-        indicArray.push([indicatorVal, this.indicators[indicatorVal].indicator_name]);
-      }
-      return indicArray;
-    },
+  getIndicators() {
+    let indicArray = [];
+    for (let indicatorVal in this.indicators) {
+      indicArray.push([indicatorVal, this.indicators[indicatorVal].indicator_name]);
+    }
+    return indicArray;
+  },
 
-    getIndicatorName(indicatorId) {
-      return this.indicators[indicatorId].indicator_name;
-    },
-
-    reduceLegend(rangeNum) {
-      for (let indicatorVal in this.indicators) {
-        for (let yearVal in this.indicators[indicatorVal]) {
-          let year = this.indicators[indicatorVal][yearVal];
-          if ((typeof year.reduced === 'boolean') && (year.reduced === false)) {
-            let arr = reduceArray(year.values, rangeNum);
-            year.values = arr;
-            year.reduced = true;
-          }
+  getIndicatorName(indicatorId) {
+    return this.indicators[indicatorId].indicator_name;
+  },
+  
+  reduceLegend(rangeNum) {
+    for (let indicatorVal in this.indicators) {
+      for (let yearVal in this.indicators[indicatorVal].years) {
+        let year = this.indicators[indicatorVal].years[yearVal];
+        if (year.shortened === false) {
+          year.values  = shortenArray(year.values, rangeNum);
+          year.shortened = true;
         }
       }
     }
-  };
+  }
+};
 
-  const reduceArray= (arr, rangeNum) => {
-    // create the legend range, will be used to separate the country values into equally large sets
-    // we get n+1 boundaries to build a legend with n colors (n = legendRangeNum)
-    const legendArr = [];
-    
-    // filter out null values
-    // we didn't filter at the country object level so that rest of the map could be drawn
-    // in case of whole set is null
-    arr = arr.filter(n => (n===null) ? false : true);
+const shortenArray = (originalValues, rangeNum) => {
+  // create the legend range, will be used to separate the country values into equally large sets
+  // we get n+1 boundaries to build a legend with n colors (n = legendRangeNum)
+  const shortenedValues = [];
   
-    if (arr.length > 0) {
-      arr.sort((a, b) => a - b);
-      const max = Math.max(...arr);
-      for (let i = 0; i < rangeNum; i++) {
-        legendArr.push(arr[Math.round(i * arr.length / rangeNum)]);
-      }
-      legendArr.push(max);
+  // filter out null values
+  // we didn't filter at the country object level so that rest of the map could be drawn
+  // in case the whole set is null
+  originalValues = originalValues.filter(n => !!n);
+
+  if (originalValues.length) {
+    originalValues.sort((a, b) => a - b);
+    for (let i = 0; i < rangeNum; i++) {
+      shortenedValues.push(originalValues[Math.round(i * originalValues.length / rangeNum)]);
     }
-  
-    return legendArr;
-  };
+    shortenedValues.push(Math.max(...originalValues));
+  }
 
-  return legend;
-}
+  return shortenedValues;
+};

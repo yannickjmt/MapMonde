@@ -1,18 +1,22 @@
-const $ = document.querySelector.bind(document);
-var noUiSlider = require('nouislider');
-
-import * as g from './global';
+import noUiSlider from 'nouislider';
 import SelectPure from 'select-pure';
+import g from './global';
 import {fetchAndProcessData} from './api';
 import {fillMapAndLegend} from './display';
 
+const $ = document.querySelector.bind(document);
+
 export const buildForm = () => {
-// generate the select-pure component 
+  //The SelectPure component needs a default value for some reason
+  //and its onChange event is not triggered on creation
+  //so we have to assign a default value (first indicator on the list)
+  g.formIndicators = [g.indicatorsList[0].value];
+  
+  // generate the select-pure component 
   let instanceSelect = new SelectPure('.indicator-select-form', {
     options: g.indicatorsList,
     multiple: true,
-    // problem with this component, it needs a default value
-    value: [g.indicatorsList[0].value],
+    value: g.formIndicators,
     icon: 'fas fa-times',
     // could not find way to access those values otherwise
     onChange: value => { 
@@ -69,7 +73,7 @@ export const buildIndicatorsSelector = () => {
 
   if (indicatorArray.length > 0) {
     if ($('#indicators-select')) {
-      $('#indicators-select').removeEventListener('change', listenChangeIndic);
+      $('#indicators-select').removeEventListener('change', indicatorChangeHandler);
       $('#indicators').removeChild($('#indicators-select'));
     }
     // (re) create select and options
@@ -93,34 +97,34 @@ export const buildIndicatorsSelector = () => {
     // normally after new fetch data request, new indicator should be at end of array
     g.activeIndicator = indicatorArray[indicatorArray.length - 1][0];
 
-    $('#indicators').addEventListener('change', listenChangeIndic);
+    $('#indicators').addEventListener('change', indicatorChangeHandler);
   }
 };
 
-const listenChangeIndic = () => {
+const indicatorChangeHandler = () => {
   let s = $('#indicators-select');
   g.activeIndicator = s.options[s.selectedIndex].value;
 
   // when indicator changes we may have to rebuild year slider
   // because of indicator / year independance
   buildYearsSelector();
+
   fillMapAndLegend();
 };
 
 export const buildYearsSelector = () => {
-  let yearArray = g.legend.getYears(g.activeIndicator);
-  yearArray.sort((a, b) => a - b);
+  let years = g.legend.getYears(g.activeIndicator);
+  years.sort((a, b) => a - b);
 
-  if ((g.activeYear == '') || (!yearArray.includes(g.activeYear))) {
-    g.activeYear = yearArray[0];
+  if ( g.activeYear === '' || !years.includes(g.activeYear) ) {
+    g.activeYear = years[0];
   }
 
   //can't create slider with only one value
   //taken care of by forcing 2 years minimum range in the form
-  if (yearArray.length > 1) {
-    let slider = $('#slider');
-    createUpdateSlider(slider, yearArray);
-    slider.noUiSlider.on('update', ( values, handle ) => {
+  if (years.length > 1) {
+    createUpdateSlider( $('#slider') , years);
+    $('#slider').noUiSlider.on('update', ( values, handle ) => {
       g.activeYear = values[handle];
       fillMapAndLegend();
     });
@@ -141,9 +145,10 @@ const createUpdateSlider = (sliderElement, yearArr) => {
     }
   };
 
-  // cannot use noUiSlider.updateOptions() with current settings, so we need to destroy it
-  if (sliderElement.noUiSlider !== undefined) sliderElement.noUiSlider.destroy();
-  
+  // cannot use noUiSlider.updateOptions() with current settings
+  // so we need to destroy it if it exists already
+  sliderElement.noUiSlider && sliderElement.noUiSlider.destroy();
+
   noUiSlider.create(sliderElement, {
     start: yearArr.indexOf(g.activeYear),
     connect: true,

@@ -2,9 +2,9 @@ import '../../../node_modules/nouislider/distribute/nouislider.css';
 import '../../../node_modules/css-modal/build/modal.css';
 import '../styles/main.css';
 
-import * as g from './global';
+import g from './global';
 import paletteChangeMod from './paletteChange';
-import {getSVG, log} from './utils';
+import {getSVG, log, getUrlParam} from './utils';
 import {showCountryInfo} from './display';
 import {buildForm} from './ui';
 
@@ -13,8 +13,12 @@ import {buildForm} from './ui';
 const $ = document.querySelector.bind(document);
 
 document.addEventListener('DOMContentLoaded', () => {
+
+  // add ?debug=true to the url to activate logs
+  g.debug = getUrlParam(window.location.href, 'debug', false);
+
   //load SVG and initialize country object
-  getSVG('../assets/images/world.svg', 'XML')
+  getSVG('../assets/images/world.svg')
     .then(
       (result) => {
         $('#svgContainer').appendChild(result.documentElement);
@@ -43,8 +47,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // country tooltip must follow mouse
   document.addEventListener('mousemove', (event) => {
-    $('#tooltip').style.left = (event.pageX - 105) + 'px';
-    $('#tooltip').style.top = (event.pageY - 80) + 'px';
+    $('#tooltip').style.left = (event.pageX - g.tooltipOffsetX) + 'px';
+    $('#tooltip').style.top = (event.pageY - g.tooltipOffsetY) + 'px';
   }, false);
 
   $('#button-modal').addEventListener('click', () => {

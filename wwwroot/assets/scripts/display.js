@@ -1,6 +1,6 @@
-const $ = document.querySelector.bind(document);
-import * as g from './global';
+import g from './global';
 import {formatNumber} from './utils';
+const $ = document.querySelector.bind(document);
 
 export const fillMapAndLegend = () => {
   updateTitle();
@@ -16,9 +16,7 @@ export const updateMapColors = () => {
 
     let countryValue = g.countries.getValue(svgCountryCode, g.activeIndicator, g.activeYear);
 
-    let classCountry = (countryValue === '')
-      ? 'noData'
-      : getClassName(countryValue, g.activeIndicator, g.activeYear);
+    let classCountry = countryValue === '' ? 'noData' : getClassName(countryValue, g.activeIndicator, g.activeYear);
 
     svgCountry.setAttributeNS(null, 'class', classCountry);
   }
@@ -89,8 +87,8 @@ export const showCountryInfo = (event) => {
   let tooltip = $('#tooltip');
 
   if (countryCode == null) {
-    tooltip.style.visibility = 'hidden';
-    tooltip.style.opacity = 0;
+    tooltip.className = 'tooltip';
+    tooltip.classList.add('tooltip-noCountry');
   } else {
     let countryName = g.countries.getCountryName(countryCode);
     if (countryName != '') {
@@ -105,13 +103,8 @@ export const showCountryInfo = (event) => {
       }
 
       tooltip.innerHTML = html;
-      tooltip.style.visibility = 'visible';
-      tooltip.style.opacity = 0.9;
-      tooltip.style.webkitTransform = 'scale(1)';
-      tooltip.style.MozTransform = 'scale(1)';
-      tooltip.style.msTransform = 'scale(1)';
-      tooltip.style.OTransform = 'scale(1)';
-      tooltip.style.transform = 'scale(1)';
+      tooltip.className = 'tooltip';
+      tooltip.classList.add('tooltip-country');
     }
   }
 };

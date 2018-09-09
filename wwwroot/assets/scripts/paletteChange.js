@@ -16,9 +16,7 @@ export default (p) => {
     ['#fff7f3','#ffd5dd','#ffb0c8','#fc8bb2','#f1659f','#d05095','#ae3d8a','#8c2980','#6b1575','#49006a'], // pink-yellow purple
   ];
 
-  p = (typeof p === 'undefined')
-    ? 0
-    : pallettes[p+1] ? p+1 : 0;
+  p = (typeof p === 'undefined') ? 0 : pallettes[p+1] ? p+1 : 0;
 
   for (let i = 0; i < pallettes[p].length; i++) {
     let cssVar = '--color-' + (i + 1);

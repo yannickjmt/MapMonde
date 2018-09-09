@@ -1,67 +1,56 @@
+import g from './global';
 const $ = document.querySelector.bind(document);
-import * as g from './global';
 
-export const getSVG = async (url, type) => {
-  try {
-    let svg = await ajax(url, type);
-    return svg;
-  }
-  catch(err) {
-    log('error while retrieving svg: ' + err.message);
-  }
-};
-
-const ajax = (url, type) => {
-  return new Promise(function(resolve, reject) {
-    let xhr = new XMLHttpRequest();
-    xhr.onload = function() {
-      if (type == 'text') resolve(this.responseText);
-      else if (type == 'XML') resolve(this.responseXML);
-    };
-    xhr.onerror = reject;
-    xhr.open('GET', url);
-    xhr.send();
-  });
+export const getSVG = async (url) => {
+  return await fetch(url)
+    .then(response => response.text())
+    // there is no native XML parser for fetch
+    .then(str => (new window.DOMParser()).parseFromString(str, 'text/xml'))
+    .catch( err => {
+      log('error while retrieving svg: ' + err.message);
+    });
 };
 
 export const displaySpinner = (message) => {
-  $('#blank').style.display = 'block';
   $('#spinner-text').innerHTML = message;
-  $('#spinner-wrapper').style.display = 'block';
+  $('#blank').classList.add('visible');
+  $('#spinner-wrapper').classList.add('visible');
 };
 
 export const hideSpinner = () => {
-  $('#spinner-text').innerHTML = '';
-  $('#spinner-wrapper').style.display = 'none';
-  $('#blank').style.display = 'none';
+  $('#blank').className = 'blank';
+  $('#spinner-wrapper').className = 'spinner-wrapper';
 };
 
 export const displayError = (message) => {
   displaySpinner(message);
   setTimeout( () => {
     hideSpinner();
-  },2000);
+  },g.errorSpinnerTimer);
 };
 
 export const formatNumber = (n) => {
   if (typeof n == 'number') {
-    if (Math.abs(n) < 10 ) {
-      n = Math.round(n * 100)/100;
-    } else if (Math.abs(n) < 1000 ) {
-      n = Math.round(n * 10) / 10;
-    } else if (Math.abs(n) < 1000000) {
-      n = Math.round(n).toLocaleString('en-US');
-    } else if (Math.abs(n) < 10000000) {
-      n = Math.round(n / 10000) / 100 + 'm';
-    } else if (Math.abs(n) < 1000000000) {
-      n = Math.round(n / 100000) / 10 + 'm';
-    } else if (Math.abs(n) < 10000000000) {
-      n = (Math.round(n / 10000000) / 100).toLocaleString('en-US') + 'b';
-    } else if (Math.abs(n) < 1000000000000) {
-      n = (Math.round(n / 100000000) / 10).toLocaleString('en-US') + 'b';
-    } else {
-      n = (Math.round(n / 1000000000)).toLocaleString('en-US') + 'b';
+    let suffix = '';
+    if (Math.abs(n) >= 1000000 && Math.abs(n) < 1000000000) {
+      n = n / 1000000;
+      suffix = 'm';
+    } else if (Math.abs(n) >= 1000000000) {
+      n = n / 1000000000;
+      suffix = 'b';
     }
+    n = getSignificantNumbers(n) + suffix;
+  }
+  return n;
+};
+
+const getSignificantNumbers = (n) => {
+  if (Math.abs(n) < 10 ) {
+    n = Math.round(n * 100)/100;
+  } else if (Math.abs(n) < 1000 ) {
+    n = Math.round(n * 10) / 10;
+  } else if (Math.abs(n) < 1000000) {
+    n = Math.round(n).toLocaleString('en-US');
   }
   return n;
 };
@@ -70,4 +59,20 @@ export const log = (message) => {
   if (g.debug) { 
     console.log(message);
   }
+};
+
+export const getUrlParam = (url, parameter, defaultvalue) => {
+  let urlparameter = defaultvalue;
+  if (url.indexOf(parameter) > -1) {
+    urlparameter = getUrlVars(url)[parameter];
+  }
+  return urlparameter;
+};
+
+const getUrlVars = (url) => {
+  var vars = {};
+  url.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
+    vars[key] = value;
+  });
+  return vars;
 };
