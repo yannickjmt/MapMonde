@@ -1,15 +1,14 @@
 import g from './global';
+
 const $ = document.querySelector.bind(document);
 
-export const getSVG = async (url) => {
-  return await fetch(url)
-    .then(response => response.text())
-    // there is no native XML parser for fetch
-    .then(str => (new window.DOMParser()).parseFromString(str, 'text/xml'))
-    .catch( err => {
-      log('error while retrieving svg: ' + err.message);
-    });
-};
+export const getSVG = async url => fetch(url)
+  .then(response => response.text())
+  // there is no native XML parser for fetch
+  .then(str => (new window.DOMParser()).parseFromString(str, 'text/xml'))
+  .catch((err) => {
+    log(`error while retrieving svg: ${err.message}`);
+  });
 
 export const displaySpinner = (message) => {
   $('#spinner-text').innerHTML = message;
@@ -24,19 +23,20 @@ export const hideSpinner = () => {
 
 export const displayError = (message) => {
   displaySpinner(message);
-  setTimeout( () => {
+  setTimeout(() => {
     hideSpinner();
-  },g.errorSpinnerTimer);
+  }, g.errorSpinnerTimer);
 };
 
-export const formatNumber = (n) => {
-  if (typeof n == 'number') {
+export const formatNumber = (num) => {
+  let n = num;
+  if (typeof n === 'number') {
     let suffix = '';
     if (Math.abs(n) >= 1000000 && Math.abs(n) < 1000000000) {
-      n = n / 1000000;
+      n /= 1000000;
       suffix = 'm';
     } else if (Math.abs(n) >= 1000000000) {
-      n = n / 1000000000;
+      n /= 1000000000;
       suffix = 'b';
     }
     n = getSignificantNumbers(n) + suffix;
@@ -44,10 +44,11 @@ export const formatNumber = (n) => {
   return n;
 };
 
-const getSignificantNumbers = (n) => {
-  if (Math.abs(n) < 10 ) {
-    n = Math.round(n * 100)/100;
-  } else if (Math.abs(n) < 1000 ) {
+const getSignificantNumbers = (num) => {
+  let n = num;
+  if (Math.abs(n) < 10) {
+    n = Math.round(n * 100) / 100;
+  } else if (Math.abs(n) < 1000) {
     n = Math.round(n * 10) / 10;
   } else if (Math.abs(n) < 1000000) {
     n = Math.round(n).toLocaleString('en-US');
@@ -56,7 +57,7 @@ const getSignificantNumbers = (n) => {
 };
 
 export const log = (message) => {
-  if (g.debug) { 
+  if (g.debug) {
     console.log(message);
   }
 };
@@ -70,8 +71,8 @@ export const getUrlParam = (url, parameter, defaultvalue) => {
 };
 
 const getUrlVars = (url) => {
-  var vars = {};
-  url.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
+  const vars = {};
+  url.replace(/[?&]+([^=&]+)=([^&]*)/gi, (m, key, value) => {
     vars[key] = value;
   });
   return vars;

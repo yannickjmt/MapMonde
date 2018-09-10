@@ -8,18 +8,18 @@ export default {
   svgCountries: [],
   activeYear: '',
   activeIndicator: '',
-  
+
   countries: countriesMod,
-  
+
   legend: legendMod,
-  
+
   indicatorsList: indicatorsListMod,
-  
+
   formIndicators: [],
-  
+
   legendRangeNum: 10,
   activePalette: 0,
   tooltipOffsetX: 95,
   tooltipOffsetY: 85,
-  errorSpinnerTimer: 2000
+  errorSpinnerTimer: 2000,
 };

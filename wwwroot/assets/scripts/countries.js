@@ -9,14 +9,14 @@ export default {
   //*  }
 
   setCountry(countryId, countryName) {
-    this[countryId] = {'country_name': countryName };
+    this[countryId] = { country_name: countryName };
   },
 
   setValue(countryId, indicatorId, year, value) {
     if (this[countryId]) {
-      let indicObj = {};
+      const indicObj = {};
       indicObj[year] = value;
-      
+
       if (this[countryId][indicatorId]) {
         Object.assign(this[countryId][indicatorId], indicObj);
       } else {
@@ -24,11 +24,11 @@ export default {
       }
     }
   },
-  
+
   getCountryName(countryId) {
     return this[countryId] ? this[countryId].country_name : '';
   },
-  
+
   getValue(countryId, indicatorId, year) {
     let val = '';
     if (this[countryId][indicatorId]) {
@@ -37,5 +37,5 @@ export default {
       }
     }
     return val;
-  }
+  },
 };
