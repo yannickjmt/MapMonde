@@ -10,7 +10,7 @@ export const fillMapAndLegend = () => {
 };
 
 export const updateMapColors = () => {
-  // assign CSS class each to svg element if valid value
+  // assign CSS class to each svg element if valid value
   for (const svgCountry of g.svgCountries) {
     const svgCountryCode = svgCountry.getAttribute('data-id');
 
@@ -87,6 +87,10 @@ const setLegendNoData = () => {
 export const showCountryInfo = (event) => {
   const countryCode = event.target.getAttribute('data-id');
   const tooltip = $('#tooltip');
+
+  // fix annoying slight jitter when hovering quickly over multiple countries on Chrome only
+  // Heisenbug? Observing it fixes it.
+  $('#svgContainer').getBoundingClientRect();
 
   if (countryCode == null) {
     tooltip.className = 'tooltip';

@@ -2,13 +2,13 @@
 
 ## Dynamic world map built with data queried from the World Bank API.
 
-This web page pulls data from the World Bank API and displays it on a scalable SVG world map.
+This page pulls data from the World Bank API and displays it on a dynamic world map.
 
 Features: 
-- Multi indicator queries in parralel
-- Quick and easy navigation between years and indicators
+- Multi indicator queries in parralel.
+- Intuitive and fast data visualisation controls.
 - A curated list of 35 of the most relevant indicators.
-- A choice of different cartography-adapted palettes of colors
+- A choice of different cartography-appropriate palettes of colors.
 
 [DEMO](https://mapmonde.netlify.com/)
 

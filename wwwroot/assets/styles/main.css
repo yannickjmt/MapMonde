@@ -60,7 +60,6 @@ table {
 :root {
     --color-bg: #3F4351;
     --color-noData: #f2f2f2;
-
 }
 
 html {
@@ -88,7 +87,6 @@ body {
         margin: 0;
         width: 100%;
         max-width: 100%;
-        /* box-sizing: border-box; */
 	}
 }
 
@@ -129,7 +127,6 @@ body {
         grid-template-areas: 
             "header-title header-title"
             "icon1 icon2";
-        /* grid-row-gap: 10px; */
         align-content: start;
         justify-items: center;
 	}
@@ -145,7 +142,6 @@ body {
     height: auto;
     display: flex;
     flex-wrap: nowrap;
-    /* align-items: center; */
     justify-content: center;
     margin: auto;
     background: white;
@@ -232,8 +228,6 @@ body {
 	.selectors-indicators {
         width: 92%;
         max-width: 100%;
-        /* padding-left: 5px;
-        padding-right: 5px; */
         padding: 0;
         padding-top: 20px;
         flex-direction: column;
